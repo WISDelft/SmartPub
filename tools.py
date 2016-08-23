@@ -1,0 +1,74 @@
+import urllib.request
+import os
+
+
+
+def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, incrementKB = 0, printOutput = True, folder = './', overwrite = True, localfilename='.'):
+    """
+    Download a file from an URL, and show the download progress.
+    :param url: the source URL
+    :param barlength: the length of the progress bar (default 20). Set to 0 to disable progress bar
+    :param incrementPercentage: update progress every X percent (default 10). This is ignored when incrementPercentage>0 is used. If both incrementPercentage and incrementKB are 0, no propgress is displayed
+    :param incrementKB: update display every X KB (default 0, which means it is disabled)
+    :param printOutput: set to False if you wish no output (default True)
+    :param folder: name of folder with "/" at the end (default './'
+    :param overwrite: overwrite existing files (default True)
+    :param localfilename: the name of the local file (default is the name of the remote file)
+    :return:
+    """
+    if (barlength > 0):
+        barlengthDivisor = 100 / barlength
+
+    # check local file
+    if localfilename is '.':
+        file_name = folder + url.split('/')[-1]
+    else:
+        file_name = folder + localfilename
+    if os.path.exists(file_name) and not overwrite:
+        if printOutput:
+            print('Skipping ' + file_name)
+        return
+
+    # get remote file info
+    u = urllib.request.urlopen(url)
+    meta = u.info()
+    file_size = int(meta['Content-Length'])
+
+    if printOutput:
+        print('Downloading: {:s}   {:1.0f} KB'.format(file_name, file_size/1024))
+
+    # set KB increments
+    if (incrementKB > 0):
+        incrementPercentage = 100 * incrementKB / (file_size / 1024)
+
+
+    # transfer file
+    f = open(file_name, 'wb')
+    file_size_dl = 0
+    block_sz = 8192
+    nextIncrement = 0
+    while True:
+        buffer = u.read(block_sz)
+        if not buffer:
+            break
+
+        file_size_dl += len(buffer)
+        f.write(buffer)
+
+        # output progress
+        if printOutput and (incrementPercentage > 0 or incrementKB > 0):
+            currentPercentage = file_size_dl * 100. / file_size
+            status ='{:10.0f}KB {:05.2f}%  '.format(file_size_dl / 1024, currentPercentage)
+            if barlength>0:
+                status = status + '|'+ '#' * int(currentPercentage / barlengthDivisor) + ' ' * int(barlength - currentPercentage / barlengthDivisor) + '|'
+            if currentPercentage >= nextIncrement:
+                print (status)
+                nextIncrement = nextIncrement + incrementPercentage
+    f.close()
+    return
+
+def normalizeDBLPkey(dblpkey):
+    return dblpkey.replace("/", "_")
+
+
+
