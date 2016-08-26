@@ -32,10 +32,20 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
     # get remote file info
     u = urllib.request.urlopen(url)
     meta = u.info()
-    file_size = int(meta['Content-Length'])
+    length = meta['Content-Length']
+    if meta['Content-Length'] is not None:
+        file_size = int(meta['Content-Length'])
+    else:
+        # disable display if cannot size
+        file_size = -1
+        barlength = 0
+        incrementKB = 0
+        incrementPercentage = 0
+    if file_size is 0:
+        raise BaseException('File size is 0')
 
     if printOutput:
-        print('Downloading: {:s}   {:1.0f} KB'.format(file_name, file_size/1024))
+        print('Downloading: {:s}   {:1.0f} KB'.format(url, file_size/1024))
 
     # set KB increments
     if (incrementKB > 0):
@@ -71,4 +81,4 @@ def normalizeDBLPkey(dblpkey):
     return dblpkey.replace("/", "_")
 
 
-
+# downloadFileWithProgress('http://aclweb.org/anthology/Y/Y06/Y06-1007.pdf', incrementKB=10 * 1024, overwrite=True)
