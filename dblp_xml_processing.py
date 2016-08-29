@@ -1,20 +1,17 @@
-# setup logging
+import config as cfg
 import logging
-logging.basicConfig(format='%(asctime)s %(message)s', filename='./logs/dblp_xml_processing.log', level=logging.DEBUG, filemode='w')
-logging.debug("Start XML Parsing")
-logging.getLogger().addHandler(logging.StreamHandler())
+import tools
+tools.setup_logging()
 
 import sys
 from lxml import etree
 import gzip
-import tools
 import datetime
-from pymongo import MongoClient
+
 
 # set to true if you want to persist to a local mongo DB (default connection)
 storeToMongo = True
-# the path of the data folder (for XML and PDF)
-data_folder = './data/'
+
 # set to true if you want to skip downloading EE entries (pdf URLs) which have been accessed before (either sucessfully or unsucessfully)
 # this only works if storeToMongo is set to True because the MongoDB must be accessed for that. (if you set storeToMongo to false, I will
 # just assume that MongoDB is simply not active / there
@@ -30,9 +27,6 @@ DATA_ITEMS = ["title", "booktitle", "year", "journal", "crossref", "ee"]
 
 # prints out a progress every X attempted downloads (including skips which had been downloaded before)
 statusEveryXdownloads = 100
-
-
-
 
 
 
@@ -70,17 +64,17 @@ def fast_iter2(context, db):
                 paper[data_item] = data.text
 
         if paper['type'] not in SKIP_CATEGORIES:
-            downloadAndStore(paper, db)
+            download_and_store(paper, db)
 
 
 ## stores stuff in mongo db, and downloads the PDF
-def downloadAndStore(paper, db):
+def download_and_store(paper, db):
     if 'ee' in paper:
 
         # only proceed if paper has a key, an ee entry, and that entry ends on pdf
         if (type(paper['dblpkey']) is str and type(paper['ee']) is str and paper['ee'].endswith("pdf")):
             filename = paper['dblpkey']+".pdf"
-            # downloadinfo is the dictionary which is later stored in the Monfo "downloads" collection to memorize
+            # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
             # which URLs have been accessed, and if that was successfull or not
             downloadinfo = {
                 '_id': paper['ee'],
@@ -113,7 +107,7 @@ def downloadAndStore(paper, db):
             if not skip:
                 try:
                     # download
-                    tools.downloadFileWithProgress(downloadinfo['url'], barlength = 0, overwrite = False, folder = './data/pdf/', localfilename=filename, incrementPercentage=0, incrementKB=0)
+                    tools.downloadFileWithProgress(downloadinfo['url'], barlength = 0, overwrite = False, folder = cfg.folder_pdf, localfilename=filename, incrementPercentage=0, incrementKB=0)
                     global numOfPDFobtainedInThisSession
                     numOfPDFobtainedInThisSession += 1
                     # store
@@ -132,30 +126,30 @@ def downloadAndStore(paper, db):
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 def main():
-        # just a counter
-        global numOfPDFobtained
-        global numOfPDFobtainedInThisSession
-        numOfPDFobtained = 0
-        numOfPDFobtainedInThisSession = 0
 
-        # get xml files
-        tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.xml.gz', incrementKB=10 * 1024,
-                                       folder=data_folder, overwrite=False)
-        tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.dtd', incrementKB=10 * 1024, folder=data_folder,
-                                       overwrite=False)
+    # just a counter
+    global numOfPDFobtained
+    global numOfPDFobtainedInThisSession
+    numOfPDFobtained = 0
+    numOfPDFobtainedInThisSession = 0
 
-
-        # initialize connection to local mongoDB, database is named pub
-        if storeToMongo:
-            client = MongoClient()
-            db = client.pub
+    # get xml files
+    tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.xml.gz', incrementKB=10 * 1024,
+                                   folder=cfg.folder_dblp_xml, overwrite=False)
+    tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.dtd', incrementKB=10 * 1024,
+                                   folder=cfg.folder_dblp_xml, overwrite=False)
 
 
-        with gzip.open(data_folder+"dblp.xml.gz", 'rb') as file:
-            context = etree.iterparse(file, dtd_validation=True, events=("start", "end"))
-            fast_iter2(context, db)
+    # initialize connection to local mongoDB, database is named pub
+    if storeToMongo:
+        db = tools.connect_to_mongo()
 
-        #cursor.close()
+
+    # open xml and iterate over xml tree to extract relevant stuff
+    with gzip.open(cfg.folder_dblp_xml+"dblp.xml.gz", 'rb') as file:
+        context = etree.iterparse(file, dtd_validation=True, events=("start", "end"))
+        fast_iter2(context, db)
+
 
 
 if __name__ == '__main__':

@@ -1,6 +1,8 @@
 import urllib.request
 import os
-
+import config as cfg
+from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
 
 
 def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, incrementKB = 0, printOutput = True, folder = './', overwrite = True, localfilename='.'):
@@ -77,8 +79,46 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
     f.close()
     return
 
+##
 def normalizeDBLPkey(dblpkey):
+    """
+    tTakes a raw dblp key and converts replaces / with _ (so that you can use it for filenames etc)
+    :param dblpkey: raw dblp key as extracted from DBLP XML
+    :return: normalized key
+    """
     return dblpkey.replace("/", "_")
 
+##
+def create_all_folders():
+    """
+    Creates all required folders
+    """
+    os.makedirs(cfg.folder_dblp_xml, exist_ok=True)
+    os.makedirs(cfg.folder_content_xml, exist_ok=True)
+    os.makedirs(cfg.folder_pdf, exist_ok=True)
+    os.makedirs(cfg.folder_log, exist_ok=True)
 
+##
+def setup_logging():
+    # setup logging
+    import logging
+    create_all_folders()
+    logging.basicConfig(format='%(asctime)s %(message)s', filename=cfg.folder_log+'last_log.log',
+                        level=logging.DEBUG, filemode='w')
+    logging.debug("Start XML Parsing")
+    logging.getLogger().addHandler(logging.StreamHandler())
+
+
+def connect_to_mongo():
+    """
+    Returns a db connection to the mongo instance
+    :return:
+    """
+    try:
+        client = MongoClient()
+        db = client.pub
+        db.downloads.find_one({'_id': 'test'})
+        return db
+    except ServerSelectionTimeoutError as e:
+        raise Exception("Local MongoDB instance cannot be accessed.") from e
 # downloadFileWithProgress('http://aclweb.org/anthology/Y/Y06/Y06-1007.pdf', incrementKB=10 * 1024, overwrite=True)
