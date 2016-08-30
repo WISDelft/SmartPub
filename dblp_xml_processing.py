@@ -98,7 +98,7 @@ def download_and_store(paper, db):
                         global numOfPDFobtainedInThisSession
                         numOfPDFobtained += 1
                         if numOfPDFobtained % statusEveryXdownloads is 0:
-                            print(
+                            logging.info(
                                 'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
                                     paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
 
@@ -110,6 +110,7 @@ def download_and_store(paper, db):
                 try:
                     # download
                     tools.downloadFileWithProgress(downloadinfo['url'], barlength = 0, overwrite = False, folder = cfg.folder_pdf, localfilename=filename, incrementPercentage=0, incrementKB=0)
+                    logging.info(' Downloaded '+paper['dblpkey'])
                     global numOfPDFobtainedInThisSession
                     numOfPDFobtainedInThisSession += 1
                     # store
