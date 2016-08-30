@@ -69,25 +69,28 @@ def process_paper(dblpkey, db):
         result= grobid_mapping.tei_to_dict(xml)
         #
         #try:
+        mongo_set_dict=dict()
+
         if 'abstract' in result:
-            db.publications.update_one(
-                {'_id': dblpkey},
-                {'$set': {'content_abstract': result["abstract"]}}
-            )
+            mongo_set_dict["content.abstract"]=result["abstract"]
+        if 'notes' in result:
+            mongo_set_dict["content.notes"] = result["notes"]
         if 'fulltext' in result:
-            db.publications.update_one(
-                {'_id': dblpkey},
-                {'$set': {'content_fulltext': result["fulltext"]}}
-            )
+            mongo_set_dict["content.fulltext"] = result["fulltext"]
             with open(cfg.folder_content_xml + dblpkey + ".txt", 'w') as f:
                 # f.write(result["fulltext"])
                 print(result["fulltext"])
-        #except:
-        #    pprint.pprint(result)
-        #
+
+        mongoResult= db.publications.update_one(
+            {'_id': dblpkey},
+            {'$set': result}
+        )
+        # print(mongoResult)
+
         logging.info("Processed "+dblpkey)
     except:
         logging.exception('Cannot process paper ' +dblpkey, exc_info=True)
+
     # pprint.pprint(result)
     # for ref in result['references']:
     #     print(ref)
@@ -105,7 +108,9 @@ def process_papers(mongo_search_string):
 def main():
     tools.create_all_folders()
     # mongo_search_string = {'_id': 'journals_pvldb_ChaytorW10'}
-    mongo_search_string = {'journal': 'PVLDB'}
+    mongo_search_string = {'_id': 'journals_webology_Fedushko14'}
+    #mongo_search_string = {'journal': 'PVLDB'}
+    # mongo_search_string = ""
     process_papers(mongo_search_string)
 
 

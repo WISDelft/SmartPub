@@ -13,29 +13,39 @@ def tei_to_dict(root):
     """
     result = {}
 
-    abstract = get_abstract(root)
-    if abstract and len(abstract) == 1:
-        result['abstract'] = abstract[0].text
-
     authors = get_authors(root)
-    if authors:
-        result['authors'] = map(element_to_author, authors)
+    #if authors:
+    #   result['content.authors'] = map(element_to_author, authors)
 
     keywords = get_keywords(root)
     if keywords and len(keywords) == 1:
-        result['keywords'] = extract_keywords(keywords[0])
+        result['content.keywords'] = extract_keywords(keywords[0])
 
-    title = get_title(root)
-    if title and len(title) == 1:
-        result['title'] = title[0].text
+    notes = get_notes(root)
+    if notes:
+        result['content.notes'] = notes
+
+    #title = get_title(root)
+    #if title and len(title) == 1:
+    #    result['result.title'] = title[0].text
 
     references = get_references(root)
     if references:
-        result['references'] = map(element_to_reference, references)
+        dict_reference=[]
+        for reference in references:
+            mr = element_to_reference(reference)
+            dict_reference.append(mr)
+        result['content.references'] = dict_reference
+
+    abstract = get_abstract(root)
+    if abstract and len(abstract) == 1:
+        result['content.abstract'] = abstract[0].text
 
     fulltext = get_fulltext(root)
     if fulltext:
-        result['fulltext'] = fulltext
+        result['content.fulltext'] = fulltext
+
+
 
     return result
 
@@ -68,8 +78,8 @@ def element_to_author(el):
             affiliations.append({
                 'value': institution.text
             })
-
-    result['affiliations'] = affiliations
+    if len(affiliations) > 0:
+        result['affiliations'] = affiliations
 
     return result
 
@@ -182,3 +192,13 @@ def get_fulltext(root):
         result+=section
 
     return result
+
+def get_notes(root):
+    notes=[]
+    r_xpath = root.xpath('//tei:text/tei:body/tei:note', namespaces=NS)
+    for match in r_xpath:
+        notes.append(match.text)
+    if len(notes)>0:
+        return notes
+    else:
+        return None

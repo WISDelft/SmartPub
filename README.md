@@ -10,7 +10,7 @@ Currently, it will download and process files into the "data" subfolder of this 
 - For PDF processing, you need grobid installed. Grobid is a rather heavy collection of tools, and the easiest way to get it up and running as as follows:
     - Install Docker
     - run ```docker pull lfoppiano/grobid:0.4.1-SNAPSHOT``` to install the Docker version of grobid
-    - start grobid via ```docker run -t -d --rm -p 8080:8080 lfoppiano/grobid:0.4.1-SNAPSHOT```
+    - start grobid via ```docker run -t --rm -p 8080:8080 lfoppiano/grobid:0.4.1-SNAPSHOT```
     - test if it works by going to http://localhost:8080
  - Create your own config file (see below)   
  
@@ -21,19 +21,30 @@ You will need to register your public RSA key first! (ask Christoph) The name of
 
 ```javascript
 { // note that if a data key could not be parsed or is not available, that key is not used 
-    "_id" : "..."       // internal MongoDB id, identical to DBLP_ID
-    "dblpkey" : "..."   // key as used in dblp, with '/' replaces with '_'
-    "title": "..."      // title of the publication
-    "type" : "..."      // type of the publication. Right now, we only crawl 'article', 'inproceedings', 'book', and 'incollection'
-    "journal" : "..."   // name of the jounral if an article
-    "book" : "..."      // name of the book if book, or name of conference if inproceedings or incollection
-    "year" : "..."      // year of publication
-    "authors" : {"...", "..."} // list of athour strings as used in DBLP
-    "ee" : "..."        // link to a potential PDF. Note: In the MongoDB, we ONLY have papers for which this link was valid. All papers with invalid links or DOIs behind paywalls are discarded!
+    "_id" : "..."                   // internal MongoDB id, identical to DBLP_ID
+    "dblpkey" : "..."               // key as used in dblp, with '/' replaces with '_'
+    "title": "..."                  // title of the publication
+    "type" : "..."                  // type of the publication. Right now, we only crawl 'article', 'inproceedings', 'book', and 'incollection'
+    "journal" : "..."               // name of the jounral if an article
+    "book" : "..."                  // name of the book if book, or name of conference if inproceedings or incollection
+    "year" : "..."                  // year of publication
+    "authors" : {"...", "..."}      // list of author strings as used in DBLP (e.g., names only with numbering in case of dublicates)
+    "ee" : "..."                    // link to a potential PDF. Note: In the MongoDB, we ONLY have papers for which this link was valid. All papers with invalid links or DOIs behind paywalls are discarded!
     "content" :
     {
-        "abstract" : "..."      // plain text abstract as string
-        "fulltext" : "..."      // plain text fulltext as string, with all additional info / tags stripped
+        "abstract" : "..."          // plain text abstract as string
+        "fulltext" : "..."          // plain text fulltext as string, with all additional info / tags stripped
+        "notes" : {"...", "..."}    // list of footnotes (or other types of notes) as plain strings
+        "keywords" : {"...", "..."} // list of user-provided keywords as plain strings
+        "references" :              // list of references
+        {
+            "ref_title" : "..."     // name of the reference
+            "authors"   : "..."     // list of author names of the reference (these are not DBLP authors, but text extracted from the PDF)
+            "journal_pubnote" :     // detailed metadata on the reference if available
+            {
+                ...
+            }
+        }
     }
 }
 ```
