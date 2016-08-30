@@ -4,8 +4,13 @@ import pprint
 NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
 
 
-def tei_to_dict(root):
 
+def tei_to_dict(root):
+    """
+    Reads a LXML tag representing a TEI XML into a dictionary.
+    :param root:
+    :return:
+    """
     result = {}
 
     abstract = get_abstract(root)
