@@ -3,14 +3,15 @@
 # https://grobid.readthedocs.io/en/latest/Grobid-docker/
 # https://github.com/kennknowles/python-jsonpath-rw
 
-import requests
 import logging
-import tools
+
+import requests
+
+from pyhelpers import tools, grobid_mapping
+
 tools.setup_logging()
 import config as cfg
 from lxml import etree
-import grobid_mapping
-import pprint
 from six import text_type
 import os
 
@@ -65,7 +66,7 @@ def process_paper(dblpkey, db):
     NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
     try:
         xml=get_grobid_xml(dblpkey)
-        result=grobid_mapping.tei_to_dict(xml)
+        result= grobid_mapping.tei_to_dict(xml)
         #
         #try:
         if 'abstract' in result:

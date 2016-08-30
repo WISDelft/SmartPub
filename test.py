@@ -1,10 +1,5 @@
-import sys
-from lxml import etree
-import gzip
-import tools
-import datetime
-from pymongo import MongoClient
 from bson.son import SON
+from pymongo import MongoClient
 
 client = MongoClient()
 db = client.pub

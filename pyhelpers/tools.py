@@ -1,6 +1,6 @@
 import urllib.request
 import os
-import config as cfg
+import config_default as cfg
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 

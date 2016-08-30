@@ -1,6 +1,8 @@
-import config as cfg
 import logging
-import tools
+
+import config as cfg
+from pyhelpers import tools
+
 tools.setup_logging()
 
 import sys
