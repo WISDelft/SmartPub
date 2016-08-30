@@ -104,11 +104,10 @@ def process_papers(mongo_search_string):
 
 def main():
     tools.create_all_folders()
-    mongo_search_string = {'_id': 'journals_pvldb_ChaytorW10'}
+    # mongo_search_string = {'_id': 'journals_pvldb_ChaytorW10'}
     mongo_search_string = {'journal': 'PVLDB'}
     process_papers(mongo_search_string)
 
-    ### we neeed unicode handling!!!!!!!
 
 
 if __name__ == '__main__':

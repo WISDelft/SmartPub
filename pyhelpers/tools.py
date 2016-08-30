@@ -115,8 +115,8 @@ def connect_to_mongo():
     :return:
     """
     try:
-        client = MongoClient()
-        db = client.pub
+        client = MongoClient(cfg.mongoDB_IP, cfg.mongoDB_Port)
+        db = client[cfg.mongoDB_db]
         db.downloads.find_one({'_id': 'test'})
         return db
     except ServerSelectionTimeoutError as e:
