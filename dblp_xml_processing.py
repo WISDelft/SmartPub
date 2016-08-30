@@ -128,7 +128,7 @@ def download_and_store(paper, db):
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 def main():
-
+    tools.create_all_folders()
     # just a counter
     global numOfPDFobtained
     global numOfPDFobtainedInThisSession
