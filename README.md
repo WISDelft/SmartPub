@@ -17,6 +17,7 @@ Currently, it will download and process files into the "data" subfolder of this 
 # Using the installed version on SERVsara
 - If you want to access the MongoDB on SERVsara, you need to create an SSH tunnel first. This can be easily done by ```ssh -L 4321:localhost:27017 ubuntu@SERVSara_IP```. Then, you can access MongoDB on ```localhost:4321``` from your local machine. 
 You will need to register your public RSA key first! (ask Christoph) The name of the database is ```pub```.
+- Check ```access_fulltexts.py``` to see how to access stuff from MongoDB
 - The schema of the publication entries (collection "publication") is as follows:
 
 ```javascript
@@ -31,18 +32,22 @@ You will need to register your public RSA key first! (ask Christoph) The name of
     "authors" : {"...", "..."}      // list of author strings as used in DBLP (e.g., names only with numbering in case of dublicates)
     "ee" : "..."                    // link to a potential PDF. Note: In the MongoDB, we ONLY have papers for which this link was valid. All papers with invalid links or DOIs behind paywalls are discarded!
     "content" :
-    {
+    { // note that the stuff in content is probabilistically extracted from the PDF. It will not always be correct. Also, there is more information available currently not in mongoDB, as e.g., chapter structure or tables & figures
         "abstract" : "..."          // plain text abstract as string
         "fulltext" : "..."          // plain text fulltext as string, with all additional info / tags stripped
         "notes" : {"...", "..."}    // list of footnotes (or other types of notes) as plain strings
-        "keywords" : {"...", "..."} // list of user-provided keywords as plain strings
+        "keywords" : {"...", "..."} // list of author-provided keywords as plain strings
         "references" :              // list of references
         {
             "ref_title" : "..."     // name of the reference
             "authors"   : "..."     // list of author names of the reference (these are not DBLP authors, but text extracted from the PDF)
             "journal_pubnote" :     // detailed metadata on the reference if available
             {
-                ...
+                "in" : "..."        // name of the journal or conference
+                "journal_volume" : "..." 
+                "journal_issue" : "..." 
+                "year" : "..." 
+                "page_range": "..." 
             }
         }
     }
