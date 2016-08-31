@@ -14,10 +14,11 @@ Currently, it will download and process files into the "data" subfolder of this 
     - test if it works by going to http://localhost:8080
  - Create your own config file (see below)   
  
-# Using the installed version on SERVsara
+# Using data hosted on SERVsara
 - If you want to access the MongoDB on SERVsara, you need to create an SSH tunnel first. This can be easily done by ```ssh -L 4321:localhost:27017 ubuntu@SERVSara_IP```. Then, you can access MongoDB on ```localhost:4321``` from your local machine. 
 You will need to register your public RSA key first! (ask Christoph) The name of the database is ```pub```.
 - Check ```access_fulltexts.py``` to see how to access stuff from MongoDB
+    - I also like Mongoclient (http://www.mongoclient.com/) for fiddeling around with data 
 - The schema of the publication entries (collection "publication") is as follows:
 
 ```javascript
