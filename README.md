@@ -74,6 +74,8 @@ gets lost during extraction. se ```nohup python pdf_text_extractor.py &``` to ru
 
 - **access_fulltexts.py**: Simple example script for demonstrating how you can access the fulltexts via MongoDB and the aforementioned SSH tunnel from the SURFsara server (assuming you configured ````config.py```correctly)
 
+- **show_statistics.py**: Print a small set of statistics about the data (number of PDFs, number of failed links, etc.)
+
 
 - all things named test* or *.ipynb: You can ignore these files. I use them for experimenting with code and libraries, and they will likely be cleaned later.
 

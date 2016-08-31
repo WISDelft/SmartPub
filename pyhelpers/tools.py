@@ -99,7 +99,7 @@ def create_all_folders():
     os.makedirs(cfg.folder_log, exist_ok=True)
 
 ##
-def setup_logging():
+def setup_logging(printOutput = ""):
     # setup logging
     import logging
     create_all_folders()

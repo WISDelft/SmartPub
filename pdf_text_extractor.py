@@ -108,8 +108,9 @@ def process_papers(mongo_search_string):
 def main():
     tools.create_all_folders()
     # mongo_search_string = {'_id': 'journals_pvldb_ChaytorW10'}
-    mongo_search_string = {'_id': 'journals_webology_Fedushko14'}
+    # mongo_search_string = {'_id': 'journals_webology_Fedushko14'}
     #mongo_search_string = {'journal': 'PVLDB'}
+    mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
     process_papers(mongo_search_string)
 
