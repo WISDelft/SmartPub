@@ -9,7 +9,7 @@ import requests
 
 from pyhelpers import tools, grobid_mapping
 
-tools.setup_logging()
+tools.setup_logging(file_name="extractor.log")
 import config as cfg
 from lxml import etree
 from six import text_type

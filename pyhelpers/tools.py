@@ -99,11 +99,11 @@ def create_all_folders():
     os.makedirs(cfg.folder_log, exist_ok=True)
 
 ##
-def setup_logging(printOutput = ""):
+def setup_logging(file_name = "last_log.log"):
     # setup logging
     import logging
     create_all_folders()
-    logging.basicConfig(format='%(asctime)s %(message)s', filename=cfg.folder_log+'last_log.log',
+    logging.basicConfig(format='%(asctime)s %(message)s', filename=cfg.folder_log+file_name,
                         level=logging.DEBUG, filemode='w')
     logging.debug("Start XML Parsing")
     logging.getLogger().addHandler(logging.StreamHandler())

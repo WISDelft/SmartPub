@@ -3,7 +3,7 @@ import logging
 import config as cfg
 from pyhelpers import tools
 
-tools.setup_logging()
+tools.setup_logging(file_name="xml_processor.log")
 
 import sys
 from lxml import etree
