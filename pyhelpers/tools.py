@@ -16,7 +16,7 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
     :param folder: name of folder with "/" at the end (default './'
     :param overwrite: overwrite existing files (default True)
     :param localfilename: the name of the local file (default is the name of the remote file)
-    :return:
+    :return: True if the file was actually downloaded, False if it was skipped because it existed
     """
     if (barlength > 0):
         barlengthDivisor = 100 / barlength
@@ -29,7 +29,7 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
     if os.path.exists(file_name) and not overwrite:
         if printOutput:
             print('Skipping ' + file_name)
-        return
+        return False
 
     # get remote file info
     u = urllib.request.urlopen(url)
@@ -77,7 +77,7 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
                 print (status)
                 nextIncrement = nextIncrement + incrementPercentage
     f.close()
-    return
+    return True
 
 ##
 def normalizeDBLPkey(dblpkey):

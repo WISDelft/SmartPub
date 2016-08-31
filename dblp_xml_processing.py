@@ -109,8 +109,11 @@ def download_and_store(paper, db):
             if not skip:
                 try:
                     # download
-                    tools.downloadFileWithProgress(downloadinfo['url'], barlength = 0, overwrite = False, folder = cfg.folder_pdf, localfilename=filename, incrementPercentage=0, incrementKB=0)
-                    logging.info(' Downloaded '+paper['dblpkey'])
+                    skipped=not tools.downloadFileWithProgress(downloadinfo['url'], barlength = 0, overwrite = False, folder = cfg.folder_pdf, localfilename=filename, incrementPercentage=0, incrementKB=0)
+                    if skipped:
+                        logging.info(' Used local PDF copy for ' + paper['dblpkey'])
+                    else:
+                        logging.info(' Downloaded '+paper['dblpkey'])
                     global numOfPDFobtainedInThisSession
                     numOfPDFobtainedInThisSession += 1
                     # store
