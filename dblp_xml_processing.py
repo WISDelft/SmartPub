@@ -12,7 +12,7 @@ import datetime
 
 
 # set to true if you want to persist to a local mongo DB (default connection)
-storeToMongo = True
+storeToMongo = False
 
 # set to true if you want to skip downloading EE entries (pdf URLs) which have been accessed before (either sucessfully or unsucessfully)
 # this only works if storeToMongo is set to True because the MongoDB must be accessed for that. (if you set storeToMongo to false, I will
@@ -30,6 +30,7 @@ DATA_ITEMS = ["title", "booktitle", "year", "journal", "crossref", "ee"]
 # prints out a progress every X attempted downloads (including skips which had been downloaded before)
 statusEveryXdownloads = 100
 
+filters = {}
 
 
 
@@ -66,50 +67,68 @@ def fast_iter2(context, db):
                 paper[data_item] = data.text
 
         if paper['type'] not in SKIP_CATEGORIES:
+            # try to downlaod and store the thing if it is not in one of the skipped categories
             download_and_store(paper, db)
 
 
 ## stores stuff in mongo db, and downloads the PDF
 def download_and_store(paper, db):
+    global filters
+    # the ee XML tag indicates that this paper has some kind of source attached (this will usually be an URL)
     if 'ee' in paper:
-
-        # only proceed if paper has a key, an ee entry, and that entry ends on pdf
-        if (type(paper['dblpkey']) is str and type(paper['ee']) is str and paper['ee'].endswith("pdf")):
-            filename = paper['dblpkey']+".pdf"
-            # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
-            # which URLs have been accessed, and if that was successfull or not
-            downloadinfo = {
-                '_id': paper['ee'],
-                'url': paper['ee'],
-                'dblpkey': paper['dblpkey'],
-                'lastaccessed': datetime.datetime.now(),
-                'success': True
-            }
-            # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
-            if skipPreviouslyAccessedURLs and storeToMongo:
-                result = db.downloads.find_one({'_id': downloadinfo['_id']})
-                if result is None:
-                    skip = False
-                else:
+        # Do we want to skip this file? There are lots of reasons, see below... Skipping means we will not try to download it
+        skip = False
+        # filters have been set
+        if len(filters)>0:
+            for k, v in filters.items():
+                if not (k in paper and paper[k]==v):
                     skip = True
-                    if result['success']:
-                        global numOfPDFobtained
-                        global paperCounter
-                        global numOfPDFobtainedInThisSession
-                        numOfPDFobtained += 1
-                        if numOfPDFobtained % statusEveryXdownloads is 0:
-                            logging.info(
-                                'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
-                                    paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
 
-            else:
-                skip = False
+        # do NOT skip if paper has a key, an ee entry
+        if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
+            # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
+            if (paper['ee'].endswith("pdf") or paper['ee'].startswith("doi.acm.org")):
+                filename = paper['dblpkey']+".pdf"
+                # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
+                # which URLs have been accessed, and if that was successfull or not
+                downloadinfo = {
+                    '_id': paper['ee'],
+                    'url': paper['ee'],
+                    'dblpkey': paper['dblpkey'],
+                    'lastaccessed': datetime.datetime.now(),
+                    'success': True
+                }
+                # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
+                if skipPreviouslyAccessedURLs and storeToMongo:
+                    result = db.downloads.find_one({'_id': downloadinfo['_id']})
+                    if result is None:
+                        skip = False
+                    else:
+                        skip = True
+                        if result['success']:
+                            global numOfPDFobtained
+                            global paperCounter
+                            global numOfPDFobtainedInThisSession
+                            numOfPDFobtained += 1
+                            if numOfPDFobtained % statusEveryXdownloads is 0:
+                                logging.info(
+                                    'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
+                                        paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
+                else:
+                    skip = False
 
-            # Do the Download
+            # Do the Download and store to MongoDB
             if not skip:
                 try:
-                    # download
-                    skipped=not tools.downloadFileWithProgress(downloadinfo['url'], barlength = 0, overwrite = False, folder = cfg.folder_pdf, localfilename=filename, incrementPercentage=0, incrementKB=0)
+                    print(paper['dblpkey'])
+                    # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
+                    if paper['ee'].endswith("pdf"):
+                        # Normal PDF download
+                        skipped=not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
+                    if paper['ee'].startswith("doi.acm.org"):
+                        raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
+
+
                     if skipped:
                         logging.info(' Used local PDF copy for ' + paper['dblpkey'])
                     else:
@@ -131,7 +150,17 @@ def download_and_store(paper, db):
                         downloadinfo['error'] = repr(ex)
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
-def main():
+def main(filter:("filter","option")=None):
+    """
+
+    :param filter: Only consider entries with which match certain filter conditions in the DBLP xml. Examples: -filter="{'book' : 'SIGIR'}" or -filter="{'journal' : 'PVLDB', 'year' : '2016'}"   (Note the usage of " and ')
+    """
+    import json
+    global filters
+    if filter:
+        filters=json.loads(filter.replace("'",'"'))
+        print("Using filters "+str(filters))
+
     tools.create_all_folders()
     # just a counter
     global numOfPDFobtained
@@ -149,6 +178,8 @@ def main():
     # initialize connection to local mongoDB, database is named pub
     if storeToMongo:
         db = tools.connect_to_mongo()
+    else:
+        db = None
 
 
     # open xml and iterate over xml tree to extract relevant stuff
@@ -159,5 +190,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import plac
+    plac.call(main)
 

@@ -251,6 +251,7 @@ def get_fulltext(root):
     :param root:
     :return: string
     """
+    # @TODO THIS IS SUUUPER-CRUDE! Improvements necesarry!
     result=""
     r_xpath = root.xpath('//tei:text/tei:body/tei:div', namespaces=NS)
     for match in r_xpath:

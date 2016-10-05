@@ -4,8 +4,8 @@ import json
 import requests
 
 
-tools.downloadFileWithProgress('http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5089263', incrementKB=10 * 1024, localfilename="1.pdf", overwrite=False)
-tools.downloadFileWithProgress('http://dl.acm.org/ft_gateway.cfm?id=2964799&ftid=1751125&dwn=1&CFID=847673629&CFTOKEN=22464829', localfilename="2.pdf", incrementKB=10 * 1024, overwrite=False)
+print(tools.downloadFile('http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5089263',  localfilename="1.pdf", overwrite=True))
+print(tools.downloadFile('http://dl.acm.org/ft_gateway.cfm?id=2964799&ftid=1751125&dwn=1&CFID=847673629&CFTOKEN=22464829', localfilename="2.pdf", overwrite=True))
 
 class PageParser(HTMLParser):
     def __init__(self):

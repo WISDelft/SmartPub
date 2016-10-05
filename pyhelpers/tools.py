@@ -3,10 +3,10 @@ import os
 import config as cfg
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
-
+import requests
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
 
-def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, incrementKB = 0, printOutput = True, folder = './', overwrite = True, localfilename='.', headers={}):
+def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, incrementKB = 0, printOutput = True, folder = './', overwrite = True, localfilename='.'):
     """
     Download a file from an URL, and show the download progress.
     :param url: the source URL
@@ -38,7 +38,7 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
     # We need: Custom user agent, connection keep alive, anything else?
     ##
 
-    req = urllib.request.Request(url, headers=headers)
+    req = urllib.request.Request(url)
     with urllib.request.urlopen(req) as u:
         meta = u.info()
         length = meta['Content-Length']
@@ -83,6 +83,38 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
                 if currentPercentage >= nextIncrement:
                     print (status)
                     nextIncrement = nextIncrement + incrementPercentage
+        f.close()
+        return True
+
+def downloadFile(url, folder='./', overwrite=True, localfilename='.', printOutput = True):
+        """
+        Download a file from an URL. Better if you do not require the progressbar. Also, uses custom headers in order to circumvent, e.g. ACM blocking.
+        :param url: the source URL
+        :param printOutput: set to False if you wish no output (default True)
+        :param folder: name of folder with "/" at the end (default './'
+        :param overwrite: overwrite existing files (default True)
+        :param localfilename: the name of the local file (default is the name of the remote file)
+        :return: True if the file was actually downloaded, False if it was skipped because it existed
+        """
+
+
+        # check local file
+        if localfilename is '.':
+            file_name = folder + url.split('/')[-1]
+        else:
+            file_name = folder + localfilename
+        if os.path.exists(file_name) and not overwrite:
+            if printOutput:
+                print('Skipping ' + file_name)
+            return False
+
+        # get remote file info
+        headers = {'user-agent': USER_AGENT, 'Connection': 'keep-alive'}
+        r = requests.get(url, headers=headers)
+        if printOutput:
+            print('Downloading: {:s}'.format(url))
+        f = open(file_name, 'wb')
+        f.write(r.content)
         f.close()
         return True
 
