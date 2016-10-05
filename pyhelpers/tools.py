@@ -4,8 +4,9 @@ import config as cfg
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
 
-def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, incrementKB = 0, printOutput = True, folder = './', overwrite = True, localfilename='.'):
+def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, incrementKB = 0, printOutput = True, folder = './', overwrite = True, localfilename='.', headers={}):
     """
     Download a file from an URL, and show the download progress.
     :param url: the source URL
@@ -32,52 +33,58 @@ def downloadFileWithProgress(url, barlength=20, incrementPercentage = 10, increm
         return False
 
     # get remote file info
-    u = urllib.request.urlopen(url)
-    meta = u.info()
-    length = meta['Content-Length']
-    if meta['Content-Length'] is not None:
-        file_size = int(meta['Content-Length'])
-    else:
-        # disable display if cannot size
-        file_size = -1
-        barlength = 0
-        incrementKB = 0
-        incrementPercentage = 0
-    if file_size is 0:
-        raise BaseException('File size is 0')
 
-    if printOutput:
-        print('Downloading: {:s}   {:1.0f} KB'.format(url, file_size/1024))
+    # @TODO: SO, THIS IS RATHER BAD. WE NEED TO REWORK THIS, AND ADD SUPPORT FOR CUSTOM HEADERS.
+    # We need: Custom user agent, connection keep alive, anything else?
+    ##
 
-    # set KB increments
-    if (incrementKB > 0):
-        incrementPercentage = 100 * incrementKB / (file_size / 1024)
+    req = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(req) as u:
+        meta = u.info()
+        length = meta['Content-Length']
+        if meta['Content-Length'] is not None:
+            file_size = int(meta['Content-Length'])
+        else:
+            # disable display if cannot size
+            file_size = -1
+            barlength = 0
+            incrementKB = 0
+            incrementPercentage = 0
+        if file_size is 0:
+            raise BaseException('File size is 0')
+
+        if printOutput:
+            print('Downloading: {:s}   {:1.0f} KB'.format(url, file_size/1024))
+
+        # set KB increments
+        if (incrementKB > 0):
+            incrementPercentage = 100 * incrementKB / (file_size / 1024)
 
 
-    # transfer file
-    f = open(file_name, 'wb')
-    file_size_dl = 0
-    block_sz = 8192
-    nextIncrement = 0
-    while True:
-        buffer = u.read(block_sz)
-        if not buffer:
-            break
+        # transfer file
+        f = open(file_name, 'wb')
+        file_size_dl = 0
+        block_sz = 8192
+        nextIncrement = 0
+        while True:
+            buffer = u.read(block_sz)
+            if not buffer:
+                break
 
-        file_size_dl += len(buffer)
-        f.write(buffer)
+            file_size_dl += len(buffer)
+            f.write(buffer)
 
-        # output progress
-        if printOutput and (incrementPercentage > 0 or incrementKB > 0):
-            currentPercentage = file_size_dl * 100. / file_size
-            status ='{:10.0f}KB {:05.2f}%  '.format(file_size_dl / 1024, currentPercentage)
-            if barlength>0:
-                status = status + '|'+ '#' * int(currentPercentage / barlengthDivisor) + ' ' * int(barlength - currentPercentage / barlengthDivisor) + '|'
-            if currentPercentage >= nextIncrement:
-                print (status)
-                nextIncrement = nextIncrement + incrementPercentage
-    f.close()
-    return True
+            # output progress
+            if printOutput and (incrementPercentage > 0 or incrementKB > 0):
+                currentPercentage = file_size_dl * 100. / file_size
+                status ='{:10.0f}KB {:05.2f}%  '.format(file_size_dl / 1024, currentPercentage)
+                if barlength>0:
+                    status = status + '|'+ '#' * int(currentPercentage / barlengthDivisor) + ' ' * int(barlength - currentPercentage / barlengthDivisor) + '|'
+                if currentPercentage >= nextIncrement:
+                    print (status)
+                    nextIncrement = nextIncrement + incrementPercentage
+        f.close()
+        return True
 
 ##
 def normalizeDBLPkey(dblpkey):
@@ -120,5 +127,6 @@ def connect_to_mongo():
         db.downloads.find_one({'_id': 'test'})
         return db
     except ServerSelectionTimeoutError as e:
-        raise Exception("Local MongoDB instance cannot be accessed.") from e
-# downloadFileWithProgress('http://aclweb.org/anthology/Y/Y06/Y06-1007.pdf', incrementKB=10 * 1024, overwrite=True)
+        raise Exception("Local MongoDB instance at "+cfg.mongoDB_IP+":"+cfg.mongoDB_Port+" could not be accessed.") from e
+
+#downloadFileWithProgress('http://aclweb.org/anthology/Y/Y06/Y06-1007.pdf', incrementKB=10 * 1024, overwrite=True)
