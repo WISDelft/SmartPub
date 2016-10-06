@@ -56,10 +56,13 @@ def fast_iter2(context, db):
     for paperCounter, element in enumerate(extract_paper_elements(context)):
         # extract basic metadata from the dblp XML
         paper = {
-            'type': element.tag,
+            'type': element.tag
            # 'mdate': element.get("mdate"),
-            'dblpkey': element.get('key')
         }
+        if 'key' in element.attrib:
+            paper['dblpkey'] = element.get('key', default=None)
+        else:
+            paper['dblpkey'] = None
         if paper['dblpkey'] is not None:
             paper['dblpkey'] = tools.normalizeDBLPkey(paper['dblpkey'])
 
@@ -135,9 +138,9 @@ def download_and_store(paper, db):
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].endswith("pdf"):
                         # Normal PDF download
-                        skipped=not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
+                        skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("doi.acm.org"):
-                        extract_paper_from_ACM(paper['ee'])
+                        skipped = not extract_paper_from_ACM(paper['ee'])
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
 
 
@@ -190,7 +193,7 @@ def extract_paper_from_ACM(paper_url):
             file_id = href_link[href_link.find("ftid=")+6 : href_link.find("&d")]
             localfilename = pdf_id + '_' + file_id+'.pdf'
             #folder = "C:/Users/User/Documents/acm_pdfs/"
-            tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
+            return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
                                    localfilename= localfilename, printOutput=False)
 
 def main(filter:("filter","option")=None):
