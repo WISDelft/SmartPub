@@ -31,6 +31,7 @@ DATA_ITEMS = ["title", "booktitle", "year", "journal", "crossref", "ee"]
 
 # prints out a progress every X attempted downloads (including skips which had been downloaded before)
 statusEveryXdownloads = 100
+statusEveryXxmlLoops = 1000
 
 filters = {}
 
@@ -71,7 +72,10 @@ def fast_iter2(context, db):
         if paper['type'] not in SKIP_CATEGORIES:
             # try to downlaod and store the thing if it is not in one of the skipped categories
             download_and_store(paper, db)
-
+        # print(paperCounter, paperCounter % statusEveryXxmlLoops)
+        if (paperCounter % statusEveryXxmlLoops) == 0:
+            print('.', end="")
+            sys.stdout.flush()
 
 ## stores stuff in mongo db, and downloads the PDF
 def download_and_store(paper, db):
@@ -85,6 +89,9 @@ def download_and_store(paper, db):
             for k, v in filters.items():
                 if not (k in paper and paper[k]==v):
                     skip = True
+            if not skip:
+                if "dblpkey" in paper:
+                    print ("Filter matched: "+str(paper["dblpkey"]))
 
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
@@ -117,7 +124,9 @@ def download_and_store(paper, db):
                                     'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
                                         paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
                 else:
-                    skip = False
+                    skip = False # url not in download collection of mongo db
+            else:
+                skip = True # this ee entry is not interesting to us
 
             # Do the Download and store to MongoDB
             if not skip:
@@ -128,7 +137,7 @@ def download_and_store(paper, db):
                         # Normal PDF download
                         skipped=not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("doi.acm.org"):
-                        extract_paper(paper['ee'])
+                        extract_paper_from_ACM(paper['ee'])
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
 
 
@@ -153,10 +162,14 @@ def download_and_store(paper, db):
                         downloadinfo['error'] = repr(ex)
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
-#this function will access a given url  and will find the
-#link of the pdf.
-#Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
-def extract_paper(paper_url):
+
+def extract_paper_from_ACM(paper_url):
+    """
+    this function will access a given url  and will find the link of the pdf.
+    Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
+    :param paper_url: DOI link of and ACM Page
+    :return:
+    """
     #reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
     #the site will strike you out because you are a robot!
     req = Request(paper_url ,headers={'User-Agent': 'Mozilla/5.0'})
@@ -183,7 +196,7 @@ def extract_paper(paper_url):
 def main(filter:("filter","option")=None):
     """
 
-    :param filter: Only consider entries with which match certain filter conditions in the DBLP xml. Examples: -filter="{'book' : 'SIGIR'}" or -filter="{'journal' : 'PVLDB', 'year' : '2016'}"   (Note the usage of " and ')
+    :param filter: Only consider entries with which match certain filter conditions in the DBLP xml. Examples: -filter="{'booktitle' : 'SIGIR', 'year' : '2015'}" or -filter="{'journal' : 'PVLDB'}"   (Note the usage of " and ')
     """
     import json
     global filters
