@@ -9,7 +9,9 @@ import sys
 from lxml import etree
 import gzip
 import datetime
-
+#modules to extract acm papers
+from bs4 import BeautifulSoup
+from urllib.request import Request, urlopen
 
 # set to true if you want to persist to a local mongo DB (default connection)
 storeToMongo = True
@@ -126,7 +128,8 @@ def download_and_store(paper, db):
                         # Normal PDF download
                         skipped=not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("doi.acm.org"):
-                        raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
+                        extract_paper(paper['ee'])
+                        #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
 
 
                     if skipped:
@@ -149,6 +152,33 @@ def download_and_store(paper, db):
                         ex=sys.exc_info()
                         downloadinfo['error'] = repr(ex)
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+
+#this function will access a given url  and will find the
+#link of the pdf.
+#Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
+def extract_paper(paper_url):
+    #reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
+    #the site will strike you out because you are a robot!
+    req = Request(paper_url ,headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    #parse the html code
+    soup = BeautifulSoup(webpage, 'html.parser')
+    #select only the link tags
+    for link in soup.find_all('a'):
+        #the name of in the link tag is "FullTextPDF"
+        if str(link.get('name')).endswith('PDF'):
+            href_link = link.get('href')
+            prefix = "http://dl.acm.org/"
+            pdf_link = prefix + href_link
+            #To avoid any conflicts I am taking the id of the link and the
+            #ftid and I concatinate them together. I put +3 and +6 to
+            #exclude  the "id=" and "ftid="
+            pdf_id = href_link[href_link.find("id=")+3: href_link.find("&f")]
+            file_id = href_link[href_link.find("ftid=")+6 : href_link.find("&d")]
+            localfilename = pdf_id + '_' + file_id+'.pdf'
+            #folder = "C:/Users/User/Documents/acm_pdfs/"
+            tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
+                                   localfilename= localfilename, printOutput=False)
 
 def main(filter:("filter","option")=None):
     """
