@@ -162,7 +162,7 @@ def download_and_store(paper, db):
                         db.publications.replace_one({'_id' : paper['_id']}, paper, upsert = True )
                         db.downloads.replace_one({'_id' : downloadinfo['_id']}, downloadinfo, upsert = True )
                 except:
-                    logging.exception('Cannot download or store '+paper['ee'], exc_info=False)
+                    logging.exception('Cannot download or store '+paper['ee'], exc_info=True)
                     if storeToMongo:
                         downloadinfo['success'] = False
                         ex=sys.exc_info()
