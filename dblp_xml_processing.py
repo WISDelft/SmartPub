@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
 # set to true if you want to persist to a local mongo DB (default connection)
-storeToMongo = True
+storeToMongo = False
 
 # set to true if you want to skip downloading EE entries (pdf URLs) which have been accessed before (either sucessfully or unsucessfully)
 # this only works if storeToMongo is set to True because the MongoDB must be accessed for that. (if you set storeToMongo to false, I will
@@ -35,6 +35,9 @@ statusEveryXxmlLoops = 1000
 
 filters = {}
 enabledScrapers = ["acm"]
+
+numOfPDFobtained = 0
+numOfPDFobtainedInThisSession = 0
 
 
 
@@ -141,7 +144,7 @@ def download_and_store(paper, db):
                         # Normal PDF download
                         skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers:
-                        skipped = not extract_paper_from_ACM(paper['ee'])
+                        skipped = not extract_paper_from_ACM(paper['ee'], filename)
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
 
 
@@ -167,7 +170,7 @@ def download_and_store(paper, db):
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 
-def extract_paper_from_ACM(paper_url):
+def extract_paper_from_ACM(paper_url, filename):
     """
     this function will access a given url  and will find the link of the pdf.
     Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
@@ -192,10 +195,12 @@ def extract_paper_from_ACM(paper_url):
             #exclude  the "id=" and "ftid="
             pdf_id = href_link[href_link.find("id=")+3: href_link.find("&f")]
             file_id = href_link[href_link.find("ftid=")+6 : href_link.find("&d")]
-            localfilename = pdf_id + '_' + file_id+'.pdf'
+            # localfilename = pdf_id + '_' + file_id+'.pdf'
             #folder = "C:/Users/User/Documents/acm_pdfs/"
+            print("donwload file "+pdf_link)
             return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
-                                   localfilename= localfilename, printOutput=False)
+                                   localfilename= filename, printOutput=False)
+    raise BaseException(paper_url+' does not contain a valid ACM download link.')
 
 def main(filter:("filter","option")=None):
     """

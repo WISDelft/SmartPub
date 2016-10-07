@@ -1,25 +1,6 @@
-from bson.son import SON
-from pymongo import MongoClient
-
-client = MongoClient()
-db = client.pub
+import dblp_xml_processing
 
 
-## count conferences
-pipeline=[
-    {"$group": {"_id": "$booktitle", "count": {"$sum": 1}}},
-    {"$sort": SON([("count", -1), ("_id", -1)])}
-]
-result=db.publications.aggregate(pipeline)
-for r in result:
-    print(r)
-
-
-## count journals
-pipeline=[
-    {"$group": {"_id": "$journal", "count": {"$sum": 1}}},
-    {"$sort": SON([("count", -1), ("_id", -1)])}
-]
-result=db.publications.aggregate(pipeline)
-for r in result:
-    print(r)
+url="http://doi.acxxxm.org/10.1145/2911451.2911492"
+# url="http://dblp.uni-trier.de/db/conf/sigir/index.html"
+print(dblp_xml_processing.extract_paper_from_ACM(url, "acm.pdf"))

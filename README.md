@@ -28,7 +28,7 @@ You will need to register your public RSA key first! (ask Christoph) The name of
     "title": "..."                  // title of the publication
     "type" : "..."                  // type of the publication. Right now, we only crawl 'article', 'inproceedings', 'book', and 'incollection'
     "journal" : "..."               // name of the jounral if an article
-    "book" : "..."                  // name of the book if book, or name of conference if inproceedings or incollection
+    "booktitle" : "..."             // name of the book if book, or name of conference if inproceedings or incollection
     "year" : "..."                  // year of publication
     "authors" : {"...", "..."}      // list of author strings as used in DBLP (e.g., names only with numbering in case of dublicates)
     "ee" : "..."                    // link to a potential PDF. Note: In the MongoDB, we ONLY have papers for which this link was valid. All papers with invalid links or DOIs behind paywalls are discarded!
@@ -66,6 +66,7 @@ One thing you might want to change is for example the MongoDB port to 4321 if yo
 If a paper could be downloaded, an entry with limited metadata (title, authors, journal/conference, year) will be stored in a local MongoDB database named "pub", in a collection named "publications".
 It also logs each attempt of downloading something in a collection called "downloads". By default, you can simple start this file, and it will skip all papers / downloads it has tried before, therefore it is suitable
 for incrementally building a library. Use ```nohup python dblp_xml_processing.py &``` to run this on the server. You likely do not want to run this on your own machine.
+You can also provide a filter property like this: ```-filter="{'booktitle' : 'SIGIR', 'year' : '2015'}"``` or ```-filter="{'journal' : 'PVLDB'}"```
 
 - **pdf_text_extractor.py**: Work in progress. You can specify a MongoDB search string, and then it tries to extract content from all papers which match that search. 
 Grobid needs to be installed and running on the machine in order for this to work. As grobid is rather slow, the resulting TEI XML will be cached. Then, the script extracts relevant content from the TEI and 
