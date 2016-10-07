@@ -113,6 +113,7 @@ def main():
     # mongo_search_string = {'book': 'SIGIR'}
     mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
+    #mongo_search_string = {"dblpkey":"journals_iajit_NguyenH12"}
     process_papers(mongo_search_string)
 
 
