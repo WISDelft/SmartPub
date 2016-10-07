@@ -100,7 +100,7 @@ def download_and_store(paper, db):
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
-            if (paper['ee'].endswith("pdf") and and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers):
+            if (paper['ee'].endswith("pdf") and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                 # which URLs have been accessed, and if that was successfull or not
