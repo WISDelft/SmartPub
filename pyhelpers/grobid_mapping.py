@@ -1,6 +1,7 @@
 from lxml import etree
 from lxml import objectify
 import pprint
+
 NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
 
 
@@ -45,6 +46,9 @@ def tei_to_dict(root):
     if fulltext:
         result['content.fulltext'] = fulltext
 
+    segment_text = get_segmented_text(root)
+    if segment_text:
+        result['content.chapters'] = segment_text
 
 
     return result
@@ -243,6 +247,56 @@ def get_title(root):
     :return: XML node
     """
     return root.xpath('//tei:titleStmt/tei:title', namespaces=NS)
+
+
+##
+def get_segmented_text(root):
+    """
+    This function parse all the divs of the body and extract
+    the chapter number and title. Moreover, it extracts
+    for each chapter the corresponding paragraphs
+    :param root:
+    :return: XML node
+    """
+
+    raw_xpath = root.xpath('//tei:text/tei:body/tei:div', namespaces=NS)
+    #traverse the xml and find the chapters the titles and the paragraphs of
+    #each chapter
+    chapter_paragraphs = []
+    chapter = {}
+    chapters = []
+    ids = list()
+    flag = False
+    json_data = {}
+    paragraphs = []
+    previous_ch = 0
+    for match in raw_xpath:
+        for child in match:
+            # get the attribute 'n' from the xml tag
+            chapter_number = child.get('n')
+            if chapter_number is not None:
+                if flag:
+                    chapters.append(chapter)
+                    chapter = {}
+                    paragraphs = []
+                    chapter['title'] = child.text
+                    chapter['chapter_num'] = chapter_number
+                    chapter['paragraphs'] = paragraphs
+                    flag = False
+                else:
+                    chapter['title'] = child.text
+                    chapter['chapter_num'] = chapter_number
+                    chapter['paragraphs'] = paragraphs
+
+            else:
+                paragraphs.append(child.text)
+                flag = True
+
+    # append the last chapter
+    chapters.append(chapter)
+
+    return chapters
+
 
 ##
 def get_fulltext(root):
