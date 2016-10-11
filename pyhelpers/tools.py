@@ -120,6 +120,8 @@ def downloadFile(url, folder='./', overwrite=True, localfilename='.', printOutpu
             # check if the web page is empty
             if str(r.content) == "b''":
                 raise BaseException("Empty page")
+            elif str(r.content).find("<!DOCTYPE html>") or str(r.content).find("<html"):
+                raise BaseException("HTML container - html doc")
             else:
                 if printOutput:
                     print('Downloading: {:s}'.format(url))
