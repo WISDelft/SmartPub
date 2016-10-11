@@ -111,11 +111,18 @@ def downloadFile(url, folder='./', overwrite=True, localfilename='.', printOutpu
         # get remote file info
         headers = {'user-agent': USER_AGENT, 'Connection': 'keep-alive'}
         r = requests.get(url, headers=headers)
-        if printOutput:
-            print('Downloading: {:s}'.format(url))
-        f = open(file_name, 'wb')
-        f.write(r.content)
-        f.close()
+        # Check the status code of the request
+        # if it's 200 then we have a success
+        # otherwise it is a failure
+        if r.status_code != 200:
+            raise BaseException("HTTPError {}".format(r.status_code))
+        else:
+            if printOutput:
+                print('Downloading: {:s}'.format(url))
+            f = open(file_name, 'wb')
+            f.write(r.content)
+            f.close()
+
         return True
 
 ##
