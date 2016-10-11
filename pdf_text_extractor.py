@@ -15,7 +15,8 @@ from lxml import etree
 from six import text_type
 import os
 
-
+import  time
+import random
 
 def get_grobid_xml(paper_id):
     """
@@ -70,7 +71,7 @@ def process_paper(dblpkey, db):
         #
         #try:
         mongo_set_dict=dict()
-
+        #print("results: {}".format(result))
         if 'abstract' in result:
             mongo_set_dict["content.abstract"]=result["abstract"]
         if 'notes' in result:
@@ -80,6 +81,8 @@ def process_paper(dblpkey, db):
             with open(cfg.folder_content_xml + dblpkey + ".txt", 'w') as f:
                 # f.write(result["fulltext"])
                 print(result["fulltext"])
+        if 'chapters' in result:
+            mongo_set_dict["content.chapters"] = result["chapters"]
 
         mongoResult= db.publications.update_one(
             {'_id': dblpkey},
@@ -100,8 +103,15 @@ def process_paper(dblpkey, db):
 def process_papers(mongo_search_string):
     db = tools.connect_to_mongo()
     result = db.publications.find(mongo_search_string)
+    count = 0
     for r in result:
         process_paper(r['dblpkey'], db)
+        # sleep after any paper process
+        rnd_time = int(random.uniform(5,10))
+        print("sleep for {} secs!".format(rnd_time))
+        time.sleep(rnd_time)
+
+
 
 
 
@@ -113,7 +123,9 @@ def main():
     # mongo_search_string = {'book': 'SIGIR'}
     mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
-    #mongo_search_string = {"dblpkey":"journals_iajit_NguyenH12"}
+    #mongo_search_string = {"dblpkey":"journals_iajit_MisraC12"}
+    #get only the articles
+    #mongo_search_string = {"type" : "article"}
     process_papers(mongo_search_string)
 
 
