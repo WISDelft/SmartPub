@@ -43,8 +43,6 @@ enabledScrapers = ["pdf"]
 
 # add the number of access in acm to set sleep mode
 num_of_access_in_acm = 0
-# add the number of access in common pdf
-num_of_access_in_pdf = 0
 
 numOfPDFobtained = 0
 numOfPDFobtainedInThisSession = 0
@@ -152,22 +150,6 @@ def download_and_store(paper, db):
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].endswith("pdf") and "pdf" in enabledScrapers:
                         # Normal PDF download
-                        global num_of_access_in_pdf
-                        num_of_access_in_pdf += 1
-                        if num_of_access_in_pdf % 1000 == 0:
-                            print("Crawler sleeps for 30 min - Times Access PDF: {}".format(num_of_access_in_pdf))
-                            time.sleep(1800)
-                        elif num_of_access_in_pdf % 50 == 0:
-                            print("Crawler sleeps for 10 min - Times Access PDF: {}".format(num_of_access_in_pdf))
-                            time.sleep(600)
-                        elif num_of_access_in_pdf % 10 == 0:
-                            print("Crawler sleeps for 10 sec - Times Access PDF: {}".format(num_of_access_in_pdf))
-                            time.sleep(10)
-
-                        # sleep for a random duration of time between 1 and 10 seconds
-                        rndm_time = int(random.uniform(1, 10))
-                        time.sleep(rndm_time)
-                        print("Crawler sleeps for {} sec - Times Access PDF: {}".format(rndm_time,num_of_access_in_pdf))
                         skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers:
                         global num_of_access_in_acm
