@@ -12,6 +12,9 @@ import datetime
 #modules to extract acm papers
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
+#import time to set a sleeping mode to avoid HTTP error: 503/403/303
+import  time
+import random
 
 # set to true if you want to persist to a local mongo DB (default connection)
 storeToMongo = True
@@ -35,6 +38,9 @@ statusEveryXxmlLoops = 1000
 
 filters = {}
 enabledScrapers = ["acm"]
+
+# add the number of access in acm to set sleep mode
+num_of_access_in_acm = 0
 
 numOfPDFobtained = 0
 numOfPDFobtainedInThisSession = 0
@@ -77,7 +83,7 @@ def fast_iter2(context, db):
                 paper[data_item] = data.text
 
         if paper['type'] not in SKIP_CATEGORIES:
-            # try to downlaod and store the thing if it is not in one of the skipped categories
+            # try to download and store the thing if it is not in one of the skipped categories
             download_and_store(paper, db)
         # print(paperCounter, paperCounter % statusEveryXxmlLoops)
         if (paperCounter % statusEveryXxmlLoops) == 0:
@@ -144,6 +150,22 @@ def download_and_store(paper, db):
                         # Normal PDF download
                         skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers:
+                        global num_of_access_in_acm
+                        num_of_access_in_acm += 1
+                        if num_of_access_in_acm % 1000 == 0:
+                            print("Crawler sleeps for 30 min - Times Access ACM: {}".format(num_of_access_in_acm))
+                            time.sleep(1800)
+                        elif num_of_access_in_acm % 50 == 0:
+                            print("Crawler sleeps for 10 min - Times Access ACM: {}".format(num_of_access_in_acm))
+                            time.sleep(600)
+                        elif num_of_access_in_acm % 10 == 0:
+                            print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
+                            time.sleep(10)
+
+                        # sleep for a random duration of time between 1 and 10 seconds
+                        rndm_time = int(random.uniform(1, 10))
+                        time.sleep(rndm_time)
+                        print("Crawler sleeps for {} sec - Times Access ACM: {}".format(rndm_time,num_of_access_in_acm))
                         skipped = not extract_paper_from_ACM(paper['ee'], filename)
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
 
