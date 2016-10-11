@@ -50,7 +50,6 @@ def tei_to_dict(root):
     if segment_text:
         result['content.chapters'] = segment_text
 
-
     return result
 
 ##
