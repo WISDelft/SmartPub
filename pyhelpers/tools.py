@@ -117,11 +117,15 @@ def downloadFile(url, folder='./', overwrite=True, localfilename='.', printOutpu
         if r.status_code != 200:
             raise BaseException("HTTPError {}".format(r.status_code))
         else:
-            if printOutput:
-                print('Downloading: {:s}'.format(url))
-            f = open(file_name, 'wb')
-            f.write(r.content)
-            f.close()
+            # check if the web page is empty
+            if str(r.content) == "b''":
+                raise BaseException("Empty page")
+            else:
+                if printOutput:
+                    print('Downloading: {:s}'.format(url))
+                f = open(file_name, 'wb')
+                f.write(r.content)
+                f.close()
 
         return True
 
