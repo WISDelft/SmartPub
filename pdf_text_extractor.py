@@ -71,9 +71,9 @@ def get_grobid_xml(paper_id):
 
 
 def check_validity_of_xml(root):
-    NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
-    header = root.xpath('//tei:teiHeader', namespaces=NS)
-    if "<teiHeader xml:lang=\"en\">" in str(root):
+    string_XML = etree.tostring(root)
+    # print(string_XML)
+    if "<teiHeader xml:lang=\"en\">" in str(string_XML):
         return True
     else:
         return False
@@ -142,7 +142,7 @@ def main():
     # mongo_search_string = {'_id': 'journals_webology_Fedushko14'}
     # mongo_search_string = {'journal': 'PVLDB'}
     # mongo_search_string = {'book': 'SIGIR'}
-    #mongo_search_string = {'content': {"$exists": False}}
+    mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
     #mongo_search_string = {"dblpkey":"journals_iajit_MisraC12"}
     #get only the articles
@@ -150,12 +150,14 @@ def main():
 
     # processable paper
     # mongo_search_string = {'_id': 'journals_mala_Wadler00'}
+    # mongo_search_string = {'_id': 'journals_ijclclp_XiaoLW07'}
 
     # pdf with out unicode mapping
     #mongo_search_string = {'_id': 'journals_iajit_BrahmiaMCB12'}
 
+
     # broken pdf
-    mongo_search_string = {'_id': 'journals_sigmod_Snodgrass04'}
+    # mongo_search_string = {'_id': 'journals_sigmod_Snodgrass04'}
 
     process_papers(mongo_search_string)
 
