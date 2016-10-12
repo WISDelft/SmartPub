@@ -65,7 +65,7 @@ def get_grobid_xml(paper_id):
             if check_validity_of_xml(root):
                 return root
             else:
-                raise Exception("Error in xml, pdf  either broken or not extractable (i.e Unicode mapping missing")
+                raise Exception("Error in xml, pdf  either broken or not extractable (i.e Unicode mapping missing)")
         else:
             raise Exception("Error calling GROBID for "+paper_id+": "+str(response.status_code)+" "+response.reason)
 
@@ -123,7 +123,8 @@ def process_paper(dblpkey, db):
 
 def process_papers(mongo_search_string):
     db = tools.connect_to_mongo()
-    result = db.publications.find(mongo_search_string)
+    # set no_cursor_timeout= true, to avoid "pymongo.errors.CursorNotFound"
+    result = db.publications.find(mongo_search_string, no_cursor_timeout=True)
     count = 0
     for r in result:
         process_paper(r['dblpkey'], db)
