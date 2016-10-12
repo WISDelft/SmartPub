@@ -18,6 +18,9 @@ import os
 import  time
 import random
 
+# for testing
+import sys
+
 def get_grobid_xml(paper_id):
     """
     Loads the GROBID XML of the paper with the provided DBLP id. If possible uses the XML cache. If not, uses the
@@ -33,7 +36,11 @@ def get_grobid_xml(paper_id):
     if os.path.isfile(filename_xml):
         ## yes, load from cache
         root=etree.parse(filename_xml)
-        return root
+        # check the validity of the xml
+        if check_validity_of_xml(root):
+            return root
+        else:
+            raise Exception("Error in xml, pdf  either broken or not extractable (i.e Unicode mapping missing")
     else:
         if not os.path.isfile(filename):
             raise Exception("PDF for "+paper_id+" does not exist.")
@@ -52,10 +59,24 @@ def get_grobid_xml(paper_id):
             ## and store it to xml cache
             with open(filename_xml, 'wb') as f:
                 f.write(etree.tostring(root, pretty_print=True))
-            return root
+            # Check if the xml file derived from a valid pdf with unicode mapping
+            # Correct: <teiHeader xml:lang="en">
+            # Incorrect: <teiHeader xml:lang="de">
+            if check_validity_of_xml(root):
+                return root
+            else:
+                raise Exception("Error in xml, pdf  either broken or not extractable (i.e Unicode mapping missing")
         else:
             raise Exception("Error calling GROBID for "+paper_id+": "+str(response.status_code)+" "+response.reason)
 
+
+def check_validity_of_xml(root):
+    NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
+    header = root.xpath('//tei:teiHeader', namespaces=NS)
+    if "<teiHeader xml:lang=\"en\">" in str(root):
+        return True
+    else:
+        return False
 
 def process_paper(dblpkey, db):
     """
@@ -121,11 +142,21 @@ def main():
     # mongo_search_string = {'_id': 'journals_webology_Fedushko14'}
     # mongo_search_string = {'journal': 'PVLDB'}
     # mongo_search_string = {'book': 'SIGIR'}
-    mongo_search_string = {'content': {"$exists": False}}
+    #mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
     #mongo_search_string = {"dblpkey":"journals_iajit_MisraC12"}
     #get only the articles
     #mongo_search_string = {"type" : "article"}
+
+    # processable paper
+    # mongo_search_string = {'_id': 'journals_mala_Wadler00'}
+
+    # pdf with out unicode mapping
+    #mongo_search_string = {'_id': 'journals_iajit_BrahmiaMCB12'}
+
+    # broken pdf
+    mongo_search_string = {'_id': 'journals_sigmod_Snodgrass04'}
+
     process_papers(mongo_search_string)
 
 
