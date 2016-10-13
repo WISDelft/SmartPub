@@ -1,6 +1,7 @@
 from lxml import etree
 from lxml import objectify
 import pprint
+import  sys
 
 NS = {'tei': 'http://www.tei-c.org/ns/1.0'}
 
@@ -46,7 +47,8 @@ def tei_to_dict(root):
     if fulltext:
         result['content.fulltext'] = fulltext
 
-    segment_text = get_segmented_text(root)
+    # segment_text = get_segmented_text(root)
+    segment_text =get_segmented_text(root)
     if segment_text:
         result['content.chapters'] = segment_text
 
@@ -264,6 +266,7 @@ def get_segmented_text(root):
     chapter_paragraphs = []
     chapter = {}
     chapters = []
+    paragraph = ""
     ids = list()
     flag = False
     json_data = {}
@@ -288,8 +291,18 @@ def get_segmented_text(root):
                     chapter['paragraphs'] = paragraphs
 
             else:
-                paragraphs.append(child.text)
-                flag = True
+                # paragraphs.append(child.text)
+                # with the child.text we got partially the
+                # text from the tag. There was an issue with the
+                # references in the paragraphs and the only way
+                # to overcome this issue is to use the itertext()
+                # method that parse the text from any subelement
+                if "p" in child.tag:
+                    for th in child.itertext():
+                        paragraph += th
+                    paragraphs.append(paragraph)
+                    paragraph = ""
+                    flag = True
 
     # append the last chapter
     chapters.append(chapter)

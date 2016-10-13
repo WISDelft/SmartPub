@@ -3,10 +3,12 @@ Here we will play around with some cool text analysis
 in order to find out which procedure is more suitable
 for our task
 """
-import nltk, re, pprint
+import nltk, re, pprint, sys
 from pyhelpers import tools
 
 
+# define the source of raw text, we could either add fulltext, or chapters
+features_with_raw_data = ["chapters"]
 # basic pipeline of information extraction from raw data
 def ie_preprocess(document):
     sentences = nltk.sent_tokenize(document) # sentence segmentation, list of strings
@@ -36,10 +38,18 @@ def iteratePuplications(mongo_string_search):
     # first we are going to use the entire text
     # (i.e content.fulltext)
     name_entities = []
+    info_extr = []
     for r in result:
         # print(r['content']['fulltext'])
-        info_extr = ie_preprocess(r['content']['fulltext'])
-        name_entities = name_entity_rec(info_extr)
+        if "fulltext" in features_with_raw_data:
+            info_extr = ie_preprocess(r['content']['fulltext'])
+        elif "chapters" in features_with_raw_data:
+            for chapter in r['content']['chapters']:
+                for paragraph in chapter['paragraphs']:
+                    print(paragraph)
+                sys.exit(1)
+                # info_extr = ie_preprocess(r['content']['chapters'])
+        # name_entities = name_entity_rec(info_extr)
 
     # the first loop traverse each sentence in
     # the list of sentences
