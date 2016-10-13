@@ -143,7 +143,7 @@ def main():
     # mongo_search_string = {'_id': 'journals_webology_Fedushko14'}
     # mongo_search_string = {'journal': 'PVLDB'}
     # mongo_search_string = {'book': 'SIGIR'}
-    mongo_search_string = {'content': {"$exists": False}}
+    # mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
     #mongo_search_string = {"dblpkey":"journals_iajit_MisraC12"}
     #get only the articles
@@ -160,6 +160,8 @@ def main():
     # broken pdf
     # mongo_search_string = {'_id': 'journals_sigmod_Snodgrass04'}
 
+    # traverse all the instances in mongo
+    mongo_search_string = {}
     process_papers(mongo_search_string)
 
 
