@@ -25,6 +25,7 @@ def name_entity_rec(results):
         mylist.append(nltk.ne_chunk(sent, binary=False))
     return mylist
 
+
 def iteratePuplications(mongo_string_search):
     # initialize the db connection
     db = tools.connect_to_mongo()
@@ -47,10 +48,9 @@ def iteratePuplications(mongo_string_search):
         # in each sentence. For each word we
         # have the part of speech and the
         # type of the entity (if it has any)
+        print("Sentence: {}".format(i))
         for entity in enumerate(sentence):
             print(entity)
-    #for entity in name_entities:
-    #    print(entity,)
 
 
 def main():
