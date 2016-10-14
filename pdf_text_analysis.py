@@ -36,20 +36,24 @@ def iteratePuplications(mongo_string_search):
 
     # we need to think ways of text analysis
     # first we are going to use the entire text
-    # (i.e content.fulltext)
+    # (i.e content.fulltext) and then per chapter
     name_entities = []
     info_extr = []
     for r in result:
         # print(r['content']['fulltext'])
         if "fulltext" in features_with_raw_data:
             info_extr = ie_preprocess(r['content']['fulltext'])
+            name_entities = name_entity_rec(info_extr)
         elif "chapters" in features_with_raw_data:
             for chapter in r['content']['chapters']:
+                chapter_text = ""
                 for paragraph in chapter['paragraphs']:
-                    print(paragraph)
-                sys.exit(1)
-                # info_extr = ie_preprocess(r['content']['chapters'])
-        # name_entities = name_entity_rec(info_extr)
+                    chapter_text += paragraph
+                # print(chapter_text)
+                info_extr = ie_preprocess(chapter_text)
+                name_entities.append(name_entity_rec(info_extr))
+        print(name_entities)
+        return name_entities
 
     # the first loop traverse each sentence in
     # the list of sentences
