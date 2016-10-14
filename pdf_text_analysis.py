@@ -5,7 +5,7 @@ for our task
 """
 import nltk, re, pprint, sys
 from pyhelpers import tools
-
+from TextSummarize import TextSummarize
 
 # define the source of raw text, we could either add fulltext, or chapters
 features_with_raw_data = ["chapters"]
@@ -39,6 +39,7 @@ def iteratePuplications(mongo_string_search):
     # (i.e content.fulltext) and then per chapter
     name_entities = []
     info_extr = []
+    ts = TextSummarize()
     for r in result:
         # print(r['content']['fulltext'])
         if "fulltext" in features_with_raw_data:
@@ -50,8 +51,13 @@ def iteratePuplications(mongo_string_search):
                 for paragraph in chapter['paragraphs']:
                     chapter_text += paragraph
                 # print(chapter_text)
+                print("Summary: Chapter")
+                for s in ts.summarize(chapter_text, 4):
+                    print("*",s)
+                print("Summary: end")
                 info_extr = ie_preprocess(chapter_text)
                 name_entities.append(name_entity_rec(info_extr))
+
         print(name_entities)
         return name_entities
 
