@@ -58,19 +58,7 @@ def iteratePuplications(mongo_string_search):
                 info_extr = ie_preprocess(chapter_text)
                 name_entities.append(name_entity_rec(info_extr))
 
-        print(name_entities)
-        return name_entities
-
-    # the first loop traverse each sentence in
-    # the list of sentences
-    for i, sentence in enumerate(name_entities):
-        # the second loop traverse the words
-        # in each sentence. For each word we
-        # have the part of speech and the
-        # type of the entity (if it has any)
-        print("Sentence: {}".format(i))
-        for entity in enumerate(sentence):
-            print(entity)
+    return name_entities
 
 
 def main():

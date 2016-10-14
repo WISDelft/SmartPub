@@ -3,11 +3,15 @@ from string import punctuation
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
+
 import gensim
+from pyhelpers import tools
 
 """
 Silly example of LDA
 """
+"""
+
 doc_a = "Brocolli is good to eat. My brother likes to eat good brocolli, but not my mother."
 doc_b = "My mother spends a lot of time driving my brother around to baseball practice."
 doc_c = "Some health experts suggest that driving may cause increased tension and blood pressure."
@@ -50,4 +54,28 @@ ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=2, id2word = dicti
 print(ldamodel.print_topics(num_topics=2, num_words=4))
 
 ##### end of the silly example
+"""
 
+def main():
+    # mongo search query
+    mongo_string_search = {"dblpkey":"journals_mala_Wadler00"}
+    db = tools.connect_to_mongo()
+    # set no_cursor_timeout= true, to avoid "pymongo.errors.CursorNotFound"
+    result = db.publications.find(mongo_string_search, no_cursor_timeout=True)
+    en_stop = set(stopwords.words('english') + list(punctuation))
+
+    for r in result:
+        fulltext = r['content']['fulltext']
+        tokens = word_tokenize(fulltext)
+
+        stopped_tokens = [i for i in tokens if i not in en_stop]
+        print(stopped_tokens)
+        dictionary = corpora.Dictionary([stopped_tokens])
+        corpus = [dictionary.doc2bow(text) for text in [stopped_tokens]]
+        ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=2, id2word=dictionary, passes=20)
+
+    print(ldamodel.print_topics(num_topics=2, num_words=5))
+
+
+if __name__ == '__main__':
+    main()
