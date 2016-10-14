@@ -29,7 +29,7 @@ class TextSummarize:
 
         for sentence in sentences:
             for token in sentence:
-                if token in self._stopwords:
+                if token not in self._stopwords:
                     freq[token] += 1
         # now we need to normalize the frequency dict
         # by dividing all the values with the highest value
