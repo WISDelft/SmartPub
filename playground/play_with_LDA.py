@@ -96,8 +96,8 @@ def common_statistics(db, mongo_search_string):
         print(content_fraction(words))
 
 
-def unusual_words(fulltext):
-    text_vocab = set(w.lower() for w in fulltext if w.isalpha())
+def unusual_words(words):
+    text_vocab = set(w.lower() for w in words if w.isalpha())
     english_vocab = set(w.lower() for w in words.words())
     unusual = text_vocab.difference(english_vocab)
     return sorted(unusual)
