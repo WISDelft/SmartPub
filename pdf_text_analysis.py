@@ -102,6 +102,11 @@ def getPublications(mongo_string_search):
 
 
 def LDA_process(mongo_string_search):
+    """
+    Find the topics for each paper/chapter/paragraph using LDA
+    :param mongo_string_search:
+    :return:
+    """
     result = getPublications(mongo_string_search)
     mydict = {
         "dblpkey": "",
