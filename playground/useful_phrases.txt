@@ -1,0 +1,157 @@
+1 Stating the aim of your paper and its contribution
+In this report  paper  review  study we .
+This paper outlines  proposes  describes  presents a new approach to .
+This paper examines  seeks to address  focuses on  discusses  investigates how to solve .
+This paper is an overview of  a review of  a report on  a preliminary attempt to .
+The present paper aims to validate  call into question  refute findings regarding .
+Is presented  described  analyzed  computed  investigated  examined  introduced  discussed in order to .
+The aim of our work  research  study  analysis was to further  extend  widen  broaden current knowledge of .
+Our knowledge of  is largely based on very limited data. The aim of the research was thus therefore  consequently to.
+The aim of this study is to study  evaluate  validate  determine  examine  analyze  calculate estimate  formulate .
+This paper calls into question  takes a new look at  re-examines  revisits  sheds new light on .
+With this in mind  Within the framework of these criteria  In this context we tried to .
+We undertook this study  initiated this research  developed this methodology to .
+We believe that we have found  developed  discovered  designed an innovative solution to .
+We describe  present  consider  analyze a novel  simple  radical  interesting solution for .
+
+17 Describing purpose of testing  methods used
+In order to identify  understand  investigate  study  analyze  .
+To enable  allow us to . , we .
+To see  determine  check  verify  determine whether .
+To control  test for ,  was done.
+So that we could  would be able to do , we .
+In an attempt  effort to do , we .
+Was done  We did  in order to .
+
+19 Describing the apparatus and materials used and their source
+The instrument used  utilized  adopted  employed was .
+The apparatus consists of  is made up of  is composed of  is based on .
+The device was designed  developed  set up in order to .
+Incorporates  exploits  makes use of the latest technological advances.
+The system comes complete  is equipped  is fully integrated  is fitted with a .
+It is mounted on  connected to  attached to  fastened to  fixed to  surrounded by  covered with integrated into  embedded onto  encased in  housed in  aligned with .
+It is located in  situated in  positioned on .
+Was obtained from  supplied by Big Company Inc.
+Was kindly provided  supplied by Prof Big.
+
+20 Reporting software used
+The software application  program  package used to analyze the data was.
+The data were obtained  collected using SoftGather.
+Data management  analysis was performed by  using SoftGather.
+Was carried out  performed  analyzed  calculated  determined using .
+Statistical significance was analyzed by using  through the use of .
+We used commercially available software  a commercially available software package.
+Free software, downloaded from  was used  adopted to .
+
+22 Formulating equations, theories and theorems
+This problem can be outlined  phrased  posed in terms of .
+The problem is ruled by  governed by  related to  correlated to .
+This theorem asserts  states that .
+The resulting integrals  solution to  can be expressed as .
+where T stands for  denotes  identifies  is an abbreviation for time.
+By substituting  Substituting  Substitution into .
+Combining  Integrating  Eliminating  we have that: .
+Taking advantage of  Exploiting  Making use of , we .
+On combining this result with , we deduce  conclude that .
+Subtracting  from , we have that  obtain  get .
+Equation  shows  reveals that
+This gives the formal solution  allows a formal solution to be found .
+It may easily  simply verified that .
+It is straightforward  easy  trivial to verify that .
+For the sake of simplicity  reasons of space, we
+
+25 Outlining selection procedure for samples, surveys etc.
+The traditional  classical  normal  usual approach to sample collection is to .
+The criteria  reasons for selecting  were:
+The sample was selected  subdivided on the basis of  and .
+The initial sample consisted of  was made up  was composed of .
+Approximately  Just over  Slightly under a half  third  quarter of the sample were .
+A total of 1234  were recruited for this study  this survey  for interviews.
+At the beginning of the study, all of the participants  subjects  patients were aged .
+In all cases patients’  subjects’  participants’ consent was obtained.
+Interviews were performed  conducted  carried out informally
+The interviewees were divided  split  broken down into two groups based on  on the basis of .
+
+29 Describing benefits of your method, equipment etc.
+This method represents a viable  valuable  useful  groundbreaking  innovative alternative to .
+This equipment has the ability  capacity  potential to outperform all previous .
+This apparatus has several  many interesting features  characteristics.
+Our method has many interesting  attractive  beneficial  useful  practical  effective  valuable applications.
+Of particular  major  fundamental interest is .
+The key  basic  chief  crucial  decisive  essential  fundamental  important  main  major principal advantages are:
+Our procedure is a clear improvement  advance on current methods.
+We believe this solution will aid  assist researchers to .
+This solution improves on  enhances  furthers  advances previous methods by .
+The benefits  advantages in terms of  far outweigh the disadvantages with regard to .
+
+31 Explaining how you got your results
+To assess   evaluate   distinguish between  and ,  was used.
+Analysis was used to test  predict  confirm .
+Changes in  were identified  calculated  compared using .
+The correlation  difference between  and  was tested.
+The first set of analyses investigated  examined  confirmed  highlighted the impact of .
+
+33 Stating what you found
+These tests revealed  showed  highlighted that .
+Strong  Some  No evidence of  was found .
+Interestingly  Surprisingly  Unexpectedly, for high values of ,  was found .
+There was a significant positive  no correlation between .
+On average  Generally speaking  Broadly speaking, we found values for  of .
+The average  mean score for  was .
+This result is significant only  exclusively at an  level.
+Further analysis  analyses  tests  examinations  replications showed that .
+
+34 Stating what you did not find
+No significant difference  correlation was found  identified  revealed  detected  observed highlighted between .
+There were no significant differences between  and  in terms of   with regard to   as far as  is concerned.
+The analysis did not show  reveal  identify  confirm any significant differences between .
+None of these differences were  Not one of these differences was statistically significant.
+Overall  Taken as a whole  Generally speaking  With a few exceptions, our results show  did not affect .
+
+35 Highlighting significant results and achievements
+The most striking  remarkable result to emerge from the data is that .
+Interestingly  Curiously  Remarkably  Inexplicably, this correlation is related to ..
+Significantly  Importantly  Crucially  Critically,  is .
+The correlation between  and  is interesting  of interest  worth noting  noteworthy  worth mentioning because .
+The most surprising  remarkable  intriguing correlation is with the .
+The single most striking  conspicuous  marked observation to emerge from the data comparison was .
+It is interesting  critical  crucial  important  fundamental to note that .
+We believe that  As far as we know  As far as we aware this is the first time that  .
+We believe that  We are of the opinion that  In our view the result emphasizes the validity of our model.
+This result has further strengthened our confidence in   conviction that  is  hypothesis that  is
+Our technique shows a clear  clearly has an advantage over .
+The importance of  cannot be stressed  emphasized too much.
+This underlines  highlights  stresses  proves  demonstrates just how important  is.
+The utility of  is thus underlined  highlighted  stressed  proved  demonstrated.
+This finding confirms  points to  highlights  reinforces  validates the usefulness of  as a .
+Our study provides additional support for  further evidence for  considerable insight into .
+These results extend  further  widen our knowledge of .
+These results offer compelling  indisputable  crucial  overwhelming  powerful  invaluable unprecedented  unique  vital evidence for .
+
+40 Outlining undesired or unexpected results
+As was  might have been expected, our findings were often contradictory .
+Contrary to expectations  Unlike other research carried out in this area, we did not find a significant difference between .
+Our results were disappointing  poor  inadequate  unsatisfactory  below expectations. However, .
+Our study was unsuccessful  not successful in proving that .
+Our research failed to account for  justify  explain  give an explanation for  give a reason for the low values of .
+Surprisingly  Unfortunately  Disappointingly  Regrettably, no signs of  were  evidence for was found.
+What is surprising  we were surprised to find  we are unable to account for is the fact that .
+A substantial  appreciable  noticeable disagreement is evident.
+The  appear to be over-predicted  overestimated  overstated .
+This number is slightly lower than the value we expected  anticipated  predicted and there is certainly room for improvement.
+
+41 Admitting limitations
+We aware that our research may have two limitations. The first is . The second is .
+These limitations highlight  reveal  underline  are evidence of the difficulty of collecting data on .
+It is plausible that a number of limitations may  might  could have influenced the results obtained.
+First  To begin with .
+An additional  Another possible source of error is .
+Since  Given that  As the focus of the study was on  . there is a possibility  there is some likelihood  it is not inconceivable that dissimilar evaluations would have arisen if the focus hadbeen on .
+The restricted use of  could account for  be the reason for  explain why .
+There are several sources for  causes of  reasons for possible error.
+A major source of unreliability  uncertainty  contamination is in the method used to .
+Unfortunately, it was not possible  we were unable to investigate the significant relationships of and  further because  due to the fact that  is .
+Inevitably  Not surprisingly  As expected  As anticipated, there were some discrepancies inaccuracies  problems due to .
+The performance was rather  slightly  a little disappointing. This was probably as a result of .
+One downside  disadvantage  negative factor regarding our methodology is that .
+Further data collection is required  would be needed to determine exactly how  affects 

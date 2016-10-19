@@ -3,7 +3,7 @@ from nltk.corpus import stopwords
 from collections import defaultdict
 from string import punctuation
 from heapq import nlargest
-
+import logging
 
 class TextSummarize:
     def __init__(self, min_th = 0.1, max_th = 0.9):
@@ -29,7 +29,7 @@ class TextSummarize:
 
         for sentence in sentences:
             for token in sentence:
-                if token in self._stopwords:
+                if token not in self._stopwords:
                     freq[token] += 1
         # now we need to normalize the frequency dict
         # by dividing all the values with the highest value
@@ -58,7 +58,10 @@ class TextSummarize:
         """
         sentences = tokenize.sent_tokenize(text) # nltk toolbox list of sentences
         # check if the summary is longer that the input
-        assert n <= len(sentences)
+        if n <= len(sentences):
+            n = int(len(sentences)/2)
+            logging.warning('Watch out! argument n is larger than the sentences thus the n now is equal with'
+                            'half of the sentences!')  # will print a message to the console
 
         token_sent = [ tokenize.word_tokenize( s.lower()) for s in sentences] # nltk list of list of words/tokens
         self._freq = self._compute_frequencies(token_sent)
