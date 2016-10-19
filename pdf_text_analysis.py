@@ -10,6 +10,8 @@ from nltk.tokenize import word_tokenize
 from string import punctuation
 from nltk.corpus import stopwords
 from gensim import corpora, models
+from K_means_clustering import  My_kmeans
+
 # define the source of raw text, we could either add fulltext, or chapters
 to_sum = ["fulltext","chapters","paragraphs","abstract"]
 lda_topics = 3
@@ -170,9 +172,27 @@ def main():
     # mongo search query
     #mongo_string_search = {"dblpkey":{"$in":["journals_ijclclp_WuC07","journals_mala_Wadler00"]}}
     mongo_string_search = {"dblpkey": "journals_ijclclp_WuC07"}
-    # summaries = summarize_process(mongo_string_search)
+    print("Summaries")
+    summaries = summarize_process(mongo_string_search)
+    # comment out if you want prettify print
+    #pprint.pprint(summaries)
+    print(summaries)
+    print("End of Summaries")
+    print()
+
+    print("LDA")
     ldas = LDA_process(mongo_string_search=mongo_string_search)
+    # comment out if you want prettify print
+    # pprint.pprint(ldas)
     print(ldas)
+    print("End of LDA")
+    print()
+
+    print("K-means")
+    kmeans = My_kmeans(mongo_string=mongo_string_search,num_cluster=5,terms_printed=3)
+    kmeans.k_means_process()
+    print("End of K-means")
+    print()
 
 if __name__ == '__main__':
     main()
