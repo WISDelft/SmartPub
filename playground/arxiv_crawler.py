@@ -5,6 +5,10 @@ import ngram_analysis
 import topic_extractor
 import nltk
 
+"""
+queryParameter: query papers based on a parameter--> e.g instagram + twitter
+max_results: max number of papers
+"""
 def arxiv_crawler(queryParameter, max_results):
 
     introctions_list=[]
@@ -135,4 +139,4 @@ def arxiv_crawler(queryParameter, max_results):
 
 
 
-arxiv_crawler('instagram', 100)
+
