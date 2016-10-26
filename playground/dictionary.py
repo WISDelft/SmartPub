@@ -12,7 +12,8 @@ objective = ['introduce', 'introduced', 'we use', 'We use', 'we also', 'We also'
              'argue', 'concluding', 'concluded', 'concludes', 'conclude', 'demonstrating', 'demonstrated',
              'demonstrates', 'demonstrate', 'indicating', 'indicated', 'presenting', 'presented', 'presents', 'present',
              'recommending', 'recommended', 'recommends', 'recommend', 'showing', 'showed', 'shows', 'show', 'shown',
-             'suggested', 'suggests', 'suggest', 'indicated', 'indicates', 'indicate', 'we used', 'We used', 'we list', 'We list', 'this research', 'This research',
+             'suggested', 'suggests', 'suggest', 'indicated', 'indicates', 'indicate', 'we used', 'We used', 'we list',
+             'We list', 'this research', 'This research',
              'We conducted', 'we conducted', 'our research', 'Our research', 'we construct',
              'We construct', 'we employ', 'We employ', 'we discuss', 'We discuss', 'this study', 'This study',
              'we explore', 'We explore', 'We present', 'we present', 'We compare', 'we compare', 'we develop',
@@ -32,8 +33,8 @@ dataset = ['dataset', 'Dataset', 'datasource', 'Datasource', 'data source', 'Dat
 
 method = ['we use', 'We use', 'we used', 'We used', 'Algorithm', 'algorithm', 'analyze', 'analyzed', 'analyzes',
           'analyse', 'analysed', 'analyses', 'approach', 'Aproach', 'methodology', 'Methodology', 'Methodologies',
-          'methodologies', 'method', 'Method', 'technique','Technique', 'We implement', 'We implemented',
-          'we implement', 'we implemented', 'we developed', 'employed','employ', 'utilize', 'utilized']
+          'methodologies', 'method', 'Method', 'technique', 'Technique', 'We implement', 'We implemented',
+          'we implement', 'we implemented', 'we developed', 'employed', 'employ', 'utilize', 'utilized']
 
 software = ['API', 'api', 'tool', 'software', 'framework', 'Framework', 'Tool', 'Software', 'tools', 'Tools', 'Api']
 
@@ -46,6 +47,4 @@ result = ['we can observe', 'We can observe', 'we calculated', 'we find', 'we ca
           'we measure', 'we compared', 'We compared', 'we obtain', 'We obtain', 'We obtained', 'we obtained',
           'we have measured', 'Our method predicts',
           'We have measured']
-
-
 
