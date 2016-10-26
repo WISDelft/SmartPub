@@ -88,6 +88,17 @@ def SVC_classifier(X_train, X_test, y_train, y_test):
     print score
     return clf1
 
+
+def fasttext_classifier():
+     classifier = fasttext.supervised('fasttexttrain.txt', 'model', label_prefix='__label__')
+     texts = ['Our dataset consists of geo-tagged activity logs from Four- square.', 'The presented data was extracted using the open source Twitter API v1.1 [6].','In this section we introduce the notation and the problem setting we will be working with in the rest of the paper.']
+     labels = classifier.predict(texts)
+     print labels
+     result = classifier.test('test.txt')
+     print 'P@1:', result.precision
+     print 'R@1:', result.recall
+     print 'Number of examples:', result.nexamples
+
 def main():
 
   train=dictionary.train+dictionary.train2
@@ -95,6 +106,7 @@ def main():
   X_train, X_test, y_train, y_test = vectorize(train, metadata,lexicon)
   randomf_clf=random_forest_classifier(X_train, X_test, y_train, y_test)
   svc_clf=SVC_classifier(X_train, X_test, y_train, y_test)
+  fasttext_classifier()
 
 
 if __name__ == '__main__':
