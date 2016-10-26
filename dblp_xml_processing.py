@@ -39,7 +39,7 @@ statusEveryXdownloads = 100
 statusEveryXxmlLoops = 1000
 
 filters = {}
-enabledScrapers = ["pdf"]
+enabledScrapers = ["acm"]
 
 # add the number of access in acm to set sleep mode
 num_of_access_in_acm = 0
@@ -164,10 +164,12 @@ def download_and_store(paper, db):
                             print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(10)
 
-                        # sleep for a random duration of time between 1 and 10 seconds
-                        rndm_time = int(random.uniform(1, 10))
+                        # sleep for a random duration of time between 60 and 360 seconds
+                        rndm_time = int(random.uniform(60, 360))
+                        print(
+                            "Crawler sleeps for {} min - Times Access ACM: {}".format(float(rndm_time/int(60)), num_of_access_in_acm))
                         time.sleep(rndm_time)
-                        print("Crawler sleeps for {} sec - Times Access ACM: {}".format(rndm_time,num_of_access_in_acm))
+
                         skipped = not extract_paper_from_ACM(paper['ee'], filename)
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
 

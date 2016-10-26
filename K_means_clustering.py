@@ -27,7 +27,6 @@ from sklearn.cluster import KMeans
 
 class My_kmeans:
 
-
     def __init__(self, num_cluster, mongo_string, terms_printed):
         """
         Initialization of the summarizer
