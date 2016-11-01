@@ -58,7 +58,7 @@ class TextSummarize:
         """
         sentences = tokenize.sent_tokenize(text) # nltk toolbox list of sentences
         # check if the summary is longer that the input
-        if n <= len(sentences):
+        if n > len(sentences):
             n = int(len(sentences)/2)
             logging.warning('Watch out! argument n is larger than the sentences thus the n now is equal with'
                             'half of the sentences!')  # will print a message to the console

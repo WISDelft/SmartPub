@@ -1,0 +1,299 @@
+Automatic language identification (LID) is the process of determining the language identity corresponding to a spoken query.
+It is an important technology in many applications, such as spoken language translation, multilingual speech recognition [Ma et al.
+2002], and spoken document retrieval [Dai et al.
+2003].
+In the past few decades, many statistical approaches to LID have been developed [Kirchhoff et al.
+2002] [[Matrouf et al.
+1998] [Nagarajan and Murthy 2004] [Parandekar and Kirchhoff 2003] [Singer et al.
+2003] [Torres-Carrasquillo et al.
+2002] [Yan and Barnard 1995] [Zissman 1996] by exploiting recent advances in the acoustic modeling [Singer et al.
+2003] [Torres-Carrasquillo et al.
+2002] of phone units and the language modeling of n-grams of these phones [[Parandekar and Kirchhoff 2003].
+Acoustic phone models are used in language-dependent continuous phone recognition to convert speech utterances into sequences of phone symbols in a tokenization process.
+Then the scores from acoustic models and the scores from language models are combined to obtain a language-specific score for making a final LID decision [Zissman 1996].
+Syllable-like units have also been studied [Nagarajan and Murthy 2004].
+To further improve the LID performance, other information, such as articulatory and acoustic features [Kirchhoff et al.
+2002] [Sugiyama 1991], lexical knowledge [Adda-Decker et al.
+2003] [Ma et al.
+2002] and prosody [Hazen and Zue 1994], have also been integrated into LID systems.
+Zissman [1996] experimentally showed that phonetic language models can sometimes be more powerful than MFCC-based Gaussian mixture models (GMMs) [Torres-Carrasquillo et al.
+2002].
+Therefore the fusion of high-level features and good utilization of their statistics are two important research topics for LID.
+To make use of high-level features, the LID problem can be taken as consisting of two sub-problems, the tokenization problem and the classification problem.
+When the tokenization problem is addressed, a fundamental question that arises is whether phone definition is really needed to identify spoken languages.
+When human beings are constantly exposed to a language without being given any linguistic knowledge, they learn to determine the language's identity by perceiving some of the speech cues in the language.
+It is also noteworthy that in human perceptual experiments, listeners with multilingual background often perform better than monolingual listeners in identifying unfamiliar languages [Muthusamy et al.
+1994].
+These results motivate us to look for useful speech cues for LID along the same line of a recently proposed automatic speech attribute transcription (ASAT) paradigm for automatic speech recognition [Lee 2004].
+When we address the classification problem, we find that the strategies such as feature representation for spoken documents and classifier design principles have direct impacts on LID performance.
+In this paper, we adopt the acoustic segment modeling approach to address the tokenization problem.
+It is assumed that the sound characteristics of all spoken languages can be covered by a set of acoustic units without strict phonetic definitions, which are called acoustic segment models (ASMs) [Lee et al.
+1998].
+They can be used to decode spoken utterances into strings of such units.
+We also propose a vector space modeling approach (VSM) to classifier design where the statistics of the units and their co-occurrences corresponding to spoken utterances are used to construct feature vectors.
+Hidden Markov modeling (HMM) [Rabiner 1989] is the dominant approach to acoustic modeling.
+A collection of ASMs is established from the bottom up in an unsupervised manner using HMM, and has been used to construct an acoustic lexicon for isolated word recognition with high accuracy [Lee et al.
+1998].
+In LID research, a large body of prior work in LID has been devoted to the PR-LM framework (the phone-recognition frontend followed by the language model backend) [Zissman 1996] and its variations, where phonetic units are used as acoustic units.
+This is also referred to as the phonotactic approach.
+The phonotactic approach has been shown to achieve superior performance in NIST LRE tasks especially when it is fused with acoustic scores [Singer et al.
+2003].
+In this paper, we investigate four LID system configurations cast in a formalism of frontend feature extraction and backend classifier, namely parallel phone recognizer (PPR) and universal phone recognizer (UPR) frontends, and n-gram language model (LM) and vector space model (This paper is organized as follows.
+In Section 2, we introduce the acoustic segment modeling approach.
+In Section 3, we discuss LID systems by studying their frontends and backends.
+In Section 4, we present the experimental results on four front-backend combinations.
+We draw conclusions in Section 5. 
+A tokenizer is needed to convert spoken utterances into sequences of fundamental acoustic units specified in an acoustic inventory.
+We believe that units that are not linked to a particular phonetic definition can be more universal, and therefore conceptually easier to adopt.
+Such acoustic units are thus highly desirable for universal language characterization, especially for rarely observed languages, languages without orthographies, or languages without well-documented phonetic dictionary.
+A number of variants have been developed along these lines, which have been referred to as language-independent acoustic phone models.
+Hazen and Zue [1994] reported using 87 phones from the multilingual OGI-TS corpus.
+Berkling and Barnard [1994a] explored the possibility of finding and using only those phones that best discriminate between language pairs.
+Berkling and Barnard [1994b] and Corredor-Ardoy et al.
+[1997] used phone clustering algorithms to find common sets of phones for languages.
+However, these systems could only operate when a phonetically transcribed database was available.
+On a separate front, a general effort to circumvent the need for phonetic transcription can be traced back to [Lee et al.
+1998] on automatic speech recognition, where ASM was constructed in an unsupervised manner.
+Some recent studies have applied this concept to LID [Sai Jayram et al.
+2003].
+Motivated by the above efforts, we propose here an ASM method for establishing a universal representation of acoustic units for multiple languages.
+Attempts have been made to derive a universal collection of phones to cover all sounds described in an international phonetic inventory, e.g.
+International Phonetic Alphabet (IPA) or Worldbet [Hieronymus 1994].
+In practice, this is a challenging endeavor because we need a large collection of labeled speech samples for all languages.
+Note that these sounds overlap considerably across languages.
+One possible approximation approach is to use a set of phonemes from several languages to form a superset, called an augmented phoneme inventory (API) here.
+This idea has been explored in previous works [Berkling and Barnard 1994a] [Berkling and Barnard 1994b] Ardoy et al.
+1997] [Hazen and Zue 1994].
+A good inventory needs to phonetically cover as many targeted languages as possible.
+This method can be effective when phonemes from all targeted languages form a closed set, as studied by Hazen and Zue [1994].
+Human perceptual experiments have also shown a similar effect, where listeners' LID performance improved as their exposure to each language increased [Muthusamy et al.
+1994].
+This API-based tokenization approach was recently explored by using a set of all 124 phones and 4 noise units from English, Korean, and Mandarin, and by extrapolating them to nine other languages in the NIST LRE tasks.
+This set of 128 units is referred to as API-I in Table 1, which is a proprietary phone set defined for the IIR-LID 1 database.
+Many preliminary LID experiments were conducted using the IIR-LID database and the API-I phone set.
+For example, we have explored an API-based approach to universal language characterization and a text categorization approach to LID [Gao et al.
+2005], which formed the basis for the vector based feature extraction approach discussed in the next section.
+To expand the acoustic and phonetic coverage, we further used another larger set of APIs with 258 phones, from the six languages in the OGI-TS 2 multi-language telephone speech database.
+These six languages all appear in the NIST LRE tasks.
+This set will be referred to as API-II.
+A detailed breakdown of how the two phone sets were formed with phone counts for each language is given in Table 1.
+The above phone-based language characterization approach suffers from two major shortcomings.
+First, a combined phone set from a limited set of multiple languages cannot easily be extended to cover new and rarely used languages.
+Second, a large collection of transcribed speech data is needed to train the acoustic and language phone models for each language.
+To alleviate these difficulties, a data-driven method that does not rely on exact phonetic transcriptions is preferred.
+It can be obtained by constructing consistent acoustic segment models (ASMs) [Lee et al.
+1998] intended to cover the entire sound space of all spoken languages in an unsupervised manner.
+As in other types of hidden Markov modeling, the initialization of ASMs is a critical factor for success.
+Note that the unsupervised, data-driven procedure for obtaining ASMs may result in many unnecessary small segments because of a lack of phonetic or prosodic constraints, (e.g.
+the number of segments in a word and the duration of an ASM) imposed during segmentation.
+This problem is especially severe when segmenting a huge collection of speech utterances from a large population of speakers with different language backgrounds.
+The API approach uses phonetically defined units in the sound inventory.
+It has the advantage of adopting phonetic constraints in the segmentation process.
+By using API to bootstrap ASM, our approach effectively incorporates some phonetic knowledge about a few languages in the initialization step to guide the ASM training process as described below: Step 1: Carefully select a few languages, typically with large amounts of labeled data, and train language-specific phone models.
+Choose a set of J models for bootstrapping.
+The J models had better not to overlap very much according to their acoustic characteristics, and their number should be large enough to provide a reasonable acoustic coverage for all of the target languages.
+Step 4: Group all segments corresponding to a specific label into a class.
+Use these segments to re-train an HMM.
+In this procedure, we jointly optimize the J models as well as the segmentation of all utterances.
+This is equivalent to the commonly adopted segmental ML and k-means HMM training algorithm [Rabiner 1989] which adopt iterative optimization of segmentation and maximization.
+We have found that API-bootstrapped ASMs are more stable than the randomly initialized ASMs.
+It outperformed API by a big margin in the 1996 NIST LRE task as reported in .
+The detailed results will be given in section 4.1.
+With an established acoustic inventory obtained using the ASM method, we can tokenize any given speech utterance to obtain a token sequencê T , in a form similar to a text-like document.
+Note that ASMs are trained in a self-organized manner.
+We may not be able to establish a phonetic lexicon using ASMs and translate an ASM sequence into words.
+However, as far as LID is concerned, we are more interested in consistent tokenization than in the underlying lexical characterization of a spoken utterance.
+The self-organizing ASM modeling approach offers the key property that it does not require the training speech data to be directly or indirectly phonetically transcribed.
+Comparing the API and ASM methods, we find that the API method has better linguistic/phonetic grounding, while the ASM method is more acoustically oriented.
+Instead of using a bottom-up approach to derive purely acoustically oriented ASM units in an unsupervised manner, we use API to bootstrap the units.
+The main difference between API and ASM lies in the relaxation of phone transcription for segmentation.
+In API, phone models are trained according to manually transcribed phone labels, while in ASM, segmentation is done in iterations using automatic recognition results.
+In this way, ASM gains two advantages: (i) it allows us to adjust a set of API phones from a small number of selected languages towards a larger set of targeted languages; (ii) ASMs can be trained on acoustic data similar to that used for the LID task, thus potentially minimizing the mismatch between the test data and the APIs that were trained on a prior set of phonetically transcribed speech data. 
+In this section, we will first briefly discuss prior works cast in the formalism of phone recognition (PR) and phone-based language modeling (LM).
+Then, we will propose our phone recognition frontend based on ASM acoustic modeling and our backend of vector space modeling for language classification.
+Note that the ASMs are no longer the phonemes defined in Table 1.
+For easy reference, we will continue to refer to the ASM tokenization process as phone recognition (PR).
+A typical LID system is illustrated in Figure 1, which shows a collection of parallel phone recognizers (PPR frontend) that serve as voice tokenizers, referred to as the frontend.
+A frontend converts spoken utterances into sequences of token symbols, or spoken documents.
+It is followed by a set of n-gram phone language models (LM) that impose constraints on phone decoding and provide language scores.
+The LM pool converts an input spoken utterance into a vector of interpolated LM scores.
+The language models and the classifier are referred to as the backend.
+The backend classifier models a spoken language using a collection of training samples, in the form of LM score vectors.
+Figure 1.
+Block diagram of a PPR-LM LID system Generally speaking, a probabilistic language classifier can be formulated as follows.
+Given a sequence of feature vectors O of length τ ,  <Equation_0> , we can express the a posteriori probability of language l using Bayes Theorem as follows:  <Equation_1> where T is a candidate token sequence, and Lang-L Lang-2  <Equation_2> where the first term on the right hand side of (2) is the probability of O given T and its acoustic model AM f λ , the second term is the language probability of T given the language model , LM f l λ , and the last term is the prior probability P(l), which is often assumed to be equal for all languages.
+The observation probability, P(O), is not a function of the language and can be removed from the optimization function.
+The exact computation in (2) involves summing over all possible token sequences.
+In practice, it can be approximated by finding the most likely phone sequencê f T , for each phone recognizer f, using the Viterbi algorithm:  <Equation_3> where f B is the set of all possible token sequences from the f-th phone recognizer.
+As such, a solution to (2) can be approximated as follows:  <Equation_4> We assume that the F parallel language-dependent acoustic phone models can be used to approximate the acoustic space of L languages.
+After a spoken utterance is decoded by the F recognizers, it needs to be evaluated by a set of F L × language models to establish comparability.
+The system formulated by (3) and (4) is known as parallel PRLM, or P-PRLM [Zissman 1996].
+In this paper, it will be referred to as PPR-LM to identify its PPR frontend and LM backend.
+In prior works, researchers also looked into a language-independent phone recognizer with a set of universal acoustic units, or phones that are common to all languages.
+The formulations of (3) and (4) can be simplified as a two-step optimization:  <Equation_5>  <Equation_6> where B is the set of all possible token sequences for all languages.
+The acoustic probability on the right hand side of (5) is now the same for all competing languages.
+Only a language-specific score on the right hand side of (6) is used for score comparison to select the identified language.
+As such, the PPR-LM system can be simplified as the UPR-LM system with a universal phone recognition (UPR) frontend as shown in Figure 2.
+Figure 2.
+Block diagram of a UPR-LM LID system A number of UPR-LM systems have been proposed along these lines, such as the ALI system [Hazen and Zue 1994], the single-language PRLM system [Zissman 1996], and the language-independent phone recognition approach [Corredor-Ardoy et al.
+1997].
+However, the training of phone sets in these systems requires phonetic transcription of all training utterances.
+In this paper, we propose a new way of training the set of universal acoustic units using the ASM approach described in Section 2.2, where acoustic models are trained in a self-organized and unsupervised manner.
+This provides two obvious advantages: (1) the unsupervised strategy allows the frontend to adapt easily to new languages without the need for phonetic transcription; (2) the universal acoustic units can be flexibly partitioned into subsets to work for the parallel phone recognition (PPR) frontend as shown in Figure 1.
+Vector space modeling (VSM) has become a standard tool in Information Retrieval (IR) systems since its introduction decades ago [Salton 1971].
+It uses a vector to represent a text document.
+One of the advantages of the method is that it allows the discriminative training of classifiers over the document vectors.
+We can derive the distance between documents easily as long as the vector attributes are well defined characteristics of the documents.
+Each coordinate in the vector reflects the presence of the corresponding attribute.
+Inspired by the idea of document vectors in text categorization research, we would like to investigate a new concept of the LID classifier, using vector space modeling.
+A spoken language will always contain a set of high frequency function words, prefixes, and suffixes, Suppose that the sequence of feature vectors O is decoded into a sequence of  <Equation_7> , where each unit is drawn from the universal ASM inventory of J models in a UPR frontend,  <Equation_8> One is able to establish a high-dimensional salient feature vector which is language independent, where all of its elements are expressed as the n-gram probability attributes  <Equation_9> Its dimension is equal to the total number of n-gram patterns needed to highlight the overall behavior of an utterance:  <Equation_10> The vector λ is also called a bag-of-sounds (BOS) vector [, which represents a spoken utterance in a document vector in a same way as in text-based document vector representation [Gao et al.
+2005] [Salton 1971].
+The vector space modeling approach evaluates the goodness of fit, or score function, using a vector-based distance, such as an inner product:  <Equation_11> where l ω is a language-dependent weight vector with dimension equal to λ , with each component representing the contribution of its individual n-gram probability to the overall language score.
+The spoken document vector in (7) is high dimensional in nature as high order n-gram patterns are included.
+This makes it suitable for discriminative feature extraction and selection.
+For the PPR frontend, the sequence of feature vectors O is decoded into F independent sequences of acoustic units.
+A BOS vector f λ can be derived from each sequence in the same way as in (7) for each phone recognizer.
+A grand BOS vector is, therefore, constructed by concatenating the F vectors f λ to represent the input spoken utterance.
+With multiple tokenizers, we hope that the grand BOS vector will describe the input spoken utterance in a greater detail.
+Term weighting [Bellegarda 2000] is widely used to render the value of the attribute in a document vector by taking into account the frequency of occurrence of each attribute.
+It is interesting to note that attribute patterns which often occur in a few documents but not as often in others provide high indexing power for these documents.
+On the other hand, patterns which occur very often in all documents possess little indexing power.
+This desirable property has led to the development of a number of term weighting schemes, such as tf-idf, that are commonly used in information retrieval [Salton 1971], natural language call routing [Kuo and Lee 2003], and text categorization [Gao et al.
+2004].
+We adopt the standard tf-idf term weighting scheme in this paper.
+Note that the variations [Berkling and Barnard 1994a] Ardoy et al.
+1997] [Hazen and Zue 1994] [Zissman 1996] of LM backend systems proposed in prior works used cross-entropy or perplexity based language model scores, which are based on similarity matching, for language classification decision-making.
+The VSM can be seen as an attempt to enhance the discrimination power offered by n-gram phonotactic information.
+With the universal ASM acoustic units in place, any spoken utterance can now be tokenized with a set of " key terms " so that their patterns and statistics can be used to discriminate between individual spoken documents.
+The given collection of spoken documents in the training set from a particular language forms the same language category.
+LID can be considered the process of classifying a spoken document into some pre-defined language categories.
+An unknown testing utterance to be identified can be represented as a query vector, and LID can then be performed as in text document classification [Joachims 2002].
+We can then utilize any classifier learning technique, such as support vector machine [Sebastiani 2002] or artificial neural network [Haykin 1994], developed by the text categorization community to design language classifiers.
+An LID system with the VSM-backend is shown in Figure 3for the PPR frontend and in Figure 4for the UPR frontend.
+The VSM-backend takes as inputs n-gram statistics in the form of document vectors.
+The backend structure remains the same for both the UPR and PPR frontends, so long as we can represent the voice tokenizations from the PPR/UPR frontend in document vectors.
+With the document vectors from the training database, the backend groups training document vectors into language classes.
+Figure 3.
+Block diagram of a PPR-VSM LID system Figure There are many ways to reduce the dimension of the document vectors and to enhance the discriminative ability, such as by applying latent semantic indexing (LSI).
+In this paper, we propose to use a set of output scores from an array of support vector machines (SVMs) as the dimension-reduced vector for the final classifier.
+For each of L target languages, we have a number of high dimensional training vectors as shown in (7).
+An SVM is a 2-way classifier used to partition the high dimensional vector space.
+We construct an SVM between each of the language pairs.
+As a result, we obtain ( 1)/2 L L × − pair-wise SVM classifiers for the L target languages.
+For each input utterance, an output score is generated from each of the pair-wise SVM classifiers, resulting in a vector of To summarize, we have discussed an LID paradigm of two frontend options for voice tokenization, PPR or UPR, and two backend options, LM or VSM.
+The PPR-LM and UPR-LM configurations were well studied in the previous works.
+However, a systematic comparison among the PPR-LM, UPR-LM, PPR-VSM and UPR-VSM configurations has not been made.
+Thus, we conducted a comparative study over the four combinations of frontends and backends based on ASM acoustic units.
+<Equation_12> 
+We followed the experiment setup in the NIST Language Recognition Evaluation (LRE) tasks 4 .
+The tasks were intended to establish a baseline of performance capability for language recognition of conversational telephone speech.
+The evaluation was carried out on recorded telephony speech in 12 languages, Arabic, English, Farsi, French, German, Hindi, Japanese, Korean, Mandarin, Spanish, TamilOur early research on API and ASM showed the following: (1) The ASM frontend outperformed the API frontend when followed by the VSM backend; In the language identification task on the 12 languages in the 1996 NIST LRE evaluation data (30 seconds only), 128 API units were trained with the API-I phone set by using the IIR-LID database, and 128 ASM units were further obtained based on the bootstrapping of APIs using the CallFriend database.
+With the UPR-VSM setup using the BOS vectors containing both unigram and bi-gram, an error rate of 13.9% was achieved with ASMs, while the error rate with APIs was 19.2%.
+(2) Higher ASM coverage, with a larger ASM inventory and higher order n-gram (trigram), improved the LID performance; Under the same experiment setups as in (1), we investigated the effects of the acoustic coverage by clustering the 128 ASM units into 64 and 32 ASMs according to acoustic similarity.
+Table 2compares the acoustic and linguistic coverage achieved using 32, 64, and 128 AMS units, and by using unigram, bi-gram, and trigram.
+It shows that these reduced-sized ASM units greatly impaired the discrimination power of the ASM systems.
+We needed a reasonable number of ASM units that was large enough in order to cover the sound variation in all of the languages.
+(3) Note that the initialization of acoustic model has a strong impact on the resulting models in HMM training.
+Apparently, API phone models provide good initialization for ASM models.
+In the following experiments, we used phonetically labeled OGI-TS corpus to train API-II phones, as shown in Table 1.
+For each utterance, 39-dimensional features consisting of 12 MFCCs and normalized energy, plus their first and second order time derivatives were extracted for each frame.
+Utterance based cepstral mean subtraction was applied to the features to remove channel distortion.
+A two-step modeling approach was adopted.
+First, the language dependent phonemes in API-II were trained language by language based on the phonetic training database.
+Each phoneme was modeled with an HMM of 3 states.
+The resulting 258 API-II phonemes were then used to bootstrap 258 ASM models.
+The 258 ASM models were further trained based on the 12 language CallFriend database in an unsupervised manner as described in Section 2.2.
+The average segment lengths of the 258 ASM models based on the CallFriend database ranged from 33 ms to 150 ms. First, the 15-language/dialect 6 training data in the CallFriend database was tokenized to obtain a collection of text-like phone sequences from each of the 6 tokenizers.
+We computed PPR-LM scores based on the resulting phone sequences.
+We trained up to 3-gram phone LMs for each PPR-LM tokenizer-target language pair, resulting in 15 6 90 × = LMs.
+For each input utterance, 90 interpolated scores were derived to form a vector.
+In this way, the training utterances could be represented by a collection of 90-dimension score vectors.
+Similarly, for UPR-LM, we trained up to 3-gram phone LMs for each of the target languages, resulting in 15 LMs.
+The training utterances were then represented by a collection of 15-dimension score vectors.
+Both PPR-LM and UPR-LM shared the same LM backend design, which adopted the framework of PR-LM.
+The low dimension score vectors could be modeled by the Gaussian Mixture Model (GMM) [Torres-Carrasquillo et al.
+2002].
+Next, we will discuss the VSM backend classifier [.
+The VSM backend first converted the text-like tokenization sequences into BOS vectors as discussed in Section 3.3.
+Then the BOS vectors were further processed by the support vector machines to derive ( 1)/2 L L × − dimensional discriminative vectors.
+For a frontend of 6 languages, English, Mandarin, Japanese, Hindi, Spanish and German, there were 258 phonemes in total.
+In the case of UPR, we derived a BOS vector containing both mono-phones and bi-phones with 66,822 (= 258 2 + 258) elements.
+In the case of PPR, we derived a BOS vector with 11,708 (= 48 2 +39 2 +52 2 +51 2 +32 2 +36 2 +48 +39 +52 +51 +32 +36) elements.
+The BOS vectors were then reduced to a discriminative vector of 105 15 14 / 2 = × dimensions for an evaluation task involving 15 target languages.
+In this study, both LM score vectors and BOS discriminative vectors were modeled by the GMM classifier.
+The main difference between the LM and the VSM backend classifier lies in the representation of the document vector.
+In LM backend, the document vector is characterized by interpolated LM scores, while in VSM backend, the document vector is derived from outputs of support vector machines, which introduce discriminative ability between language pairs.
+If we see the LM backend as a likelihood-based classifier, then the VSM backend is a discrimination-motivated classifier.
+We have discussed two different frontends, PPR and UPR, and two different backends, LM and VSM.
+To gain insight into the behavior of each of the frontends and backends, it is desirable to investigate the performance of each of the four combined systems as shown in Figure 5, namely, PPR-LM, PPR-VSM, UPR-LM, and UPR-VSM, where the PPR/UPR frontends are built on a set of universal ASMs.
+Without loss of generality, we deployed the same 258-ASM with two different settings.
+First, the 258 ASMs were arranged in a 6-language PPR frontend.
+They were redistributed according to their API-II definitions into 6 languages.
+Second, they were lumped together in a single UPR frontend.
+The training of the 258-ASM was discussed in Section 2.2.
+We used the GMM classifier in the LM backend and VSM backend, in which we trained 512-mixture GMMs to model the desired language and to model all its competing languages, and reported the equal error rates (EER%) between false-alarm and miss-detect.
+Figure 5.
+Block diagram of four combinations of frontends and backends The UPR-VSM system follows the block diagram of the language-independent acoustic phone recognition approach .
+PPR-LM was implemented as in [Zissman 1996].
+The LM backend uses trigrams to derive phonotactic scores.
+The results for the 1996, 2003 and 2005 NIST LRE tasks are shown in Tables 3, 4, and 5, respectively.
+In Table 6Before discussing results, we will examine the effects of the combined frontends and backends.
+In the combined systems, there are two unique frontend settings, PPR and UPR.
+PPR converts an input spoken utterance into 6 spoken documents using the parallel frontend, while UPR converts an input into a single document.
+However, there are four unique LM and VSM backend settings.
+The LM in PPR-LM and that in the UPR-LM are different; the former has 15 6 × n-gram language models, while the latter only has 15 language models.
+In other words, the former LM classifier is more complex, with a larger number of parameters, than the latter.
+The VSM in PPR-VSM and the VSM in UPR-VSM have different levels of complexity as well.
+The former VSM processes vectors with 11,708 dimensions, while the latter processes those with 66,822 dimensions, as discussed in Section 4.2.
+The vectors in PPR-VSM and UPR-VSM are shown in Although the dimensionality of V-PPR is lower than that of V-UPR, V-PPR is 6 times as dense as V-UPR, resulting in more complex support vector machine partitions (SVM) [Vapnik 1995].
+In other words, the VSM classifier in the PPR-VSM is more complex than that in UPR-VSM.
+In terms of the overall classifier backend complexity, we rank the four systems from high to low as follows: PPR-VSM, PPR-LM or UPR-VSM, and UPR-LM.
+LID technology has gone through many years of evolution.
+Many results have been published in the literature for the 1996 and 2003 NIST LRE tasks.
+They provide good benchmarks for new technology development.
+Here, we summarize some recently reported results.
+For the sake of brevity, we only compare results obtained in the 30-second tests, which represent the primary condition of interest in the NIST LRE tasks.
+Systems 1, 2, and 3 in Table 7were trained and tested on the same databases.
+Therefore, the results can be directly compared.
+They are extracted from Tables 3 and 4.
+We also cite two results from recent reports [Gauvain et al.
+2004] [Singer et al.
+2003] as references.
+Table 7shows that the performance of PPR-VSM system is among the best in the 1996 and 2003 NIST LRE tasks.
+Ma et al.
+[2005] reported that the API-bootstrapped ASM outperformed API phone models in the LID task.
+This paper extends our previous work through comprehensive benchmarking, which produced further findings and validated the effectiveness of the proposed VSM solution.
+The systems reported in this paper contributed to the ensemble classifier that participated in the 2005 NIST LRE representing IIR site.
+The proposed VSM-based language classifier compares phonotactic statistics from spoken documents.
+We have not explored the use of acoustic scores resulting from the tokenization process.
+It was reported that combining information of acoustic scores along with phonotactic statistics produced good results [Corredor-Ardoy et al.
+1997] [Singer et al.
+2003] [Torres-Carrasquillo et al.
+2002].
+Furthermore, fusion of phonotactic statistics at different levels of resolutions also improved overall performance [Lim et al.
+2005].
+We have good reason to expect that fusion among our 4 combinative systems, or between our systems and other existing methods, including GMM tokenizer [Torres-Carrasquillo et al.
+2002], will lead to further improvements. 
+We have studied the effects of frontends and backends in the LID system.
+In the following, we summarize our findings.
+In this study, we formulated both LM backend and VSM backend classifiers as a vector classification problem.
+The traditional LM backend applies similarity based approach to the vector representation of spoken documents.
+The VSM backend represents spoken documents using discriminative vectors derived from the outputs of support vector machines.
+We achieved EERs of 2.75% and 3.62% in the 30-second 1996 and 2003 NIST LRE tasks respectively with the PPR-VSM system.
+These are some of the best reported results for a single LID classifier.
+The VSM backend was also successfully implemented in IIR's submission to 2005 NIST LRE.
+The good results can be credited to the enhanced discriminatory ability of the VSM backend.
+Exploring the bag-of-sounds spoken document vectors using the bigram statistics of ASM acoustic units, we found that one of the advantages of the VSM method is that it can represent a document with heterogeneous attributes (a mix of unigram, bigram, etc).
+Inspired by the feature reduction results, we believe that the bag-of-sounds vector can be extended to accommodate trigram statistics and acoustic features as well. 
+Summarizing the results obtained in the three NIST LRE tasks, we have the following findings: (i) The VSM backend demonstrates a clear advantage over the LM backend for the 30-second and 10-second trials.
+This can be easily explained by the fact that VSM models are designed to capture phonotactics over the context of the whole spoken document.
+As a result, VSM favors longer utterances which provide richer long span phonotactic information.
+(ii) The system performance highly correlates with the complexity of the system architectures.
+This can be seen in Tables 3, 4, and 5, which show that PPR-VSM achieved the best result with an EER of 2.75%, 3.62%, and 5.78% in the 30-second 1996, 2003 and 2005 NIST LRE tasks, respectively, followed by PPR-LM, UPR-VSM, and UPR-LM.
+Note that we can increase the system complexity by using more PPRs.
+We expect that more PPRs will improve the PPR-VSM system performance further.
+(iii) Although PPR-LM outperformed UPR-VSM in general, the UPR frontend was superior in computational efficiency during run-time operation over the PPR frontend.
+In Table 6, we find that the systems with the UPR frontend ran almost 60% faster than those with the PPR frontend.
+As a general remark, ASM-based acoustic modeling not only offers an effective unsupervised training procedure and hence, low development cost, but also efficient run-time operation as in the case of the UPR frontend.
+More importantly, it delivers outstanding system performance.
+VSM is the choice for the backend when longer utterances are available, while PPR-VSM delivers the best result in the comprehensive benchmarking for 30-second test condition. 

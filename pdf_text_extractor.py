@@ -129,9 +129,9 @@ def process_papers(mongo_search_string):
     for r in result:
         process_paper(r['dblpkey'], db)
         # sleep after any paper process
-        rnd_time = int(random.uniform(5,10))
-        print("sleep for {} secs!".format(rnd_time))
-        time.sleep(rnd_time)
+        #rnd_time = int(random.uniform(1,3))
+        #print("sleep for {} secs!".format(rnd_time))
+        #time.sleep(rnd_time)
 
 
 
@@ -145,7 +145,7 @@ def main():
     # mongo_search_string = {'book': 'SIGIR'}
     # mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
-    #mongo_search_string = {"dblpkey":"journals_iajit_MisraC12"}
+    # mongo_search_string = {"dblpkey":"journals_ijclclp_WuC07"}
     #get only the articles
     #mongo_search_string = {"type" : "article"}
 

@@ -1,0 +1,182 @@
+ The most challenging problem in natural language processing (NLP) is programming computers to understand natural languages.
+For humans, efficient syllable-to-word (STW) conversion and word sense disambiguation (WSD) occur naturally when a sentence is understood.
+In a natural language understanding (NLU) system is designed, methods that enable consistent STW and WSD are critical but difficult to attain.
+For most languages, a sentence is a grammatical organization of words expressing a complete thought [Chu 1982; Fromkin et al.
+1998].
+Since a word is usually encoded with multiple senses, to understand language, efficient word sense disambiguation (WSD) is critical for an NLU system.
+As found in a study on cognitive science [Choueka et al.
+1983], people often disambiguate word sense using only a few other words in a given context (frequently only one additional word).
+That is, the relationship between a word and each of the others in the sentence can be used effectively to resolve ambiguity .
+From [Small et al.
+1988; Krovetz et al.
+1992; Resnik et al.
+2000], most ambiguities occur with nouns and verbs.
+Object-event (i.e., noun-verb) distinction is the most prominent ontological distinction for humans [Carey 1992].
+Tsai et al.
+[2002a] showed that knowledge of meaningful noun-verb (NV) word-pairs and their corresponding sense-pairs in conjunction with an NVEF word-pair identifier can be used to achieve a WSD accuracy rate of 93.7% for NV-sentences (sentences that contain at least one noun and one verb).
+According to [胡裕樹 et al.
+1995; 陳克健 et al.
+1996; Fromkin et al.
+1998; 朱曉亞 2001;陳昌來 2002; 劉順 2003], the most important content word relationship in sentences is the noun-verb construction.
+For most languages, subject-predicate (SP) and verb-object (VO) are the two most common NV constructions (or meaningful NV word-pairs).
+In Chinese, SP and VO constructions can be found in three language units: compounds, phrases and sentences [Li et al.
+1997].
+Modifier-head (MH) and verb-complement (VC) are two other meaningful NV word-pairs which are only found in phrases and compounds.
+Consider the meaningful NV word-pair 汽車-進口(car, import).
+It is an MH construction in the Chinese compound 進口汽 車(import car) and a VO construction in the Chinese phrase 進口許多汽車(import many cars).
+In [Tsai et al.
+2002a], we called a meaningful NV word-pair a noun-verb event frame (NVEF) word-pair.
+Combining the NV word-pair 汽車-進口 and its sense-pair Car-Import creates a collection of NVEF knowledge.
+Since a complete event frame usually contains a predicate and its arguments, an NVEF word-pair can be a full or a partial event frame construction.
+In Chinese, syllable-to-word entry is the most popular input method.
+Since the average number of characters sharing the same phoneme is 17, efficient STW conversion has become an indispensable tool.
+In [Tsai et al.
+2002b], we showed that NVEF knowledge can be used to achieve an STW accuracy rate of 99.66% for converting NVEF related words in Chinese.
+We proposed a method for the semi-automatic generation of NVEF knowledge in [Tsai et al.
+2002a].
+This method uses the NV frequencies in sentences groups to generate NVEF candidates to be filtered by human editors.
+This process becomes labor-intensive when a large amount of NVEF knowledge is created.
+To our knowledge, no methods exist that can be used to fully auto-extract a large amount of NVEF knowledge from Chinese text.
+In the literature, most methods for auto-extracting Verb-Noun collections (i.e., meaningful NV word-pairs) focus on English [Benson et al.
+1986; Church et al.
+1990; Smadja 1993; Smadja et al.
+1996; Lin 1998; Huang et al.
+2000; Jian 2003].
+However, the issue of VN collections focuses on extracting meaningful NV word-pairs, not NVEF knowledge.
+In this paper, we propose a new method that automatically generates NVEF knowledge from running texts and constructs a large amount of NVEF knowl- edge.
+This paper is arranged as follows.
+In section 2, we describe in detail the auto-generation of NVEF knowledge.
+Experiment results and analyses are given in section 3.
+Conclusions are drawn and future research ideas discussed in section 4.
+2.
+Development of a Method for NVEF Knowledge Auto-GenerationFor our auto-generate NVEF knowledge (AUTO-NVEF) system, we use HowNet 1.0 [Dong 1999]  as a system dictionary .
+This system dictionary provides 58,541 Chinese words and their corresponding parts-of-speech (POS) and word senses (called DEF in HowNet).
+Contained in this dictionary are 33,264 nouns and 16,723 verbs, as well as 16,469 senses comprised of 10,011 noun-senses and 4,462 verb-senses.
+Since 1999, HowNet has become one of widely used Chinese-English bilingual knowledge-base dictionaries for Chinese NLP research.
+Machine translation (MT) is a typical application of HowNet.
+The interesting issues related to (1) the overall picture of HowNet, (2) comparisons between HowNet [Dong 1999], WordNet [Miller 1990; Fellbaum 1998] , Suggested Upper Merged Ontology (SUMO) [Niles et al.
+2001; Subrata et al.
+2002; Chung et al.
+2003] and VerbNet  Kipper et al.
+2000] and (3) typical applications of HowNet can be found in the 2nd tutorial of IJCNLP-04 [Dong 2004]. 
+The sense of a word is defined as its definition of concept (DEF) in HowNet.
+Table 1lists three different senses of the Chinese word 車(Che[surname]/car/turn).
+In HowNet, the DEF of a word consists of its main feature and all secondary features.
+For example, in the DEF " character|文字,surname|姓,human|人,ProperName|專 " of the word 車(Che[surname]), the first item " character|文字 " is the main feature, and the remaining three items, surname|姓, human|人, and ProperName|專, are its secondary features.
+The main feature in HowNet inherits features from the hypernym-hyponym hierarchy.
+There are approximately 1,500 such features in HowNet.
+Each one is called a sememe, which refers to the smallest semantic unit that cannot be reduced.
+As previously mentioned, a meaningful NV word-pair is a noun-verb event-frame word-pair (NVEF word-pair), such as 車 -行駛(Che[surname]/car/turn, move).
+In a sentence, an NVEF word-pair can take an SP or a VO construction; in a phrase/compound, an NVEF word-pair can take an SP, a VO, an MH or a VC construction.
+From Table 1 , the only meaningful NV sense-pair for 車 -行駛(car, move) is LandVehicle|車 -VehicleGo|駛.
+Here, combining the NVEF sense-pair LandVehicle|車 -VehicleGo|駛 and the NVEF word-pair 車 行駛 creates a collection of NVEF knowledge.
+To effectively represent NVEF knowledge, we have proposed an NVEF knowledge representation tree (NVEF KR-tree) that can be used to store, edit and browse acquired NVEF knowledge .
+The details of the NVEF KR-tree given below are taken from [Tsai et al.
+2002a].
+The two types of nodes in the KR-tree are function nodes and concept nodes.
+Concept nodes refer to words and senses (DEF) of NVEF knowledge.
+Function nodes define the relationships between the parent and children concept nodes.
+According to each main feature of noun senses in HowNet, we can classify noun senses into fifteen subclasses.
+These subclasses are 微生物(bacteria), 動物類(animal), 人物類(human), 植物類(plant), 人工物(artifact), 天 然物(natural), 事件類(event), 精神類(mental), 現象類(phenomena), 物形類(shape), 地點類 (place), 位置類(location), 時間類(time), 抽象類(abstract) and 數量類(quantity).
+Appendix A provides a table of the fifteen main noun features in each noun-sense subclass.
+As shown in Figure 1, the three function nodes that can be used to construct a collection of NVEF knowledge (LandVehicle|車-VehcileGo|駛) are as follows: (1) Major Event (主要事件): The content of the major event parent node represents a noun-sense subclass, and the content of its child node represents a verb-sense subclass.
+A noun-sense subclass and a verb-sense subclass linked by a Major Event function node is an NVEF subclass sense-pair, such as LandVehicle|車 and VehicleGo|駛 shown in Figure 1.
+(2) Word Instance (實例): The contents of word instance children consist of words belonging to the sense subclass of their parent node.
+These words are self-learned through the sentences located under the Test-Sentence nodes.
+(3) Test Sentence (測試題): The contents of test sentence children consist of the selected test NV-sentence that provides a language context for its corresponding NVEF knowledge.
+[Chen et al.
+1986], the " longest syllabic word first strategy " is effective for Chinese word segmentation.
+If both forward and backward segmentations are equal (forward=backward ) and the word number of the segmentation is greater than one, then this segmentation result will be sent to process 2; otherwise, a NULL segmentation will be sent.
+Table 3 shows a comparison of the word-segmentation accuracy for forward, backward and forward=backward strategies using the Chinese Knowledge Information Processing (CKIP) lexicon [CKIP 1995].
+The word segmentation accuracy is the ratio of the correctly segmented sentences to all the sentences in the Academia Sinica Balancing Corpus (ASBC) [CKIP 1996].
+A correctly segmented sentence means the segmented result exactly matches its corresponding segmentation in ASBC.
+Table 3 shows that the forward=backward technique achieves the best word segmentation accuracy.
+(3) NV1 = 現場/place|地方,#fact|事情/N -湧入(yong3 ru4)/GoInto|進入/V NV2 = 觀眾/human|人,*look|看,#entertainment|藝,#sport|體育,*recreation|娛樂/N -湧入(yong3 ru4)/GoInto|進入/V Figure 1.
+An illustration of the KR-tree using (Process 2.
+Initial POS sequence generation: This process will be triggered if the output of process 1 is not a NULL segmentation.
+It is comprised of the following steps.
+1) For segmentation result w 1 /w 2 /…/w n-1 /w n from process 1, our algorithm computes the POS of w i , where i = 2 to n. Then, it computes the following two sets: a) the following POS/frequency set of w i-1 according to ASBC and b) the HowNet POS set of w i .
+It then computes the POS intersection of the two sets.
+Finally, it selects the POS with the highest frequency in the POS intersection as the POS of w i .
+If there is zero or more than one POS with the highest frequency, the POS of w i will be set to NULL POS.
+2) For the POS of w 1 , it selects the POS with the highest frequency in the POS intersection of the these sets, we have the POS intersection {STRU/36, V/35}.
+Since the POS with the highest frequency in this intersection is STRU, the POS of 了 will be set to STRU.
+Similarly, according to the intersection {V/16124, N/1321, ADJ/4} of the preceding POS/frequency set {V/16124, N/1321, PREP/1232, ECHO/121, ADV/58, STRU/26, CONJ/4, ADJ/4} of 了 and the HowNet POS set {V, N, ADJ} of 生, the POS of 生will be set to V. Table 4shows a mapping list of CKIP POS tags and HowNet POS tags.
+Process 4.
+NVEF knowledge auto-confirmation:  In this stage, AUTO-NVEF automatically confirms whether the generated NV knowledge is or is not NVEF knowledge.
+The two auto-confirmation procedures are described in the following.
+(a) NVEF accepting condition (NVEF-AC) checking: Each NVEF accepting condition is constructed using a noun-sense class (such as 人物類[human]) defined in [Tsai et al.
+2002a] and a verb main feature (such as GoInto|進入) defined in HowNet [Dong 1999].
+In [Tsai et al.
+2002b], we created 4,670 NVEF accepting conditions from manually confirmed NVEF knowledge.
+In this procedure, if the noun-sense class and the verb main feature of the generated NV knowledge can satisfy at least one NVEF accepting condition, then the generated NV knowledge will be auto-confirmed as NVEF knowledge and will be sent to the NVEF KR-tree.
+Appendix C lists the ten NVEF accepting conditions used in this study.
+(b) NVEF enclosed-word template (NVEF-EW template) checking: If the generated NV knowledge cannot be auto-confirmed as NVEF knowledge in procedure (a), this procedure will be triggered.
+An NVEF-EW template is composed of all the left side words and right side words of an NVEF word-pair in a Chinese sentence.
+For example, the NVEF-EW template of the NVEF word-pair 汽車-行駛(car, move) in the Chinese sentence 這(this)/汽車(car)/似乎(seem)/行駛(move)/順暢(well) is 這 N 似乎 V 順暢.
+In this study, all NVEF-EW templates were auto-generated from: 1) the collection of manually confirmed NVEF knowledge in , 2) the on-line collection of NVEF knowledge automatically confirmed by AUTO-NVEF and 3) the manually created NVEF-EW templates.
+In this procedure, if the NVEF-EW template of a generated NV word-pair matches at least one NVEF-EW template, then the NV knowledge will be auto-confirmed as NVEF knowledge. 
+To evaluate the performance of the proposed approach to the auto-generation of NVEF knowledge, we define the NVEF accuracy and NVEF-identified sentence ratio according to Equations (1) and (2), respectively: In Equation (1), meaningful NVEF knowledge means that the generated NVEF knowledge has been manually confirmed to be a collection of NVEF knowledge.
+In Equation (2), if a Chinese sentence can be identified as having at least one NVEF word-pair by means of the generated NVEF knowledge in conjunction with the NVEF word-pair identifier proposed in [Tsai et al.
+2002a], this sentence is called an A user interface that manually confirms generated NVEF knowledge is shown in Figure 3Auto-generated NVEF knowledge can be confirmed as meaningful NVEF knowledge if it satisfies all three of the following principles.
+For our experiment, we used two corpora.
+One was the of the NVEF knowledge were generated based on NVEF accepting conditions (human-editing knowledge), and 49% were generated based on NVEF-enclosed word templates (machine-learning knowledge).
+Tables 5a and 5b show that the average accuracy of NVEF knowledge generated by NVEF-AC and NVEF-EW for news and specific texts reached 98.71% and 97.00%, respectively.
+These results indicate that our AUTO-NVEF has the ability to simultaneously maintain high precision and extend NVEF-EW knowledge, similar to the snowball effect, and to generate a large amount of NVEF knowledge without human intervention.
+The results also suggest that the best method to overcome the Precision-Recall Tradeoff problem for NLP is based on linguistic knowledge and statistical constraints, i.e., hybrid approach [Huang et al.
+1996; Tsai et al.
+2003].
+ly.
+Table 6ashows that an NVEF word-pair, such as 工程-完成(Construction, Table 6bshows examples and the percentages of the four NV-word-length types of manually created NVEF knowledge for 1,000 randomly selected ASBC sentences.
+From the manually created NVEF knowledge, we estimate that the percentages of the collections of N1V1, N1V2+, N2+V1 and N2+V2+ NVEF word-pairs are 6.4%, 6.8%, 22.2% and 64.6%, respectively .
+According to this NVEF knowledge, we estimate that the auto-generated NVEF Knowledge (for 2001 UDN) in conjunction with the NVEF word-pair identifier can be used to identify 54% of the NVEF-sentences in ASBC.
+Table 6cshows the Top 5 single-character verbs in N1V1 and N2+V1 NVEF word-pairs and their percentages.
+Table 6dshows the Top 5 multi-character verbs in N1V2+ and N2+V2+ NVEF word-pairs and their percentages.
+From Table 6c, the percentages of N2+是 and N2+有 NVEF word-pairs are both greater than those of other single-character verbs.
+Thus, the N2+是 and N2+有 NVEF knowledge was worthy to being considered in our AUTO-NVEF.
+On the other hand, we found that 3.2% of the NVEF-sentences (or 2.3% of the ASBC sentences) were N1V1-only sentences, where an N1V1-only sentence is a sentence that only has one N1V1-NVEF word-pair.
+For example, the Chinese sentence 他(he)說(say)過了(already) is an N1V1-only sentence because it has only one N1V1-NVEF word-pair: 他-說(he, say).
+Since (1) N1V1-NVEF knowledge is not critical for our NVEF-based applications and (2) auto-generating N1V1 NVEF knowledge is very difficult, the auto-generation of N1V1-NVEF knowledge was not considered in our AUTO-NVEF.
+In fact, according to the system dictionary, the maximum and average word-sense numbers of single-character were 27 and 2.2, respectively, and those of multi-character words were 14 and 1.1, respectively.
+Table 6a.
+An illustration of four NV-position types of NVEF knowledge and their ratios.
+The English words in parentheses are provided for explanatory purposes only.
+[ ] indicate nouns and <> indicate verbs.
+Table 6c.
+The Top 5 single-character verbs in N1V1 and N2+V1 word-pairs in manually-edited NVEF knowledge for 1,000 randomly selected ASBC sentences and their percentages.
+The English words in parentheses are provided for explanatory purposes only.
+[ ] indicate nouns and <> indicate verbs.
+<Equation_0> Table 6d.
+The Top 5 multi-character verbs in N1V2+ and N2+V2+ word-pairs in manually-edited NVEF knowledge for 1,000 randomly selected ASBC sentences and their percentages.
+The English words in parentheses are One hundred collections of manually confirmed non-meaningful NVEF (NM-NVEF) knowledge from the experiment results were analyzed.
+We classified them according to eleven error types, as shown in Table 7, which lists the NM-NVEF confirmation principles and the percentages for the eleven error types.
+The first three types comprised 52% of the NM-NVEF cases that did not satisfy NVEF confirmation principles 1, 2 and 3.
+The fourth type was rare, representing only 1% of the NM-NVEF cases.
+Type 5, 6 and 7 errors comprised 11% of the NM-NVEF cases and were caused by HowNet lexicon errors, such as the incorrect DEF (word-sense) exist|存在 for the Chinese word 盈盈 (an adjective, normally used to describe someone's beautiful smile).
+Type 8, 9, 10 and 11 errors are referred to as four NLP errors and comprised 36% of the NM-NVEF cases.
+Type 8 errors were caused by the different word-senses used in Old and Modern Chinese; Type 9 errors were caused by errors in WSD; Type 10 errors were caused by the unknown word problem; and Type 11 errors were caused by incorrect word segmentation.
+Table 7, 11% of the NM-NVEF cases could be resolved by correcting the lexicon errors in HowNet [Dong 1999].
+The four types of NLP errors that caused 36% of the NM-NVEF cases could be eliminated by using other techniques such as WSD ([Resnik et al.
+2000; Yang et al.
+2002]), unknown word identification ([Chang et al.
+1997; Lai et al.
+2000; Chen et al.
+2002; Sun et al.
+2002;) or word segmentation ([Sproat et al.
+1996; Teahan et al.
+2000]).
+Ex:暫居(temporary residence) has two meanings: one is <reside|住下>（緊急暫 居服務(emergency temporary residence service)）and another is <situated| Table 7.
+Eleven error types and their confirmation principles for non-meaningful NVEF knowledge generated by AUTO-NVEF. 
+In this paper, we have presented an auto-generation system for NVEF knowledge (AUTO-NVEF) that fully and automatically discovers and constructs a large amount of  According to our estimation, the auto-acquired NVEF knowledge from the 2001 UDN corpus combined with the NVEF word-pair identifier could be used to identify 54% and 60% of the NVEF-sentences in ASBC and in the 2001 UDN corpus, respectively.
+Since 94.73% (9,345/9,865) of the nouns in the most frequent 60,000 CKIP lexicon are contained in NVEF knowledge constructions, the auto-generated NVEF knowledge can be an acceptably large amount of NVEF knowledge for NLP/NLU systems.
+We found that the remaining 51.16% (5,122/10,011) of the noun-senses in HowNet were caused by two problems.
+One was that words with multiple noun-senses or multiple verb-senses, which are not easily resolved by WSD (for example, fully-automatic machine learning techniques), especially for single-character words.
+In our system dictionary, the maximum and average word-sense numbers of single-character words are 27 and 2.2, respectively.
+The other problem was corpus sparsness.
+We will continue expanding our NVEF knowledge through other corpora so that we can identify more than 75% of the NVEF-sentences in ASBC.
+AUTO-NVEF will be extended to auto-generate other meaningful content word constructions, in particular, meaningful noun-noun, noun-adjective and verb-adverb word-pairs.
+In addition, we will investigate the effectiveness of NVEF knowledge in other NLP and NLU applications, such as syllable and speech understanding as well as full and shallow parsing.
+In [董振東 1998; Jian 2003; Dong 2004], it was shown that the knowledge in bilingual Verb-Noun (VN) grammatical collections, i.e., NVEF word-pairs, is critically important for machine translation (MT).
+This motivates further work on the auto-generation of bilingual , especially Chinese-English, NVEF knowledge to support MT research.
+董振東，語義關係的表達和知識系統的建造，語言文字應用，第 Appendix A.
+Sample Table of Main Noun Features and Noun-Sense Classes Main noun features Noun-sense classes bacteria|微生物 微生物(bacteria) 
