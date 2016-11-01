@@ -272,6 +272,7 @@ def get_segmented_text(root):
     json_data = {}
     paragraphs = []
     previous_ch = 0
+    equations = 0
     for match in raw_xpath:
         for child in match:
             # get the attribute 'n' from the xml tag
@@ -298,8 +299,15 @@ def get_segmented_text(root):
                 # to overcome this issue is to use the itertext()
                 # method that parse the text from any subelement
                 if "p" in child.tag:
-                    for th in child.itertext():
-                        paragraph += th
+                    for i, th in enumerate(child.itertext()):
+                        # print(child.tag)
+                        if "formula" in child.tag:
+                            # instead of having equation terms we are goinf
+                            #to represent the equations with "<Equation>"
+                            paragraph += " <Equation_{}> ".format(equations)
+                            equations+=1
+                        else:
+                            paragraph += th
                     paragraphs.append(paragraph)
                     paragraph = ""
                     flag = True

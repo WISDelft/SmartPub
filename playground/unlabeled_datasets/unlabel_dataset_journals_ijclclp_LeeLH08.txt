@@ -1,0 +1,314 @@
+In recent years, question answering (QA) has become a key research area in several of the world's major languages, possibly because of the urgent need to deal with the information overload caused by the rapid growth of the Internet.
+Since 1999, many international question answering contests have been held at conferences and workshops, such as TREC 1 , CLEF 2 , and NTCIR 3 .
+Thus far, several languages – such as Bulgarian, Dutch, English, Finnish, French, German, Indonesian, Italian, Japanese, Portuguese, and Spanish – have been tested in monolingual or cross-lingual question answering tasks.
+In QA research, questions are usually classified into several categories, such as factoid questions, list questions, and definition questions, then dealt with by different techniques.
+Among these categories, factoid questions have been studied the most widely, and they are the focus of this paper.
+There is usually exactly one answer, which is a noun or short phrase, for a factoid question.
+For example, " Who is the president of the United States? "
+is a factoid question because the name of the president is a noun, and there is only one current U.S. President.
+Factoid questions are usually classified into questions types, such as Q_PERSON, Q_LOCATION, Q_ORGANIZATION, Q_ARTIFACT, Q_TIME, and Q_NUMBER [Lee et al.
+2007; Lee et al.
+2005].
+Although question types vary in different contests and different systems, the corresponding answer types can usually be recognized by named entity recognition (NER) techniques or simple rules.
+A QA system is normally comprised of several modules.
+The answer ranking module implements the last step in answering a factoid question and determines the final performance.
+After candidate answers have been extracted from retrieved passages, the answer ranking module takes the question, the passages (or documents), and the candidate answers as input, ranks the candidate answers, and then outputs a ranked list of candidate answers.
+Although several answer ranking methods have been proposed, they can be generally categorized as either deep or shallow methods.
+A deep method uses complex NLP techniques and may require extensive rules, ontologies, or human effort, while a shallow method does not require much of these resources and is therefore cheaper to implement.
+Although deep answer ranking methods have proven useful for English QA, as reported in [Cui et al.
+2005; Harabagiu et al.
+2005], the resources needed for such methods are usually Cross-Lingual and Monolingual Factoid Question Answering not available for some languages in monolingual or cross-lingual QA.
+In those cases, shallow ranking methods have to be used; however, to the best of our knowledge, very little research has been done on such methods.
+The situation is worse for cross-lingual tasks because most cross-lingual QA research has focused on the front-end modules, i.e., question processing and passage retrieval.
+Research on back-end modules, such as answer ranking, has received little attention in the cross-lingual QA domain.
+In this paper, we attempt to fill this research gap by exploring the behavior of shallow ranking features under noise produced by other QA modules in both monolingual and cross-lingual situations.
+Herein, noise is defined in terms of the performance decrement of a QA module.
+For example, in the case of translation quality decrement, we say that we encounter translation noise and expect that the noise may impact the performance of some shallow ranking features.
+In addition to translation noise, we also consider passage retrieval noise and answer filter noise.
+We measure the influence of these types of noise by three performance metrics to determine which ranking feature is the most effective in dealing with each kind of noise.
+Apart from considering widely used shallow ranking features, we propose a new ranking feature called SCO-QAT, which has been successfully applied to the ASQA2 system [Lee et al.
+2007], and also achieved the best performance on the C-C and E-C subtasks in NTCIR-6 CLQA [Sasaki et al.
+2007].
+SCO-QAT is a co-occurrence based feature; however, unlike some co-occurrence features [Magnini et al.
+2001], it does not need extra knowledge, word-ignoring heuristic rules, or special tools.
+The remainder of this paper is organized as follows.
+Related works are discussed in Section 2.
+We introduce the SCO-QAT feature in Section 3.
+The evaluation metrics used are introduced in Section 4.
+The ASQA2 system used in our experiments is described in Section 5.
+We detail our experiment results and compare SCO-QAT with other shallow features in Section 6.
+Then, we present our conclusions in Section 7. 
+Answer Ranking approaches can be divided in to deep and shallow methods.
+Deep approaches involve sophisticated tools or knowledge.
+The most advanced deep methods are logic-based and dependency-parser-based.
+The LCC team [Harabagiu et al.
+2005] used an abductive inference method to evaluate the correctness of an answer according to the logic form of the question, the logic form of the sentence that supports the answer, and background knowledge from WordNet.
+The logic-based approach has achieved the best QA performance in TREC for several years.
+Dependency-parser-based methods have also performed quite well on TREC tasks.
+The National University of Singapore team [Cui et al.
+2005] used dependency relations identified by a dependency parser to select answer nuggets for factoid and list questions.
+The similarity between the question and the supporting passage is calculated by machine translation models.
+Shen [Shen et al.
+2006] also used dependency relations, but incorporated them into a Maximum Entropy-based ranking model.
+Although these deep approaches perform well on monolingual QA (about 0.7 accuracy), they are quite demanding in terms of linguistic resources and computational complexity.
+In cross-lingual or multilingual QA, it is usually impossible to employ deep approaches for some languages due to the lack of knowledge resources or tools.
+In contrast, approaches with shallow features are much more flexible when QA languages are changed.
+The following are some commonly used shallow approaches.
+Surface patterns [Soubbotin and Soubbotin 2001] have been successful in the TREC QA Track, which uses string patterns to match questions with correct answers.
+However, from our perspective, if surface patterns are manually created, the method can not be regarded as " shallow " , because it is likely labor intensive.
+Although there are some " shallow " variations [Geleijnse and Korst 2006; Ravichandran and Hovy 2002] that attempt to create surface patterns automatically/semi-automatically, they usually suffer from the low coverage problem, which means they can only be applied to a few questions.
+Some approaches focus on local information, thus only take the similarity between a passage and the question into account when finding relevant answers.
+The simplest way to measure the similarity is by counting the ratio of question terms occurring in the answer passage, as has been reported [Cooper and Ruger 2000; Molla and Gardiner 2005; Zhao et al.
+2005].
+Kwok [Kwok and Deng 2006] and AnswerBus [Zheng 2002] adopt the IR score of the answer passage directly as a measure of similarity.
+Intuitively, the closeness of two terms may indicate a relation; therefore, some systems [Gillard et al.
+2006; Sacaleanu and Neumann 2006; Tom´as et al.
+2005] use features based on the distance between the answer and the question terms to obtain a better similarity measurement.
+Among these approaches, those of Lin et al.
+and Roussinov et al.
+[Roussinov et al.
+2004] incorporate the IDF value with term distances.
+The assumption is that, if the candidate answer is close to several keywords or question terms, it is more likely to be relevant.
+Instead of utilizing local information, which only considers the question and a passage, redundancy-based features consider all the returned passages or the entire corpus.
+Clarke [Clarke et al.
+2001] suggested that redundancy could be used as a substitute for deep analysis because correct answers may appear many times in high-ranking passages.
+Features using frequency or co-occurrence information are all regarded as redundancy-based.
+Several systems [Clarke et al.
+2002; Cooper and Ruger 2000; Kwok and Deng 2006; Zhao et al.
+Cross-Lingual and Monolingual Factoid Question Answering 2005; Zheng 2002] include answer frequency in their Answer Ranking components.
+A web-based co-occurrence shallow feature developed by Magnini et al.
+[Magnini et al.
+2001] has been successfully applied on the TREC dataset.
+Magnini used three methods, Pointwise Mutual Information, Maximal Likelihood Ratio, and Corrected Conditional Probability, to measure the co-occurrence of each answer and the given question based on Web search results.
+However, to use Magnini's method, we also need some word-ignoring heuristic rules to remove search keywords when the number of returned web pages is insufficient. 
+Before comparing shallow ranking features, we define the SCO-QAT ranking feature that was applied successfully in the ASQA2 system at NTCIR-6.
+SCO-QAT relies on co-occurrence information about question terms and answer terms, and is therefore similar to Magnini's approach [Magnini et al.
+2001].
+However, unlike Magnini's approach, which utilizes the Web as a corpus to help answer questions posed on a local corpus, SCO-QAT uses passages retrieved by the passage retrieval module from the local corpus directly and does not use any word-ignoring rules.
+The basic assumption of SCO-QAT is that, with good quality passages, the more often an answer co-occurs with question terms, the higher the probability that it is correct.
+Next, we describe the SCO-QAT function.
+Let the given answer be A and the given question be Q, where Q consists of a set, QT, of question terms {qt 1 , qt 2 , qt 3 , ……, qt n }.
+Based on QT, we define QC as a set of question term combinations, or more precisely {qc i | qc i is a subset of QT and qc i is not empty}.
+We also define a freq(X) function of a set X to indicate the number of retrieved passages in which all elements of X co-occur.
+The relation confidence is calculated as: ( , ) , if  <Equation_0> 0, if  <Equation_1>  <Equation_2> Then, the SCO-QAT formula is defined as: 1  <Equation_3> For example, given a question Q consisting of three question terms {qt1, qt2, qt3} and a corresponding answer set {c1, c2}, the retrieved passages are presented as follows: P1: qt1 qt2 c2 P2: qt1 qt2 qt3 c1 P3: qt1 qt2 c1 P4: qt1 c2 P5: qt2 c2 P6: qt1 qt3 c1 .
+We use Equation (2) to calculate the candidate answer's SCO-QAT score as follows: The rationale behind SCO-QAT is that we try to use retrieved passages as a resource to look up question terms and locate the correct answer.
+When a set of question terms QT co-occurs with an answer A, we can infer that some kind of relation exists between the QT set and the answer A, which could be helpful for identifying correct answers.
+However, as this kind of relation is not always correct, we have to find a way to deal with noisy relations.
+To this end, we use the confidence score shown in Equation (1) to measure the goodness of a rule, which is similar to the method used for finding association rules.
+Then, we take the sum of the confidence scores of all the co-occurrences of all question term combinations to resolve the noisy rule problem.
+This technique is useful if the returned passages contain a lot of redundant information about the given question and the answer. 
+In this section, we describe the evaluation metrics used in this paper.
+R-Accuracy and RU-Accuracy Two metrics, R-Accuracy and RU-Accuracy, are used to measure QA performance in NTCIR CLQA.
+A QA system returns a list of ranked answer responses for each question, but R-accuracy and RU-accuracy only consider the correctness of the top-1 ranked answer response on the list.
+An answer response is a pair comprised of an answer and its source document.
+Each answer response is judged as Right, Unsupported, or Wrong, as defined in the Cross-Lingual and Monolingual Factoid Question Answering NTCIR-6 CLQA overview [Lee et al.
+2007]Based on these criteria, the accuracy is calculated as the number of correctly answered questions divided by the total number of questions.
+R-accuracy means that only " Right " judgments are regarded as correct, while RU-accurakcy means that both " Right " and " Unsupported " judgments are counted.
+As R-accuracy only occurs a few times in this paper, we use " accuracy " to refer to RU-accuracy when the context is not ambiguous.
+the number of questions for which the top1 rank answer is Right number of questions R Accuracy − = the number of questions for which the top1 rank answer is Right or Unsupported number of questions RU Accuracy − = Mean Reciprocal Rank (MRR) We use MRR when we want to measure QA performance based on all the highest ranked correct answers, not only the top1 answer.
+MRR is calculated as follows: 1 , if a correct answer exists 1 the highest rank of correct answers number of questions 0, if no correct answer  <Equation_4> Expected Answer Accuracy (EAA) In addition to using the normal answer accuracy metrics, we propose a new metric called the Expected Answer Accuracy (EAA).
+We use EAA for cases where there are several top answers with the same ranking score.
+The EAA score of a ranking method is defined as follows: 1 number of correct answers with top1 rank score number of questions number of answers with top1 rank score  <Equation_5> Translation Cost We use the " translation cost " metric to measure the cost of introducing the cross-lingual function to a QA system.
+It is calculated as follows: accuracy of crosslingual QA -accuracy of monolingual QA accuracy of monolingual QA TranslationCost = 
+To evaluate answer ranking features, we chose the Academia Sinica Question Answering (ASQA) system as the testbed system for our experiment because it is modular and it performs well.
+Moreover, we can easily input different types of noise by adjusting the QA modules in ASQA.
+The system was developed by Academia Sinica 4 to deal with Chinese related QA tasks.
+The first version, ASQA1, can only deal with C-C QA, though.
+ASQA2, which is an extension of ASQA1, can deal with both C-C and E-C QA.
+We used ASQA1 in NTCIR-5 CLQA and ASQA2 in NTCIR-6 CLQA.
+NTCIR CLQA is the only QA contest in the world that focuses on Asian languages.
+On the C-C and E-C subtasks in NTCIR-6 CLQA, ASQA2 achieved the best performance with 0.553 and 0.34 RU-Accuracy, respectively.
+The system consists of several modules, as shown in Figure 1.
+In Question Processing, ASQA2 uses SVMs (Support Vector Machines) and syntax rules to identify the input question type and infer the expected answer types.
+The type taxonomy has 6 coarse-grained and 62 fined-grained answer types.
+For passage retrieval, we use Lucene 5 , an open source IR engine.
+The Chinese Answers with supporting documents Figure 1.
+System architecture of ASQA2 for Chinese-Chinese and English-Chinese Factoid QA English Question Processing EQC CQC CKeyword NER Normally, a cross-lingual QA system is constructed by modifying some components of a monolingual system; however, since translation is involved, the approach often results in performance deterioration.
+The degree of performance deterioration is usually used with the accuracy metric to evaluate the effectiveness of a cross-lingual system.
+We define the performance deterioration in terms of the translation cost, which is defined in Section 4.
+Figure 2shows the translation cost of systems in NTCIR-6 CLQA.
+When measuring the RU-Accuracy, the translation cost of ASQA2 ranks third, only slightly lower than the system in second place.
+Therefore, we consider that ASQA2 is an acceptable platform for our mono-lingual and cross-lingual experiments.
+Translation Cost on R-Acc Translation Cost on RU-Acc English Question Machine Figure 2.
+Translation costs of NTCIR-6 CLQA systems for factoid questions.
+The translation cost is calculated as the performance difference between cross-lingual and mono-lingual systems, divided by the mono-lingual performance.
+According to the ASQA2 working notes [Lee et al.
+2007], the system's success is attributable to three techniques: English question classification, answer template-based answer filtering, and answer ranking with the SCO-QAT feature.
+When the answer template-based answer filter is applied, it removes all the candidates except the one it deems correct.
+As it is impossible to compare ranking methods when there is only one answer, we removed the answer template-based filter so that it would not influence our analysis of the answer ranking features. 
+We conducted four experiments to explore the behavior of SCO-QAT and other shallow ranking features.
+In Experiment 1, we observed how shallow ranking features perform when a monolingual QA system is extended to a cross-lingual system.
+In Experiments 2, 3, and 4, we simulated situations where noise is introduced from the front-end modules and tried to determine which ranking feature is the most suitable under each kind of noise.
+Our testbed system is composed of several modules.
+Having described the system architecture in Section 5, we now elaborate on the dependencies between the experimental variables.
+First, we analyze the testbed system to identify several experimental variables and determine their interdependency, as shown in Figure 3.
+We are interested in the variables in bold font, as they will be used as independent or dependent variables in our experiments.
+The variables in gray font are not of interest because they are always controlled in the experiments.
+We provide details of the interdependency of the variables next.
+In this study, we focus on the Accuracy and other QA performance metrics; therefore, they are always dependent variables.
+These performance metrics are directly influenced by three variables: the ranking feature, passage quality, and answer quality, since ranking features can use passages and answers.
+Furthermore, passage quality depends on the information retrieval model (IR model) used and the passage depth (the number of passages used for answer extraction).
+The greater the passage depth, the worse the passage quality is likely to be, which could result in more answers of progressively lower quality.
+When ASQA switches from a monolingual to cross-lingual task, two variables are triggered: translation and English question classification.
+When translation is active, a translation engine has to be chosen to translate the question.
+Bad translation quality has a chain reaction effect because it leads to bad query quality, which leads to bad passage quality and bad answer quality.
+In ASQA, answer extraction is based on named entity recognition (NER) and answer filtering is based on the compatibility of the question type and the answer type.
+Therefore, NER and question classification are two more variables that could influence answer quality.
+Cross-Lingual and Monolingual Factoid Question Answering Translation Engine Figure 3.
+Dependencies of experimental variables based on the architecture of ASQA 2.
+When a variable at the tail of an arrow changes, it would have influence on the variable at the arrow head.
+We experimented on several QA datasets.
+A QA dataset is comprised of a set of questions, their answers, and the document IDs of supporting documents.
+The answers and supporting documents are regarded as the gold standard.
+We used the following six datasets from NTCIR5 and NTCIR6 for the CLQA Chinese-Chinese (CC) and English-Chinese (EC) subtasks: NTCIR5-CC-D200, NTCIR5-CC-T200, NTCIR5-EC-D200, NTCIR5-EC-T200, NTCIR6-CC-T150, and NTCIR6-EC-T150.
+The last item of a dataset name indicates the number of questions and the dataset's purpose, where T stands for " test " and D stands for " development " .
+The CIRB40 corpus was used to compile the According to Lin , datasets created by QA evaluation forums are not suitable for post-hoc evaluation because the gold standard is not sufficiently comprehensive.
+This means we have to manually check all the extra answers not covered by the gold standard in order to derive more reliable experiment results.
+Since the number of questions in our experiments is quite large, it is not feasible for us to examine all the extra answers and their supporting documents.
+Therefore, we only use RU-accuracy to compare performances so that we do not have to check all the returned documents; only the answers are checked.
+These manually examined answers are then fed back to the datasets to form six expanded datasets: NTCIR5-CC-D200e, NTCIR5-CC-T200e, NTCIR5-EC-D200e, NTCIR5-EC-T200e, NTCIR6-CC-T150e, and NTCIR6-EC-T150e.
+In addition, we created the IASL-CC-Q465 dataset to increase the degree of confidence in our experiments.
+It was developed by three people using a program that randomly selected passages from the CIRB40 corpus, searched for relevant documents, and created questions from the collected documents.
+Finally, we had 1015 questions for the C-C task and 550 questions for the E-C task.
+Answer correctness features are usually combined in order to achieve the best performance.
+However, combining features in QA relies mostly on heuristic methods.
+Although some systems use machine learning approaches successfully for QA ranking, it is rare to see the same approach being applied to other QA work.
+This may be because QA feature combination methods are not mature enough to deal with the variability of QA systems, and the amount of Cross-Lingual and Monolingual Factoid Question Answering training data is not sufficient to train good models.
+Therefore, instead of combined features, we only studied the effect of single ranking features because we assume they are more reliable and can be easily applied to other systems or languages.
+Table 2shows the experimental set-up.
+Table 2.
+Experimental Set-up for Experiment 1 – Single Shallow Features Independent Variables Ranking Feature, Mono-or Cross-lingual Dependent Variables Accuracy, MRR, EAA Controlled Variables Passage Depth, Translation Engine, Answer Filter Along with SCO-QAT, we tested the following widely used shallow features: keyword overlap (KO), density, IR score (IR), mutual information score (MI), and answer frequency.
+The keyword overlap feature represents the ratio of question keywords found in a passage, as used in [Cooper and Ruger 2000; Molla and Gardiner 2005; Zhao et al.
+2005].
+The IR score [Kwok and Deng 2006; Zheng 2002], which is provided by the passage retrieval module, is the score of the passage containing the answer.
+In ASQA2, the IR score is produced by the Lucene information retrieval engine 6 .
+Density is defined as the average distance between the answer and question keywords in a passage.
+There are several ways to calculate density.
+In this experiment, we simply adopt Lin's formula , which performed well in NTCIR-5 CLQA.
+The mutual information score is calculated by the PMI method used in [Magnini et al.
+2001], and instead of being based on the Web, it is calculated based on the whole corpus.
+The experiment results are listed in Table 3Cross-Lingual and Monolingual Factoid Question Answering In addition to comparing single ranking features, we compared the SCO-QAT results with those of other participants in the NTCIR5 CLQA task (Table 4).
+As the other QA systems used combined features, this is a single-versus combined-feature comparison.
+In the NTCIR5 CLQA task [Sasaki et al.
+2005], there were thirteen Chinese QA runs with an accuracy range of 0.105~0.445, and a mean of 0.315.
+It is impressive that ASQA2 with the single SCO-QAT feature achieved 0.515 accuracy 7 , which was much better than the accuracy of ASQA1 [Lee et al.
+2005], the best performing system in the NTCIR5 CLQA C-C subtask.
+Although SCO-QAT still performs well on the E-C datasets, its performance is not as good as on the C-C datasets.
+After analyzing the failed cases of E-C QA, we found the major problem was that some translations introduced words not listed in the stop word list.
+For example, there were some English questions in NTCIR CLQA, such as " Who is in charge of Indonesia's cabinet in 2000?＂After processing their Google translations, we identified improper keywords that were not on our stop word lists.
+For example, in the translation of the above question, " 由誰負責的印尼內閣於 2000 年?＂, we found " 由＂and " 於＂.
+Since SCO-QAT aggregates all co-occurrence scores, the effect of improper keywords is compounded.
+Although this problem could be solved by simply adding more stop words to the list, it should be noted that more new stop words may be introduced if the machine translation engine is changed.
+A better solution is to use the term-by-term translation approach because the stop word list can be controlled more easily.
+Although frequency is the simplest of the shallow features, it performs surprisingly well.
+It even achieves the best performance on one E-C dataset (NTCIR5-EC-D200).
+This may be due to the effectiveness of the ASQA2 answer filtering module, the characteristics of the Chinese news corpus, or the way questions were created, which caused questions with high frequency answers to be selected.
+We cannot find any papers on the effect of applying the frequency feature only.
+Further investigation is, therefore, needed to explain the phenomenon.
+The density feature measures the density of question terms around the answer based on the co-occurrence and distance information.
+Although it is widely used in QA systems, its performance is not as good as that of the IR score, which does not consider the distance information.
+This could be because the distance information is much noisier in QA that involves Chinese (e.g., E-C and C-C).
+We identified two types of errors caused by machine translations: wrong-term errors and synonym errors.
+Both types have a negative effect on the ranking features because the quality of the passages is often poor.
+The following is an example of a wrong term error.
+For the English question " Who is the director of the Chinese movie Crouching Tiger, Hidden Dragon?＂, the word " director＂was translated by Google Translate to the wrong term " 新 任＂in " 誰是新任的中國電影臥虎藏龍?＂.
+Here, the semantics of " director＂and " 新 任＂are completely different.
+In cases like this, it is impossible to find good quality passages for ranking.
+Synonym errors occur when improper synonyms are introduced.
+For example, the English question " Who was Taiwan's Central Bank Governor with the longest tenure?＂is translated to " 誰是台灣的央行行長最長任期?＂by Google.
+Although " 行長＂is the correct translation for mainland China, it is not the normal way to describe the head of a bank in Taiwan; therefore, a query with " 行長 " can not retrieve appropriate passages from Taiwanese news corpora (e.g., CIRB40 and CIRB20).
+To develop a cross-lingual QA system, a monolingual system is usually created first and then some modules are adjusted to meet cross-lingual requirements.
+There are two widely used approaches: question translation and term-by-term translation.
+In the question translation approach, the question is translated into the target language by machine translation.
+The translated question is then input to the monolingual system.
+In the term-by-term approach, questions are analyzed in the source language and split into several important terms, which are then translated by using a bilingual dictionary or other techniques.
+Since ASQA2 adopts the question translation approach, we can control the translation quality intuitively using different machine translation engines.
+Noisy information introduced by a machine translation engine propagates down through the QA modules and results in wrong answers.
+We tested our system on two machine translation services (namely, Google Cross-Lingual and Monolingual Factoid Question Answering Translate and SYSTRAN 8 ) to determine how the translation quality affects the answer ranking features.
+Table 5shows the experimental set-up.
+Table 5.
+Experimental Set-up for Experiment 2 – Influence of Machine Translation Quality Independent Variables Ranking Feature, Translation Engine Dependent Variables Accuracy, MRR, EAA Controlled Variables Passage Depth, Mono-or Cross-lingual, Answer Filter We observe that Google's translation quality is better than that of SYSTRAN.
+In other words, the accuracy declines when Google Translate is replaced by SYSTRAN.
+The performance decrease ratio (calculated as the performance of using SYSTRAN divided by that of using Google) for each of the three E-C datasets is shown in Table 6.
+It seems to be difficult to predict the influence of the translation quality.
+If we only look at each dataset, the decrease ratio is quite unstable, ranging from 48.3% to 96.9% in terms of accuracy.
+However, when we consider the ratio based on all the datasets, it becomes more stable for all the ranking features.
+The standard deviation of the decrease in the accuracy ratio drops from more than 0.11 to 0.0655, which shows that the current datasets of NTCIR CLQA may be too small to be used with confidence in our experiments.
+Thus, it would be better to use all the EC datasets when comparing QA systems.
+For the EC-ALL dataset, SCO-QAT yields a better performance decrease ratio in terms of accuracy and EAA, but not in terms of MRR.
+The Frequency feature still performs relatively well, because the frequency of an answer is less dependant on the translation quality.
+Passage depth, defined as the number of passages used for answer extraction and answer ranking, plays a critical role in a QA system.
+On the one hand, by increasing the passage depth we can obtain more relevant passages and, therefore, have a better chance of improving QA performance.
+On the other hand, increasing the passage depth also introduces more irrelevant passages.
+If a ranking feature can not handle the noise caused by deep passages, it can not benefit from additional relevant passages.
+In this experiment, we increase the number of passages to evaluate the performance of shallow features when the number of irrelevant passages increases.
+The experimental setup is shown in Table 7.
+We observe the performance of all C-C and E-C datasets at five depth points between 100 and 500, as shown in Figure 4.
+We chose 100 as the starting depth because it is commonly adopted in QA systems as the document depth or passage depth.
+As expected, for both CC and EC situations, EAA declines when the passage depth increases.
+(The IR score ranking feature is an exception.
+It always remains the same because the passage IR score of an answer does not change when the passage depth increases).
+However, the decrease in EAA is not as high as we expected, which suggests that, with the exception of frequency and MI, shallow ranking features can handle deep passage noise.
+Cross-Lingual and Monolingual Factoid Question Answering Figure 4.
+Single feature accuracy over 5 passage depth points (100, 200, 300, 400, 500) for all C-C and E-C datasets.
+Among the ranking features, frequency and MI are influenced by passage depth the most.
+In EC, while frequency is the best at depth 100 in terms of EAA, the latter decreases rapidly when the passage depth increases to 200, which is much more unreliable than in the CC situation.
+In other words, the accuracy feature is much more unreliable in EC.
+For MI, it not only performed worse than the other features in terms of EAA, but also decreased substantially when the depth increased.
+This suggests that MI may not be suitable for retrieved passages, although it has been applied successfully when using the Web as a corpus.
+As answer ranking is directly influenced by the answer quality, it is important to evaluate the ranking feature on answers of different quality.
+In this experiment, we adjusted the answer quality by changing the answer filter.
+The experimental set-up is detailed in Table 8.
+Table 8.
+Experimental Set-Up for Experiment 4 – Influence of Answer Quality Independent Variables Ranking Feature, Mono-or Cross-lingual Dependent Variables Accuracy, MRR, EAA Controlled Variables Passage Depth, Translation Engine, Answer Filter The Expected Answer Type filter (EAT filter) is a submodule of ASQA2 that eliminates answers deemed incompatible with the question type.
+For example, if the question type is Q_LOCATION_COUNTRY, only answers representing countries will be retained.
+It is common for QA systems to use this kind of filtering mechanism, but they differ in the granularity of the answer type system they use.
+With a good EAT filter, the quality of the input for the subsequent Answer Ranking module will be less noisy and easier to deal with.
+By utilizing the ASQA2 answer-type system (i.e., 6 coarse-grained and 62 fine-grained types), we can experiment with answer ranking features on different granularities.
+We built three EAT filters, namely, a DoNothing Filter, a Coarse-grained Filter 9 , and a Fine-grained Filter.
+The DoNothing Filter does not filter out any answers; therefore, it may contain a lot of noisy information.
+The Coarse-grained Filter and Fine-grained Filter use coarse-grained and Cross-Lingual and Monolingual Factoid Question Answering fine-grained type information respectively.
+The Fine-grained Filter is used in the single feature experiment described in Section 6.3.
+Here, we conduct the same single feature experiment with the other two noisier EAT filters.
+The results are shown in Table 9.
+As expected, the performance of every feature deteriorates with the noisy EAT filters.
+In the CC datasets, with the Coarse-grained Filter, SCO-QAT's EAA declines from 0.514 to 0.499 on the CC-ALL dataset, but it is still better than the other features.
+Even with the noisiest DoNothing Filter, SCO-QAT can still maintain a 71% decrease ratio for the CC-ALL dataset, thereby demonstrating its robustness.
+The calculation of decrease ratios in this section is similar to that in the " Influence of Machine Translation Quality " section.
+When speaking of Coarse-grained Filter, it is calculated as the performance of using Coarse-grained Filter divided by the performance of using Fine-grained Filter.
+When speaking of DoNothing Filter, the formula is the same except that the numerator is replaced with the performance of using DoNothing Filter.
+Table 9also shows the performance decrease ratio caused by inefficient EAT filters.
+It is calculated by dividing the performance score of a noisy EAT filter by that of the standard Fine-grained Filter.
+From this perspective, SCO-QAT is still the best CC feature, achieving 97% and 71% EAA decrease ratio with the Coarse-Grained Filter and DoNothing EAT filter, respectively.
+The decline in some features is caused by too many answers being collocated in the same passage.
+Without a proper EAT filter, a passage could contain the correct answer and other answers; or, at worst, contain several answers, none of which are compatible with the given question.
+Table 9(a).
+Performance and decrease ratio in CC QA when the Coarse-grained EAT filter is replaced by Fine-grained and DoNothing EAT filters.
+Cross-Lingual and Monolingual Factoid Question Answering contain any answers related to the PERSON type.
+Without a proper filter, wrong answers in the top-ranked passages would be sent to the answer ranking module.
+As a result, the IR score would not help us differentiate between the correct answer and incorrect ones.
+Note that the decline in EC's performance is substantial when the DoNothing filter is applied.
+In the CC case, the decline in EAA for the SCO-QAT feature is 71%; however, in the EC case, it drops to 14%.
+This suggests that, in EC, information about the answer type is important, since it is more reliable than the shallow ranking features under noise introduced by translation.
+Table 10.
+Performance and decrease ratio in EC QA when the Coarse-grained EAT filter is replaced by the Fine-grained and DoNothing EAT filters. 
+Sometimes, the resources needed to apply deep answer ranking approaches in a language are not available or the resource quality is not good enough.
+Hence, we conducted this research to help QA system designers choose shallow ranking features.
+We experimented on six shallow ranking features (SCO-QAT, keyword overlap, density, IR score, mutual information score, and answer frequency) under various types of noise caused by different QA modules in mono-lingual and cross-lingual situations.
+We also proposed a novel answer ranking feature called SCO-QAT, which does not require extra knowledge or sophisticated tools.
+It is, therefore, easy to implement in QA systems and may be used on various languages.
+In this pilot study, when the ASQA2 system only used the SCO-QAT ranking feature, it outperformed all the systems in NTCIR5 CLQA.
+For example, on the NTCIR5-CC-T200e QA dataset, we achieved 0.515 RU-Accuracy with the SCO-QAT feature only.
+Even the E-C version also achieved a 0.05 improvement over the best system.
+SCO-QAT also performed well in NTCIR6 CLQA, where the host system, ASQA2, achieved the best performance in the C-C subtask and the E-C subtask.
+To understand SCO-QAT better and to gain a deeper insight into shallow answer ranking features, we tested answer ranking features in various scenarios.
+We found that, although SCO-QAT performed very well in C-C QA, frequency seems the best choice for ranking in E-C QA in terms of EAA.
+However, the decrease in translation quality has a marked effect on the frequency of EAA, as shown by the fact that the EAA decrease ratio is 69.3%.
+In the same situation, SCO-QAT maintained a 74.2% EAA decrease ratio which was the best among the shallow ranking features.
+We also found that the noise introduced by passage depth does not impact much on ranking performance.
+This suggests that, if a long processing time is allowed, QA based on deep passages is a possible way to improve the performance when shallow features are used.
+In addition, answer-type-based filtering plays an important role, especially for E-C.
+When an extremely bad filter was used, the EAA decrease ratio in E-C for shallow ranking features was only 2%~21%, which shows a proper answer filter with fined-grained NER is critical to the success of an E-C system.
+In our future research on shallow ranking features, we will address the following issues.
+We will introduce a question term weighting scheme for SCO-QAT; use a taxonomy or ontology to alleviate the synonym problem that arises when counting co-occurrences of answers and question terms; experiment with shallow features on a Web corpus; utilize more syntactic information to make co-occurrence information more reliable; and test shallow features on other languages.
+Cross-Lingual and Monolingual Factoid Question Answering 
