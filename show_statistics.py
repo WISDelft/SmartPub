@@ -19,6 +19,10 @@ def main():
     result = db.publications.count({"booktitle": "WWW"})
     print('{:>25} {:>8d}'.format("WWW papers", result))
 
+    #db.inventory.find({ $ and: [{price: { $ne: 1.99}}, {price: { $exists: true}}]    })
+    result = db.publications.count({'$and' : [{'booktitle' :'WWW'} , {'content.chapters':{'$exists':True}}]})
+    print('{:>25} {:>8d}'.format("Successful extractions WWW papers", result))
+
     #print the papers from WWW
     result = db.publications.count({"booktitle": "SIGIR"})
     print('{:>25} {:>8d}'.format("SIGIR papers", result))
