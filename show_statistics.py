@@ -15,6 +15,8 @@ def main():
     result = db.publications.count({"content": {"$exists": True}})
     print('{:>25} {:>8d}'.format("fulltexts extracted", result))
 
-
+    #print the papers from WWW
+    result = db.publications.count({"booktitle": "WWW"})
+    print('{:>25} {:>8d}'.format("WWW papers", result))
 if __name__ == '__main__':
     main()
