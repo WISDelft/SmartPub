@@ -21,6 +21,9 @@ import random
 # for testing
 import sys
 
+booktitles = ['WWW', 'SIGIR', 'ESWC', 'ICWSM', 'VLDB']
+journals = ['TACO','JOCCH']
+
 def get_grobid_xml(paper_id):
     """
     Loads the GROBID XML of the paper with the provided DBLP id. If possible uses the XML cache. If not, uses the
@@ -145,6 +148,7 @@ def main():
     # mongo_search_string = {'book': 'SIGIR'}
     # mongo_search_string = {'content': {"$exists": False}}
     # mongo_search_string = ""
+
     # mongo_search_string = {"dblpkey":"journals_ijclclp_WuC07"}
     #get only the articles
     #mongo_search_string = {"type" : "article"}
@@ -152,6 +156,7 @@ def main():
     # processable paper
     # mongo_search_string = {'_id': 'journals_mala_Wadler00'}
     # mongo_search_string = {'_id': 'journals_ijclclp_XiaoLW07'}
+
 
     # pdf with out unicode mapping
     #mongo_search_string = {'_id': 'journals_iajit_BrahmiaMCB12'}
@@ -161,8 +166,13 @@ def main():
     # mongo_search_string = {'_id': 'journals_sigmod_Snodgrass04'}
 
     # traverse all the instances in mongo
-    mongo_search_string = {}
-    process_papers(mongo_search_string)
+    #mongo_search_string = {}
+
+    #Specific book title
+    for booktitle in booktitles:
+        print("Processing booktitle: {}".format(booktitle))
+        mongo_search_string = {'booktitle': booktitle}
+        process_papers(mongo_search_string)
 
 
 
