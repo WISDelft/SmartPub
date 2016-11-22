@@ -18,5 +18,21 @@ def main():
     #print the papers from WWW
     result = db.publications.count({"booktitle": "WWW"})
     print('{:>25} {:>8d}'.format("WWW papers", result))
+
+    #print the papers from WWW
+    result = db.publications.count({"booktitle": "SIGIR"})
+    print('{:>25} {:>8d}'.format("SIGIR papers", result))
+
+    #print the papers from WWW
+    result = db.publications.count({"booktitle": "ESWC"})
+    print('{:>25} {:>8d}'.format("ESWC papers", result))
+
+    #print the papers from WWW
+    result = db.publications.count({"booktitle": "ICWSM"})
+    print('{:>25} {:>8d}'.format("ICWSM papers", result))
+
+    #print the papers from WWW
+    result = db.publications.count({"booktitle": "VLDB"})
+    print('{:>25} {:>8d}'.format("VLDB papers", result))
 if __name__ == '__main__':
     main()
