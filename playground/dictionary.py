@@ -8,43 +8,41 @@
             '3rd singular past', 'present plural']
 """""
 
-objective = ['introduce', 'introduced', 'we use', 'We use', 'we also', 'We also', 'arguing', 'argued', 'argues',
-             'argue', 'concluding', 'concluded', 'concludes', 'conclude', 'demonstrating', 'demonstrated',
-             'demonstrates', 'demonstrate', 'indicating', 'indicated', 'presenting', 'presented', 'presents', 'present',
-             'recommending', 'recommended', 'recommends', 'recommend', 'showing', 'showed', 'shows', 'show', 'shown',
-             'suggested', 'suggests', 'suggest', 'indicated', 'indicates', 'indicate', 'we used', 'We used', 'we list',
-             'We list', 'this research', 'This research',
-             'We conducted', 'we conducted', 'our research', 'Our research', 'we construct',
-             'We construct', 'we employ', 'We employ', 'we discuss', 'We discuss', 'this study', 'This study',
-             'we explore', 'We explore', 'We present', 'we present', 'We compare', 'we compare', 'we develop',
-             'We develop', 'we define', 'We define', 'in this study', 'In this study', 'The goal', 'the goal',
+objective = ['this research', 'This research', 'the aim study', 'our research', 'Our research', 'we discuss',
+             'We discuss', 'this study', 'This study', 'in this study', 'In this study', 'The goal', 'the goal',
              'we describe', 'We describe', 'this work', 'This work', 'aims', 'we perform', 'We perform',
-             'In this paper', 'we propose', 'We propose', 'the present paper', 'The present paper', 'the present study',
-             'we study', 'We study', 'the aim of this paper', 'The aim of this paper', 'we aim', 'We aim',
-             'the purpose of this paper', 'The purpose of this paper', 'we investigate', 'We investigate',
-             'we introduce', 'We introduce', 'in this work', 'In this work', 'we examine', 'We examine', 'This paper',
-             'this paper', 'this article', 'This article', 'analyze', 'analyzed', 'analyzes', 'analyse', 'analysed',
-             'analyses']
+             'In this paper', 'In this report', 'in this report', 'we propose', 'We propose', 'the present paper',
+             'The present paper', 'the present study', 'we study', 'We study', 'the aim of this paper',
+             'The aim of this paper', 'we aim', 'We aim', 'the purpose of this paper', 'The purpose of this paper',
+             'we investigate', 'We investigate', 'analyzed', 'analyzes', 'analyse', 'analysed',
+             'The aim of''we introduce', 'We introduce', 'in this work', 'In this work', 'we examine', 'We examine',
+             'This paper', 'this paper', 'this article', 'This article', 'we analyze', ]
 
 dataset = ['dataset', 'Dataset', 'datasource', 'Datasource', 'data source', 'Data source', 'data from', 'Data from',
-           'collected from', 'open data', 'OpenData', 'database', 'databases', 'Open data', 'Foursquare', 'Facebook',
-           'Twitter', 'Instagram', 'Weibo', 'Flickr', 'OpenStreetMap', 'Google places', 'LBSN', 'Brightkite', 'Gowalla',
-           'geo-tagged', 'Census data', 'census data', 'mobility data', 'Mobility data']
+           'collected from', 'data set', 'open data', 'OpenData', 'database', 'databases', 'Open data',
+           'geo-tagged', 'Census data', 'census data', 'mobility data', 'Mobility data', 'we collected', 'We collected',
+           'we have collected', 'We have collected', 'we extracted', 'We extracted', 'we downloaded', 'We downloaded',
+           'dataset sourced from', 'We retrieve data', 'gathered by querying', 'extracted from', 'obtained from']
 
-method = ['we use', 'We use', 'we used', 'We used', 'Algorithm', 'algorithm', 'analyze', 'analyzed', 'analyzes',
-          'analyse', 'analysed', 'analyses', 'approach', 'Aproach', 'methodology', 'Methodology', 'Methodologies',
-          'methodologies', 'method', 'Method', 'technique', 'Technique', 'We implement', 'We implemented',
-          'we implement', 'we implemented', 'we developed', 'employed', 'employ', 'utilize', 'utilized']
 
-software = ['API', 'api', 'tool', 'software', 'framework', 'Framework', 'Tool', 'Software', 'tools', 'Tools', 'Api']
+method = ['We present', 'we present', 'We compare', 'we compare', 'we develop',
+          'We develop', 'We conducted', 'we conducted', 'we explore', 'We explore', 'we construct', 'we define',
+          'We define', 'We construct', 'We propose', 'We proposed', 'we proposed', 'we propose', 'we introduce',
+          'We introduce','we introduced', 'We introduced', 'we use', 'We use', 'we used', 'We used', 'Algorithm', 
+          'algorithm','we employ', 'utilize', 'utilized','methodology', 'Methodology',  'We implemented',
+          'analyze', 'analyzed', 'analyzes', 'analyse', 'analysed', 'analyses', 'approach', 'approaches', 'Aproach',
+          'Methodologies', 'methodologies', 'method', 'Method', 'technique', 'Technique', 'We implement',
+          'we implement', 'implemented', 'implementing', 'We then use', 'we then use', 'we developed', 'we employed',
+          ]
 
-result = ['we can observe', 'We can observe', 'we calculated', 'we find', 'we can see', 'see', 'seen', 'precision',
-          'recall', 'F1', 'concluding', 'concluded', 'concludes', 'conclude', 'demonstrating', 'demonstrated',
-          'demonstrates', 'demonstrate', 'indicating', 'indicated', 'showing', 'showed', 'shows', 'show', 'shown',
-          'suggested', 'suggests', 'suggest', 'find', 'findings', 'finding', 'found', 'result', 'Figure', 'figure',
-          'table', 'Table', 'we observe', 'we observed', 'We plot', 'we plot', 'we obtain', 'we obtained',
+software = [' API ', ' api ', 'tool', 'software', 'Tool', 'Software', 'tools', 'Tools', ' Api ', 'obtained using',
+            'data were collected using', 'performed by', 'performed using', 'extracted using']
+
+result = ['we can observe', 'We can observe', 'we find', 'we can see', 'precision',
+          'recall', 'F1', 'F 1', 'shows', 'show', 'shown', 'showed', 'we found', 'was found', 'were found', 'findings',
+          'result', 'Figure', 'figure', 'table', 'Table', 'we observe', 'we observed', 'We plot', 'we plot',
+          'we have measured', 'Our method predicts', 'We have measured',
           'we generated', 'we computed', 'We computed', 'We have computed', 'we measured', 'We measured', 'We measure',
-          'we measure', 'we compared', 'We compared', 'we obtain', 'We obtain', 'We obtained', 'we obtained',
-          'we have measured', 'Our method predicts',
-          'We have measured']
+          'we measure', 'we compared', 'We compared'
+          ]
 
