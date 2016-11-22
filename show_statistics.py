@@ -19,24 +19,38 @@ def main():
     result = db.publications.count({"booktitle": "WWW"})
     print('{:>25} {:>8d}'.format("WWW papers", result))
 
-    #db.inventory.find({ $ and: [{price: { $ne: 1.99}}, {price: { $exists: true}}]    })
     result = db.publications.count({'$and' : [{'booktitle' :'WWW'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions WWW papers", result))
 
-    #print the papers from WWW
+    #print the papers from SIGIR
     result = db.publications.count({"booktitle": "SIGIR"})
     print('{:>25} {:>8d}'.format("SIGIR papers", result))
 
-    #print the papers from WWW
+    result = db.publications.count({'$and' : [{'booktitle' :'SIGIR'} , {'content.chapters':{'$exists':True}}]})
+    print('{:>25} {:>8d}'.format("Successful extractions SIGIR papers", result))
+
+
+    #print the papers from ESWC
     result = db.publications.count({"booktitle": "ESWC"})
     print('{:>25} {:>8d}'.format("ESWC papers", result))
 
-    #print the papers from WWW
+    result = db.publications.count({'$and' : [{'booktitle' :'ESWC'} , {'content.chapters':{'$exists':True}}]})
+    print('{:>25} {:>8d}'.format("Successful extractions ESWC papers", result))
+
+    #print the papers from ICWSM
     result = db.publications.count({"booktitle": "ICWSM"})
     print('{:>25} {:>8d}'.format("ICWSM papers", result))
 
-    #print the papers from WWW
+    result = db.publications.count({'$and' : [{'booktitle' :'ICWSM'} , {'content.chapters':{'$exists':True}}]})
+    print('{:>25} {:>8d}'.format("Successful extractions ICWSM papers", result))
+
+
+    #print the papers from VLDB
     result = db.publications.count({"booktitle": "VLDB"})
     print('{:>25} {:>8d}'.format("VLDB papers", result))
+
+    result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
+    print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
+
 if __name__ == '__main__':
     main()
