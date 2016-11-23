@@ -151,7 +151,7 @@ def download_and_store(paper, db):
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].endswith("pdf") and "pdf" in enabledScrapers:
                         # Normal PDF download
-                        skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
+                        skipped = not tools.downloadFile(downloadinfo['url'], overwrite = True, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers:
                         global num_of_access_in_acm
                         num_of_access_in_acm += 1
