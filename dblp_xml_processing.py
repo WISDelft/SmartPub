@@ -40,7 +40,7 @@ statusEveryXxmlLoops = 1000
 
 filters = {}
 #remove the acm to start downloading more pdfs
-enabledScrapers = ["pdf"]
+enabledScrapers = ["pdf", "acm"]
 
 # add the number of access in acm to set sleep mode
 num_of_access_in_acm = 0
