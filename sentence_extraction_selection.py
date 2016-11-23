@@ -3,6 +3,7 @@ from playground import dictionary
 import nltk
 import random
 import time
+import config
 import sys
 
 booktitles = ['WWW', 'SIGIR', 'ESWC', 'ICWSM', 'VLDB']
@@ -27,15 +28,22 @@ def sentence_extraction(db):
     #change back to booktitles
     start = time.time()
 
-    for booktitle in journals:
+    objective_sentences = list()
+    dataset_sentences = list()
+    method_sentences = list()
+    software_sentences = list()
+    result_sentences = list()
+    other_sentences = list()
+
+    for booktitle in booktitles:
         ## i will test it locally so i use journals change later!!!!!!!!
-        mongo_string_search = {'journal': booktitle}
+        mongo_string_search = {'booktitle': booktitle}
         list_of_pubs.append(return_chapters(mongo_string_search, db))
     end = time.time()
-    print("Tine of the return_chapters {}".format(end - start))
+    print("Time of the return_chapters {}".format(end - start))
 
-    list_of_sentences = []
-    objective_sentences = list()
+    #list_of_sentences = []
+
     flag_result = False
     flag_method = False
     flag_software = False
@@ -51,8 +59,8 @@ def sentence_extraction(db):
 
             if paper['abstract'] != "":
                 objective_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey']))
+                #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
             for i, chapter in enumerate(paper['chapters']):
-
                 sentences = (sent_detector.tokenize(chapter.lower().strip()))
                 for sent in sentences:
                     if sent not in checker:
@@ -61,13 +69,15 @@ def sentence_extraction(db):
                             if len(tokens) > 1:
                                 all_tokens_in_sent = check_tokens(sent, tokens)
                                 if all_tokens_in_sent:
-                                    list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                    #list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
                                     flag_result = True
+                                    result_sentences.append((i, paper['dblpkey'], sent, "result"))
                                     checker.add(sent)
 
                             elif word.lower() in sent:
-                                list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                #list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
                                 flag_result = True
+                                result_sentences.append((i, paper['dblpkey'], sent, "result"))
                                 checker.add(sent)
 
                             if flag_result:
@@ -78,13 +88,15 @@ def sentence_extraction(db):
                                 if len(tokens) > 1:
                                     all_tokens_in_sent = check_tokens(sent, tokens)
                                     if all_tokens_in_sent:
-                                        list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                        #list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
                                         flag_software = True
+                                        software_sentences.append((i, paper['dblpkey'], sent, "software"))
                                         checker.add(sent)
 
                                 elif word.lower() in sent:
-                                    list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                    #list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
                                     flag_software = True
+                                    software_sentences.append((i, paper['dblpkey'], sent, "software"))
                                     checker.add(sent)
 
                                 if flag_software:
@@ -95,13 +107,15 @@ def sentence_extraction(db):
                                 if len(tokens) > 1:
                                     all_tokens_in_sent = check_tokens(sent, tokens)
                                     if all_tokens_in_sent:
-                                        list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                        #list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
                                         flag_method = True
+                                        method_sentences.append((i, paper['dblpkey'], sent, "method"))
                                         checker.add(sent)
 
                                 elif word.lower() in sent:
-                                    list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                    #list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
                                     flag_method = True
+                                    method_sentences.append((i, paper['dblpkey'], sent, "method"))
                                     checker.add(sent)
                                 if flag_method:
                                     break
@@ -111,33 +125,37 @@ def sentence_extraction(db):
                                 if len(tokens) > 1:
                                     all_tokens_in_sent = check_tokens(sent, tokens)
                                     if all_tokens_in_sent:
-                                        list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                        #list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
                                         flag_dataset = True
+                                        dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
                                         checker.add(sent)
 
                                 elif word.lower() in sent:
-                                    list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                    #list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
                                     flag_dataset = True
+                                    dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
                                     checker.add(sent)
 
                                 if flag_dataset:
                                     break
                         if not flag_dataset:
-                            list_of_sentences.append((i, paper['dblpkey'], sent, "other"))
+                            #list_of_sentences.append((i, paper['dblpkey'], sent, "other"))
+                            other_sentences.append((i, paper['dblpkey'], sent, "other"))
                         flag_result = False
                         flag_method = False
                         flag_software = False
                         flag_dataset = False
 
     end = time.time()
-    print("Tine of the big loop {}".format(end - start))
+    print("Time of the big loop {}".format(end - start))
     print("objective_sentences {}".format(len(objective_sentences)))
-    list_of_sentences.append(objective_sentences)
-    return list_of_sentences
+    #list_of_sentences.append(objective_sentences)
+    return objective_sentences,method_sentences,result_sentences,software_sentences,dataset_sentences,other_sentences
 
 
 def check_for_objective(abstract, dblpkey):
-    list_of_sentences = list()
+    objective_sentences = list()
+    other_sentences = list()
     sentences = (sent_detector.tokenize(abstract.lower().strip()))
     flag_objective = False
     for sent in sentences:
@@ -146,18 +164,17 @@ def check_for_objective(abstract, dblpkey):
             if len(tokens) > 1:
                 all_tokens_in_sent = check_tokens(sent, tokens)
                 if all_tokens_in_sent:
-                    list_of_sentences.append(("abstract", dblpkey, sent, "objective"))
+                    objective_sentences.append(("abstract", dblpkey, sent, "objective"))
                     flag_objective = True
                     break
             elif word.lower() in sent:
-                list_of_sentences.append(("abstract", dblpkey, sent, "objective"))
+                objective_sentences.append(("abstract", dblpkey, sent, "objective"))
                 flag_objective = True
                 break
         if not flag_objective:
-            list_of_sentences.append(("abstract", dblpkey, sent, "other"))
+            other_sentences.append(("abstract", dblpkey, sent, "other"))
 
-
-    return list_of_sentences
+    return objective_sentences
 
 
 def check_tokens(sent, tokens):
@@ -170,14 +187,13 @@ def check_tokens(sent, tokens):
                 count += 1
                 break
     if count == len(tokens):
-        #print(tokens, sent)
         return True
     else:
         return False
 
 def return_chapters(mongo_string_search, db):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search).limit(5)
+    results = db.publications.find(mongo_string_search).limit(1)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
@@ -234,49 +250,6 @@ def return_chapters(mongo_string_search, db):
     return list_of_docs
 
 
-def only_sentences(mongo_string_search,db):
-    results = db.publications.find(mongo_string_search).limit(2)
-    list_of_sentences = list()
-    list_of_chapters = list()
-    for i, r in enumerate(results):
-            try:
-                list_of_sentences.append(sent_detector.tokenize(r['content']['abstract'].lower().strip()))
-            except:
-                print("No abstract")
-                #print(my_dict)
-                #sys.exit(1)
-            try:
-                for chapter in r['content']['chapters']:
-                    #print(r['dblpkey'])
-                    if (chapter == {}):
-                        continue
-                    elif str(chapter['title']).lower() in filter_chapters:
-                        #print(chapter['title'])
-                        continue
-                    section = ""
-                    #chapter_nums.append(chapter['chapter_num'])
-                    # print(chapter['title'])
-                    for paragraph in chapter['paragraphs']:
-                        if paragraph == {}:
-                            continue
-                        section += paragraph
-                    list_of_sentences.append(sent_detector.tokenize(section.lower().strip()))
-                    #chapters.append(section)
-                    section = ""
-                #chapters = chapter_nums, chapters
-                #merged_sec = merge_subsections(chapters)
-
-                #list_of_chapters.append(merged_sec)
-
-                chapters = list()
-                #chapter_nums = list()
-            except:
-            # print("eeror")
-                print("Document {} has a Key Error - continue to the next document".format(r['dblpkey']))
-                continue
-    return list_of_sentences
-
-
 def merge_subsections(chapters):
     numbers = set()
     #print(len(chapters[0]))
@@ -297,25 +270,69 @@ def merge_subsections(chapters):
     return new_list
 
 
-def randomly_selection(number_of_files, sentences):
+def randomly_selection(all_sentcences):
     """
-    create csv files by taking random samples
-    :param number_of_files:
-    :param sentences:
+
+    :param all_sentcences:
+    :return:
     """
-    number_of_sentences = int(len(sentences)/ number_of_files)
-    copy_sentence = sentences.copy()
-    for i in range(0,number_of_files):
-        random_senetences = random.sample(copy_sentence,number_of_sentences)
-        f = open("dataset_{}.csv".format(i), "w", encoding="UTF-8")
-        for rnd_sent in random_senetences:
-            # remove commas from the sentence to avoid any misunderstanding
-            my_string = ','.join([str(item).replace(",","") for item in rnd_sent]) + ','
-            f.write(my_string)
-            f.write("\n")
-            copy_sentence.remove(rnd_sent)
-        f.close()
-        print("Finish file {}".format(i))
+
+    objective_sentences = list(all_sentcences[0][0])
+    method_sentences =  list(all_sentcences[1])
+    result_sentences =  list(all_sentcences[2])
+    software_sentences =  list(all_sentcences[3])
+    dataset_sentences =   list(all_sentcences[4])
+    other_sentences =   list(all_sentcences[5])
+
+    filenames = ['objective.csv', 'method.csv', 'result.csv', 'software.csv', 'dataset.csv', 'other.csv']
+
+    objective_sentences = random.sample(k=len(objective_sentences),population= objective_sentences)
+    f = open(filenames[0],'w', encoding='UTF-8')
+    for tu in objective_sentences:
+        my_string = ','.join([str(item).replace(",", "") for item in tu])
+        f.write(my_string)
+        f.write("\n")
+    f.close()
+
+    method_sentences = random.sample(k=len(method_sentences),population= method_sentences)
+    f = open(config.folder_datasets+filenames[1],'w', encoding='UTF-8')
+    for tu in method_sentences:
+        my_string = ','.join([str(item).replace(",", "") for item in tu])
+        f.write(my_string)
+        f.write("\n")
+    f.close()
+
+    result_sentences = random.sample(k=len(result_sentences),population= result_sentences)
+    f = open(config.folder_datasets+filenames[2],'w', encoding='UTF-8')
+    for tu in result_sentences:
+        my_string = ','.join([str(item).replace(",", "") for item in tu])
+        f.write(my_string)
+        f.write("\n")
+    f.close()
+
+    software_sentences = random.sample(k=len(software_sentences),population= software_sentences)
+    f = open(config.folder_datasets+filenames[3],'w', encoding='UTF-8')
+    for tu in software_sentences:
+        my_string = ','.join([str(item).replace(",", "") for item in tu])
+        f.write(my_string)
+        f.write("\n")
+    f.close()
+
+    dataset_sentences = random.sample(k=len(dataset_sentences),population= dataset_sentences)
+    f = open(config.folder_datasets+filenames[4],'w', encoding='UTF-8')
+    for tu in dataset_sentences:
+        my_string = ','.join([str(item).replace(",", "") for item in tu])
+        f.write(my_string)
+        f.write("\n")
+    f.close()
+
+    other_sentences = random.sample(k=len(other_sentences),population= other_sentences)
+    f = open(config.folder_datasets+filenames[5],'w', encoding='UTF-8')
+    for tu in other_sentences:
+        my_string = ','.join([str(item).replace(",", "") for item in tu])
+        f.write(my_string)
+        f.write("\n")
+    f.close()
 
 
 def main():
@@ -323,11 +340,10 @@ def main():
 
 
     start = time.time()
-    sentences = sentence_extraction(db)
+    all_sentences = sentence_extraction(db)
     end = time.time()
     print(end - start)
-    print(len(sentences))
-    randomly_selection(number_of_files= 1, sentences= sentences)
+    randomly_selection(all_sentences)
 
 
 
