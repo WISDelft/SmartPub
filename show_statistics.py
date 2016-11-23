@@ -35,8 +35,8 @@ def main():
     print('{:>25} {:>8d}'.format("ESWC papers", result))
 
     result = db.publications.find({"dblpkey":"conf_esws_BruggemannBXK16"})
-    for r in result:
-        print(r)
+    if result is None:
+        print("No entry")
 
     result = db.publications.count({'$and' : [{'booktitle' :'ESWC'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions ESWC papers", result))
