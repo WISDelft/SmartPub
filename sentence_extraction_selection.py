@@ -148,8 +148,8 @@ def sentence_extraction(db):
                         flag_dataset = False
 
     end = time.time()
-    print("Time of the big loop {}".format(end - start))
-    print("objective_sentences {}".format(len(objective_sentences)))
+    print("Time of the big loop {} seconds".format(end - start))
+    #print("objective_sentences {}".format(len(objective_sentences)))
     #list_of_sentences.append(objective_sentences)
     return objective_sentences,method_sentences,result_sentences,software_sentences,dataset_sentences,other_sentences
 
@@ -344,7 +344,7 @@ def main():
     start = time.time()
     all_sentences = sentence_extraction(db)
     end = time.time()
-    print(end - start)
+    print("Total time {} seconds".format(end - start))
     randomly_selection(all_sentences)
 
 
