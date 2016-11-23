@@ -289,7 +289,7 @@ def randomly_selection(all_sentcences):
     filenames = ['objective.csv', 'method.csv', 'result.csv', 'software.csv', 'dataset.csv', 'other.csv']
 
     objective_sentences = random.sample(k=len(objective_sentences),population= objective_sentences)
-    f = open(filenames[0],'w', encoding='UTF-8')
+    f = open(config.folder_datasets+filenames[0],'w', encoding='UTF-8')
     for tu in objective_sentences:
         my_string = ','.join([str(item).replace(",", "") for item in tu])
         f.write(my_string)
