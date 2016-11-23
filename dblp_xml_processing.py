@@ -24,7 +24,7 @@ storeToMongo = True
 # set to true if you want to skip downloading EE entries (pdf URLs) which have been accessed before (either sucessfully or unsucessfully)
 # this only works if storeToMongo is set to True because the MongoDB must be accessed for that. (if you set storeToMongo to false, I will
 # just assume that MongoDB is simply not active / there
-skipPreviouslyAccessedURLs = False
+skipPreviouslyAccessedURLs = True
 
 # the categories you are interested in
 CATEGORIES = set(
