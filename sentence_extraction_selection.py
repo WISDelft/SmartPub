@@ -195,7 +195,7 @@ def check_tokens(sent, tokens):
 
 def return_chapters(mongo_string_search, db):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search)
+    results = db.publications.find(mongo_string_search).limit(20)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
