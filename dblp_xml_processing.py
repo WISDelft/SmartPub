@@ -24,7 +24,7 @@ storeToMongo = True
 # set to true if you want to skip downloading EE entries (pdf URLs) which have been accessed before (either sucessfully or unsucessfully)
 # this only works if storeToMongo is set to True because the MongoDB must be accessed for that. (if you set storeToMongo to false, I will
 # just assume that MongoDB is simply not active / there
-skipPreviouslyAccessedURLs = True
+skipPreviouslyAccessedURLs = False
 
 # the categories you are interested in
 CATEGORIES = set(
@@ -151,7 +151,7 @@ def download_and_store(paper, db):
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].endswith("pdf") and "pdf" in enabledScrapers:
                         # Normal PDF download
-                        skipped = not tools.downloadFile(downloadinfo['url'], overwrite = True, folder = cfg.folder_pdf, localfilename=filename)
+                        skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
                     if paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers:
                         global num_of_access_in_acm
                         num_of_access_in_acm += 1
