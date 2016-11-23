@@ -11,7 +11,7 @@ journals = ['TACO']
 
 filter_chapters = ['related work' , 'background', 'state of the art' ,'previous works']
 
-#sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 
 
 def sentence_extraction(db):
@@ -61,8 +61,8 @@ def sentence_extraction(db):
                 objective_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey']))
                 #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
             for i, chapter in enumerate(paper['chapters']):
-                #sentences = (sent_detector.tokenize(chapter.lower().strip()))
-                sentences = nltk.sent_tokenize(chapter.lower().strip())
+                sentences = (sent_detector.tokenize(chapter.lower().strip()))
+                #sentences = nltk.sent_tokenize(chapter.lower().strip())
                 for sent in sentences:
                     if sent not in checker:
                         for word in dictionary.result:
@@ -148,8 +148,8 @@ def sentence_extraction(db):
                         flag_dataset = False
 
     end = time.time()
-    print("Time of the big loop {}".format(end - start))
-    print("objective_sentences {}".format(len(objective_sentences)))
+    print("Time of the big loop {} seconds".format(end - start))
+    #print("objective_sentences {}".format(len(objective_sentences)))
     #list_of_sentences.append(objective_sentences)
     return objective_sentences,method_sentences,result_sentences,software_sentences,dataset_sentences,other_sentences
 
@@ -157,8 +157,8 @@ def sentence_extraction(db):
 def check_for_objective(abstract, dblpkey):
     objective_sentences = list()
     other_sentences = list()
-    #sentences = (sent_detector.tokenize(abstract.lower().strip()))
-    sentences = nltk.sent_tokenize(abstract.lower().strip())
+    sentences = (sent_detector.tokenize(abstract.lower().strip()))
+    #sentences = nltk.sent_tokenize(abstract.lower().strip())
     flag_objective = False
     for sent in sentences:
         for word in dictionary.objective:
@@ -195,7 +195,7 @@ def check_tokens(sent, tokens):
 
 def return_chapters(mongo_string_search, db):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search).limit(1)
+    results = db.publications.find(mongo_string_search)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
@@ -344,7 +344,7 @@ def main():
     start = time.time()
     all_sentences = sentence_extraction(db)
     end = time.time()
-    print(end - start)
+    print("Total time {} seconds".format(end - start))
     randomly_selection(all_sentences)
 
 
