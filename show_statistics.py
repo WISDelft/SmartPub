@@ -34,8 +34,8 @@ def main():
     result = db.publications.count({"booktitle": "ESWC"})
     print('{:>25} {:>8d}'.format("ESWC papers", result))
 
-    result = db.publications.find_one({"dblpkey":"conf_esws_BruggemannBXK16"})
-    print(result)
+    #result = db.publications.find_one({"dblpkey":"conf_esws_BruggemannBXK16"})
+    #print(result)
     #if result is None:
     #    print("No entry")
 
