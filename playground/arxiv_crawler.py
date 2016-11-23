@@ -68,44 +68,7 @@ def arxiv_crawler(queryParameter, max_results):
                 print 'abs page link: %s' % link.href
             elif link.title == 'pdf':
                 print 'pdf link: %s' % link.href
-                Introduction=ngram_analysis.get_section(link.href, "INTRODUCTION")
-                sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-                intro_sent = (sent_detector.tokenize(Introduction.strip()))
-                for intro in intro_sent:
-                    introctions_list.append(intro)
-
-                """
-                for each section of the paper perform n-gram analysis
-                """
-                #ngram_analysis.get_2grams(Introduction,'introduction')
-                #ngram_analysis.get_3grams(Introduction, 'introduction')
-                #footnotes=ngram_analysis.get_Links(link.href)
-                #ngram_analysis.get_2grams(footnotes, 'footnotes')
-                #fig_table=ngram_analysis.get_fig_table(link.href)
-                #ngram_analysis.get_2grams(fig_table, 'fig_table')
-                #ngram_analysis.get_3grams(footnotes, 'footnotes')
-                #ngram_analysis.get_3grams(fig_table, 'fig_table')
-
-                method = ngram_analysis.get_section(link.href, "METHOD")
-                if method:
-
-                    method_sent = (sent_detector.tokenize(method.strip()))
-                    for intro in method_sent:
-                        methods_list.append(intro)
-                #    ngram_analysis.get_2grams(method, 'method')
-                #    ngram_analysis.get_3grams(method, 'method')
-
-
-                dataset= ngram_analysis.get_section(link.href, "DATASET")
-                if dataset:
-
-                    dataset_sent = (sent_detector.tokenize(dataset.strip()))
-                    for intro in dataset_sent:
-                        datasets_list.append(intro)
-                #    ngram_analysis.get_2grams(dataset, 'dataset')
-                #    ngram_analysis.get_3grams(dataset, 'dataset')
-
-
+                
         # The journal reference, comments and primary_category sections live under
         # the arxiv namespace
         try:
@@ -129,14 +92,7 @@ def arxiv_crawler(queryParameter, max_results):
 
         # The abstract is in the <summary> element
         print 'Abstract: %s' %  entry.summary
-        #ngram_analysis.get_2grams(entry.summary, 'abstract')
-        #ngram_analysis.get_3grams(entry.summary, 'abstract')
+        
 
-    #topic_extractor.get_topic(entry.summary, 2,'abstract')
-    #topic_extractor.get_topic(introctions_list, 2, 'introduction')
-    #topic_extractor.get_topic(datasets_list, 2, 'dataset')
-    #topic_extractor.get_topic(methods_list, 2, 'method')
-
-
-
+arxiv_crawler('ICWSM', 100)
 
