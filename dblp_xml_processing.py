@@ -168,13 +168,14 @@ def download_and_store(paper, db):
                             print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(10)
 
+                        skipped = not extract_paper_from_ACM(paper['ee'], filename)
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
                             "Crawler sleeps for {} min - Times Access ACM: {}".format(float(rndm_time/int(60)), num_of_access_in_acm))
                         time.sleep(rndm_time)
 
-                        skipped = not extract_paper_from_ACM(paper['ee'], filename)
+
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
                     if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
                         global num_of_access_in_springer
@@ -189,12 +190,13 @@ def download_and_store(paper, db):
                             print("Crawler sleeps for 10 sec - Times Access SPRINGER: {}".format(num_of_access_in_springer))
                             time.sleep(10)
 
+                        skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
                             "Crawler sleeps for {} min - Times Access SPRINGER: {}".format(float(rndm_time/int(60)), num_of_access_in_springer))
                         time.sleep(rndm_time)
-                        skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
+
 
 
 
