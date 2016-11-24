@@ -40,8 +40,8 @@ statusEveryXxmlLoops = 1000
 
 filters = {}
 
-enabledScrapers = ["pdf", "acm", "springer"]
-
+#enabledScrapers = ["pdf", "acm", "springer"]
+enabledScrapers= set()
 
 # add the number of access in acm to set sleep mode
 num_of_access_in_acm = 0
@@ -106,12 +106,15 @@ def download_and_store(paper, db):
         # filters have been set
         if len(filters)>0:
             for k, v in filters.items():
+                if k == 'scraper':
+                    enabledScrapers.add(v)
+                    continue
                 if not (k in paper and paper[k]==v):
                     skip = True
             if not skip:
                 if "dblpkey" in paper:
                     print ("Filter matched: "+str(paper["dblpkey"]))
-
+        #print(enabledScrapers)
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
