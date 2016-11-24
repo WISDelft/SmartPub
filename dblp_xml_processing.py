@@ -39,11 +39,14 @@ statusEveryXdownloads = 100
 statusEveryXxmlLoops = 1000
 
 filters = {}
-#remove the acm to start downloading more pdfs
-enabledScrapers = ["pdf", "acm"]
+
+enabledScrapers = ["pdf", "acm", "springer"]
+
 
 # add the number of access in acm to set sleep mode
 num_of_access_in_acm = 0
+# add the number of access in springer to set sleep mode
+num_of_access_in_springer = 0
 
 numOfPDFobtained = 0
 numOfPDFobtainedInThisSession = 0
@@ -112,7 +115,7 @@ def download_and_store(paper, db):
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
-            if (paper['ee'].endswith("pdf") and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers):
+            if (paper['ee'].endswith("pdf") and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers) or (paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                 # which URLs have been accessed, and if that was successfull or not
@@ -173,6 +176,26 @@ def download_and_store(paper, db):
 
                         skipped = not extract_paper_from_ACM(paper['ee'], filename)
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
+                    if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
+                        global num_of_access_in_springer
+                        num_of_access_in_springer += 1
+                        if num_of_access_in_springer % 1000 == 0:
+                            print("Crawler sleeps for 30 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
+                            time.sleep(1800)
+                        elif num_of_access_in_springer % 50 == 0:
+                            print("Crawler sleeps for 10 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
+                            time.sleep(600)
+                        elif num_of_access_in_springer % 10 == 0:
+                            print("Crawler sleeps for 10 sec - Times Access SPRINGER: {}".format(num_of_access_in_springer))
+                            time.sleep(10)
+
+                        # sleep for a random duration of time between 60 and 360 seconds
+                        rndm_time = int(random.uniform(60, 360))
+                        print(
+                            "Crawler sleeps for {} min - Times Access SPRINGER: {}".format(float(rndm_time/int(60)), num_of_access_in_springer))
+                        time.sleep(rndm_time)
+                        skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
+
 
 
                     if skipped:
@@ -195,6 +218,34 @@ def download_and_store(paper, db):
                         ex=sys.exc_info()
                         downloadinfo['error'] = repr(ex)
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+
+
+def extract_paper_from_SPRINGER(paper_url, filename):
+    """
+    this function will access a given url  and will find the link of the pdf.
+    Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
+    :param paper_url: e.g. "http://dx.doi.org/10.1007/BF00264597"
+    :return:
+    """
+    # reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
+    # the site will strike you out because you are a robot!
+    req = Request(paper_url, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    # parse the html code
+    soup = BeautifulSoup(webpage, 'html.parser')
+    # select only the link tags
+    for link in soup.find_all('a'):
+        # the name of in the link tag is "FullTextPDF"
+        if str(link.get('href')).endswith('.pdf'):
+            # for instance : "/content/pdf/10.1007%2FBF00264597.pdf"
+            href_link = link.get('href')
+            prefix = "http://link.springer.com"
+            pdf_link = prefix + href_link
+
+            print("Access in " + pdf_link)
+            return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
+                                      localfilename=filename, printOutput=False)
+    raise BaseException(paper_url + ' does not contain a valid SPRINGER download link.')
 
 
 def extract_paper_from_ACM(paper_url, filename):
