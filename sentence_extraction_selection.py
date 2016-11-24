@@ -35,9 +35,9 @@ def sentence_extraction(db):
     result_sentences = list()
     other_sentences = list()
 
-    for booktitle in journals:
+    for booktitle in booktitles:
         ## i will test it locally so i use journals change later!!!!!!!!
-        mongo_string_search = {'$and': [{'journal': booktitle}, {'content.chapters': {'$exists': True}}]}
+        mongo_string_search = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': True}}]}
         list_of_pubs.append(return_chapters(mongo_string_search, db))
     end = time.time()
     print("Time of the return_chapters {}".format(end - start))
@@ -200,7 +200,7 @@ def check_tokens(sent, tokens):
 
 def return_chapters(mongo_string_search, db):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search).limit(1)
+    results = db.publications.find(mongo_string_search).limit(3)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
