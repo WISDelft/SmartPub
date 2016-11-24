@@ -7,7 +7,7 @@ import config
 import sys
 
 booktitles = ['WWW', 'SIGIR', 'ESWC', 'ICWSM', 'VLDB']
-journals = ['TACO']
+journals = ['TACO', 'JOCCH']
 
 filter_chapters = ['related work' , 'background', 'state of the art' ,'previous works']
 
@@ -58,7 +58,7 @@ def sentence_extraction(db):
             # print(chapters['dblpkey'], len(chapters['chapters']))
 
             if paper['abstract'] != "":
-                objective_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey']))
+                objective_sentences = (check_for_objective(paper['abstract'],paper['dblpkey']))
                 objective_count += len(objective_sentences)
                 print("objective sentences: {}".format(objective_count))
                 #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
@@ -290,7 +290,7 @@ def randomly_selection(all_sentcences):
 
     filenames = ['objective.csv', 'method.csv', 'result.csv', 'software.csv', 'dataset.csv', 'other.csv']
 
-    objective_sentences = random.sample(k=len(objective_sentences),population= objective_sentences)
+    objective_sentences = random.sample(k=len(objective_sentences), population= objective_sentences)
     print("objective sentences in random selection: {}".format(len(objective_sentences)))
     f = open(config.folder_datasets+filenames[0],'w', encoding='UTF-8')
     for tu in objective_sentences:
