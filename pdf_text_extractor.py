@@ -171,7 +171,9 @@ def main():
     #Specific book title
     for booktitle in booktitles:
         print("Processing booktitle: {}".format(booktitle))
-        mongo_search_string = {'booktitle': booktitle}
+        #{'$and': [{'booktitle': 'ESWC'}, {'content.chapters': {'$exists': True}}]}
+        #mongo_search_string = {'booktitle': booktitle}
+        mongo_search_string = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': False}}]}
         process_papers(mongo_search_string)
 
 
