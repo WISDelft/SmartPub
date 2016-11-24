@@ -35,9 +35,9 @@ def sentence_extraction(db):
     result_sentences = list()
     other_sentences = list()
 
-    for booktitle in booktitles:
+    for booktitle in journals:
         ## i will test it locally so i use journals change later!!!!!!!!
-        mongo_string_search = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': True}}]}
+        mongo_string_search = {'$and': [{'journal': booktitle}, {'content.chapters': {'$exists': True}}]}
         list_of_pubs.append(return_chapters(mongo_string_search, db))
     end = time.time()
     print("Time of the return_chapters {}".format(end - start))
@@ -58,9 +58,12 @@ def sentence_extraction(db):
             # print(chapters['dblpkey'], len(chapters['chapters']))
 
             if paper['abstract'] != "":
-                objective_sentences = check_for_objective(paper['abstract'],paper['dblpkey'])
-                objective_count += len(objective_sentences)
-                print("objective sentences: {}".format(objective_count))
+                objsents = check_for_objective(paper['abstract'],paper['dblpkey']).copy()
+                for obj_sent in objsents:
+                    objective_sentences.append(obj_sent)
+                #print(objective_sentences)
+                #objective_count = len(objective_sentences)
+                #print("objective sentences: {}".format(objective_count))
                 #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
             for i, chapter in enumerate(paper['chapters']):
                 sentences = (sent_detector.tokenize(chapter.lower().strip()))
@@ -197,7 +200,7 @@ def check_tokens(sent, tokens):
 
 def return_chapters(mongo_string_search, db):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search).limit(3)
+    results = db.publications.find(mongo_string_search).limit(1)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
