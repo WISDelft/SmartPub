@@ -49,16 +49,18 @@ def sentence_extraction(db):
     flag_software = False
     flag_dataset = False
     count = 1
-
+    objective_count = 0
     start = time.time()
     for pubs in list_of_pubs:
-        print(count)
-        count += 1
         for paper in pubs:
+            print(count)
+            count += 1
             # print(chapters['dblpkey'], len(chapters['chapters']))
 
             if paper['abstract'] != "":
                 objective_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey']))
+                objective_count += len(objective_sentences)
+                print("objective sentences: {}".format(objective_count))
                 #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
             for i, chapter in enumerate(paper['chapters']):
                 sentences = (sent_detector.tokenize(chapter.lower().strip()))
@@ -195,7 +197,7 @@ def check_tokens(sent, tokens):
 
 def return_chapters(mongo_string_search, db):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search).limit(20)
+    results = db.publications.find(mongo_string_search).limit(5)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
