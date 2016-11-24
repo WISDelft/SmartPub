@@ -37,7 +37,7 @@ def sentence_extraction(db):
 
     for booktitle in booktitles:
         ## i will test it locally so i use journals change later!!!!!!!!
-        mongo_string_search = {'booktitle': booktitle}
+        mongo_string_search = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': True}}]}
         list_of_pubs.append(return_chapters(mongo_string_search, db))
     end = time.time()
     print("Time of the return_chapters {}".format(end - start))
