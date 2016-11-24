@@ -281,7 +281,7 @@ def randomly_selection(all_sentcences):
     :return:
     """
 
-    objective_sentences = list(all_sentcences[0][0])
+    objective_sentences = list(all_sentcences[0])
     method_sentences =  list(all_sentcences[1])
     result_sentences =  list(all_sentcences[2])
     software_sentences =  list(all_sentcences[3])
