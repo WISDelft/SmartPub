@@ -158,16 +158,20 @@ def download_and_store(paper, db):
                     if paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers:
                         global num_of_access_in_acm
                         num_of_access_in_acm += 1
+
                         if num_of_access_in_acm % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(1800)
+
                         elif num_of_access_in_acm % 50 == 0:
-                            print("Crawler sleeps for 10 min - Times Access ACM: {}".format(num_of_access_in_acm))
-                            time.sleep(600)
+                            print("Crawler sleeps for 5 min - Times Access ACM: {}".format(num_of_access_in_acm))
+                            time.sleep(300)
+
+                        """
                         elif num_of_access_in_acm % 10 == 0:
                             print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(10)
-
+                        """
                         skipped = not extract_paper_from_ACM(paper['ee'], filename)
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
@@ -180,15 +184,19 @@ def download_and_store(paper, db):
                     if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
                         global num_of_access_in_springer
                         num_of_access_in_springer += 1
+
                         if num_of_access_in_springer % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
                             time.sleep(1800)
+
                         elif num_of_access_in_springer % 50 == 0:
-                            print("Crawler sleeps for 10 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
-                            time.sleep(600)
+                            print("Crawler sleeps for 5 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
+                            time.sleep(300)
+                        """
                         elif num_of_access_in_springer % 10 == 0:
                             print("Crawler sleeps for 10 sec - Times Access SPRINGER: {}".format(num_of_access_in_springer))
                             time.sleep(10)
+                        """
 
                         skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
                         # sleep for a random duration of time between 60 and 360 seconds
