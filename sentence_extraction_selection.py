@@ -58,7 +58,7 @@ def sentence_extraction(db):
             # print(chapters['dblpkey'], len(chapters['chapters']))
 
             if paper['abstract'] != "":
-                objective_sentences = (check_for_objective(paper['abstract'],paper['dblpkey']))
+                objective_sentences = check_for_objective(paper['abstract'],paper['dblpkey'])
                 objective_count += len(objective_sentences)
                 print("objective sentences: {}".format(objective_count))
                 #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
