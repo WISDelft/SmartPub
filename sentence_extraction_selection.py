@@ -52,9 +52,9 @@ def sentence_extraction(db):
 
     start = time.time()
     for pubs in list_of_pubs:
+        print(count)
+        count += 1
         for paper in pubs:
-            print(count)
-            count += 1
             # print(chapters['dblpkey'], len(chapters['chapters']))
 
             if paper['abstract'] != "":
