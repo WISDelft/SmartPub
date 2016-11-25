@@ -14,7 +14,7 @@ filter_chapters = ['related work' , 'background', 'state of the art' ,'previous 
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 
 
-def sentence_extraction(db):
+def sentence_extraction(db, publication_limit):
     """
     this function retrieves all the sentences that contain phrases from the dictionary.py
     To do that, we take all the chapters for each paper and we check each sentence separately.
@@ -38,7 +38,7 @@ def sentence_extraction(db):
     for booktitle in booktitles:
         ## i will test it locally so i use journals change later!!!!!!!!
         mongo_string_search = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': True}}]}
-        list_of_pubs.append(return_chapters(mongo_string_search, db))
+        list_of_pubs.append(return_chapters(mongo_string_search, db, publication_limit))
     end = time.time()
     print("Time of the return_chapters {}".format(end - start))
 
@@ -198,9 +198,9 @@ def check_tokens(sent, tokens):
     else:
         return False
 
-def return_chapters(mongo_string_search, db):
+def return_chapters(mongo_string_search, db, publication_limit):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
-    results = db.publications.find(mongo_string_search).limit(3)
+    results = db.publications.find(mongo_string_search).limit(publication_limit)
     chapters = list()
     chapter_nums = list()
     list_of_docs = list()
@@ -342,16 +342,81 @@ def randomly_selection(all_sentcences):
         f.write("\n")
     f.close()
 
+def check_collection_sentences_exist(db):
+    collections = db.collection_names()
+    if "sentences" in collections:
+        return True
+    else:
+        db.create_collection("sentences")
+        #db.sentences.create_index('sentence')
+        return False
+
+def store_sentences_in_mongo(db, all_senteces):
+    for category in all_senteces:
+        for sent in category:
+            sentence_info = {
+                "chapter": sent[0],
+                "pubId": sent[1],
+                "sentence": sent[2],
+                "class": sent[3]
+            }
+            #print (sentence_info)
+            res = db.sentences.find({'sentence': sent[2]}).count()
+
+            #print (res)
+
+            if res == 0:
+                print("sentence not in the collection")
+                db.sentences.insert_one(sentence_info)
+            else:
+                print("sentence already in the collection")
+                #print(sent[2])
+                continue
+
+            #sys.exit(1)
+
+
+def create_datasets(num_of_sentences,db):
+    labels = ["objective", "software", "method", "dataset", "result", "other"]
+    my_list = list()
+    for label in labels:
+        results = db.sentences.find({"class":label})
+        f = open(config.folder_datasets+label+".csv", "w", encoding="UTF-8")
+        for i,res in enumerate(results):
+            print(i)
+            mystring = ("{},{},{},{}".format(res['chapter'], res['pubId'], res['sentence'], res['class']))
+            my_list.append(mystring)
+
+        my_list = random.sample(k=len(my_list), population=my_list)
+
+        for i, str in enumerate(my_list):
+            if i < num_of_sentences:
+                f.write(str)
+                f.write("\n")
+            else:
+                break
+        my_list = list()
+        f.close()
+
+
+
+
 
 def main():
     db = tools.connect_to_mongo()
-
+    if check_collection_sentences_exist(db):
+        print("Collection 'sentences'  exist")
+    else:
+        print("Collection 'sentences' was created")
 
     start = time.time()
-    all_sentences = sentence_extraction(db)
+    #extract sentences from 100 publication from each booktitle
+    all_sentences = sentence_extraction(db,100)
+    store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
-    randomly_selection(all_sentences)
+    #randomly_selection(all_sentences)
+    create_datasets(1000,db)
 
 
 
