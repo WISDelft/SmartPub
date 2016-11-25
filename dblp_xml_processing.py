@@ -41,7 +41,7 @@ statusEveryXxmlLoops = 1000
 filters = {}
 
 #enabledScrapers = ["pdf", "acm", "springer"]
-enabledScrapers= set()
+enabledScrapers = {"pdf"}
 
 # add the number of access in acm to set sleep mode
 num_of_access_in_acm = 0
