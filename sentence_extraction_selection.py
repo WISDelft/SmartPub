@@ -21,11 +21,11 @@ def sentence_extraction(db, publication_limit):
     Also, we merge subsection to keep it consistent (Auxiliary functions: return_chapters(),
     merge_subsections().
     :param db:
+    :param publication_limit
     :return: list of tuples in the format (chapter number, paper_id, sentence)
     """
     checker = set()
     list_of_pubs = [] # list of lists of different booktitles
-    #change back to booktitles
     start = time.time()
 
     objective_sentences = list()
@@ -36,13 +36,10 @@ def sentence_extraction(db, publication_limit):
     other_sentences = list()
 
     for booktitle in booktitles:
-        ## i will test it locally so i use journals change later!!!!!!!!
         mongo_string_search = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': True}}]}
         list_of_pubs.append(return_chapters(mongo_string_search, db, publication_limit))
     end = time.time()
     print("Time of the return_chapters {}".format(end - start))
-
-    #list_of_sentences = []
 
     flag_result = False
     flag_method = False
@@ -55,19 +52,12 @@ def sentence_extraction(db, publication_limit):
         for paper in pubs:
             print(count)
             count += 1
-            # print(chapters['dblpkey'], len(chapters['chapters']))
-
             if paper['abstract'] != "":
                 objsents = check_for_objective(paper['abstract'],paper['dblpkey']).copy()
                 for obj_sent in objsents:
                     objective_sentences.append(obj_sent)
-                #print(objective_sentences)
-                #objective_count = len(objective_sentences)
-                #print("objective sentences: {}".format(objective_count))
-                #other_sentences.append(check_for_objective(paper['abstract'],paper['dblpkey'])[1])
             for i, chapter in enumerate(paper['chapters']):
                 sentences = (sent_detector.tokenize(chapter.lower().strip()))
-                #sentences = nltk.sent_tokenize(chapter.lower().strip())
                 for sent in sentences:
                     if sent not in checker:
                         for word in dictionary.result:
@@ -117,7 +107,6 @@ def sentence_extraction(db, publication_limit):
                                         flag_method = True
                                         method_sentences.append((i, paper['dblpkey'], sent, "method"))
                                         checker.add(sent)
-
                                 elif word.lower() in sent:
                                     #list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
                                     flag_method = True
@@ -141,7 +130,6 @@ def sentence_extraction(db, publication_limit):
                                     flag_dataset = True
                                     dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
                                     checker.add(sent)
-
                                 if flag_dataset:
                                     break
                         if not flag_dataset:
@@ -342,14 +330,15 @@ def randomly_selection(all_sentcences):
         f.write("\n")
     f.close()
 
+
 def check_collection_sentences_exist(db):
     collections = db.collection_names()
     if "sentences" in collections:
         return True
     else:
         db.create_collection("sentences")
-        #db.sentences.create_index('sentence')
         return False
+
 
 def store_sentences_in_mongo(db, all_senteces):
     for category in all_senteces:
@@ -366,14 +355,12 @@ def store_sentences_in_mongo(db, all_senteces):
             #print (res)
 
             if res == 0:
-                print("sentence not in the collection")
+                #print("sentence not in the collection")
                 db.sentences.insert_one(sentence_info)
             else:
-                print("sentence already in the collection")
+                #print("sentence already in the collection")
                 #print(sent[2])
                 continue
-
-            #sys.exit(1)
 
 
 def create_datasets(num_of_sentences,db):
@@ -389,17 +376,14 @@ def create_datasets(num_of_sentences,db):
 
         my_list = random.sample(k=len(my_list), population=my_list)
 
-        for i, str in enumerate(my_list):
+        for i, string in enumerate(my_list):
             if i < num_of_sentences:
-                f.write(str)
+                f.write(string)
                 f.write("\n")
             else:
                 break
         my_list = list()
         f.close()
-
-
-
 
 
 def main():
@@ -411,13 +395,12 @@ def main():
 
     start = time.time()
     #extract sentences from 100 publication from each booktitle
-    all_sentences = sentence_extraction(db,100)
+    all_sentences = sentence_extraction(db=db,publication_limit=170)
     store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
     #randomly_selection(all_sentences)
     create_datasets(1000,db)
-
 
 
 if __name__ == '__main__':
