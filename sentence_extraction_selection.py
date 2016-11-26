@@ -334,6 +334,8 @@ def randomly_selection(all_sentcences):
 def check_collection_sentences_exist(db):
     collections = db.collection_names()
     if "sentences" in collections:
+        db.sentences.drop()
+        print("Collection dropped")
         return True
     else:
         db.create_collection("sentences")
@@ -346,11 +348,11 @@ def store_sentences_in_mongo(db, all_senteces):
             sentence_info = {
                 "chapter": sent[0],
                 "pubId": sent[1],
-                "sentence": sent[2],
+                "sentence": sent[2].replace(",", ""),
                 "class": sent[3]
             }
             #print (sentence_info)
-            res = db.sentences.find({'sentence': sent[2]}).count()
+            res = db.sentences.find({'sentence': sentence_info['sentence']}).count()
 
             #print (res)
 
@@ -395,7 +397,7 @@ def main():
 
     start = time.time()
     #extract sentences from 100 publication from each booktitle
-    all_sentences = sentence_extraction(db=db,publication_limit=170)
+    all_sentences = sentence_extraction(db=db,publication_limit=5)
     store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
