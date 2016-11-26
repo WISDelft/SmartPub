@@ -369,6 +369,7 @@ def create_datasets(num_of_sentences,db):
     labels = ["objective", "software", "method", "dataset", "result", "other"]
     my_list = list()
     for label in labels:
+        print(label)
         results = db.sentences.find({"class":label})
         f = open(config.folder_datasets+label+".csv", "w", encoding="UTF-8")
         for i,res in enumerate(results):
