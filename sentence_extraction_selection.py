@@ -334,8 +334,8 @@ def randomly_selection(all_sentcences):
 def check_collection_sentences_exist(db):
     collections = db.collection_names()
     if "sentences" in collections:
-        db.sentences.drop()
-        print("Collection dropped")
+        #db.sentences.drop()
+        #print("Collection dropped")
         return True
     else:
         db.create_collection("sentences")
