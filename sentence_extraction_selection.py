@@ -398,7 +398,7 @@ def main():
 
     start = time.time()
     #extract sentences from 100 publication from each booktitle
-    all_sentences = sentence_extraction(db=db,publication_limit=5)
+    all_sentences = sentence_extraction(db=db,publication_limit=170)
     store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
