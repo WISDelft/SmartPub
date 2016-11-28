@@ -455,9 +455,9 @@ def merge_subsections(chapters):
 def check_collection_sentences_exist(db):
     collections = db.collection_names()
     if "sentences" in collections:
-        db.sentences.drop()
-        db.create_collection("sentences")
-        print("Collection dropped and created")
+        #db.sentences.drop()
+        #db.create_collection("sentences")
+        #print("Collection dropped and created")
         return True
     else:
         db.create_collection("sentences")
