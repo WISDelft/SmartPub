@@ -349,11 +349,11 @@ def store_sentence_in_mongo(db,sentence_id, chapter_num, paper_id, keywords, sen
     }
     check_string = {'$and': [{'chapter_num': chapter_num}, {'paper_id': paper_id}, {'sentence':sentence}]}
     if db.sentences.find(check_string).count() > 1:
-        print("Already in db")
-        return True
+        #print("Already in db")
+        return False
     else:
         db.sentences.insert_one(my_sent)
-        return False
+        return True
 
 
 def check_tokens(sent, tokens):
@@ -560,13 +560,15 @@ def create_datasets(num_of_sentences,db):
         #print(sent_id)
         shuffle_list = random.sample(sent_id, len(sent_id))
         f = open(config.folder_datasets + label + ".csv", "w", encoding="UTF-8")
+        f.write("sentence_id, chapter_id, paper_id, keywords, sentence, objective, software, dataset, method, result, other")
+        f.write("\n")
         for i, sid in enumerate(shuffle_list):
             if i < num_of_sentences:
                 res = db.sentences.find_one({'sent_id': sid})
                 chapter_num = res['chapter_num']
                 pubid = res['paper_id']
                 sent_id = res['sent_id']
-                keywords = res['keywords']
+                keywords = str(res['keywords']).replace(",","")
                 sentence = res['sentence']
                 objective = res['objective']
                 software = res['software']
@@ -574,7 +576,7 @@ def create_datasets(num_of_sentences,db):
                 method = res['method']
                 result = res['result']
                 other = res['other']
-                print(pubid)
+                #print(pubid)
                 f.write("{},{},{},{},{},{},{},{},{},{},{}".format(sent_id,chapter_num,pubid,keywords,sentence,
                                                                   objective,software,dataset,method,result,other))
                 f.write("\n")
@@ -616,12 +618,8 @@ def main():
         print("Collection 'keywords' was created")
     start = time.time()
     sentence_extraction(db,5)
-    #extract sentences from 100 publication from each booktitle
-    #all_sentences = sentence_extraction(db=db,publication_limit=2)
-    #store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
-    #randomly_selection(all_sentences)
     create_datasets(50,db)
 
 
