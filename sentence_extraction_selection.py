@@ -41,135 +41,319 @@ def sentence_extraction(db, publication_limit):
     end = time.time()
     print("Time of the return_chapters {}".format(end - start))
 
+    objective_keys = list(db.keywords.find({"label":"objective"}))
+    dataset_keys = list(db.keywords.find({"label":"dataset"}))
+    method_keys = list(db.keywords.find({"label": "method"}))
+    software_keys = list(db.keywords.find({"label": "software"}))
+    result_keys = list(db.keywords.find({"label": "result"}))
+
     flag_result = False
     flag_method = False
     flag_software = False
     flag_dataset = False
+    flag_objective = False
     count = 1
-    objective_count = 0
+    sent_id = 0
+
     start = time.time()
     for pubs in list_of_pubs:
         for paper in pubs:
             print(count)
             count += 1
             if paper['abstract'] != "":
-                objsents = check_for_objective(paper['abstract'],paper['dblpkey']).copy()
-                for obj_sent in objsents:
-                    objective_sentences.append(obj_sent)
-            for i, chapter in enumerate(paper['chapters']):
-                sentences = (sent_detector.tokenize(chapter.lower().strip()))
+                #check_abstract(abstract_id, paper['dblpkey'],objective_keys,dataset_keys,method_keys,software_keys,result_keys)
+                #objsents = check_for_objective(paper['abstract'],paper['dblpkey']).copy()
+                #for obj_sent in objsents:
+                #    objective_sentences.append(obj_sent)
+
+
+                sentences = (sent_detector.tokenize(paper['abstract'].lower().strip()))
                 for sent in sentences:
-                    if sent not in checker:
-                        for word in dictionary.result:
-                            tokens = nltk.word_tokenize(word.lower())
-                            if len(tokens) > 1:
-                                all_tokens_in_sent = check_tokens(sent, tokens)
-                                if all_tokens_in_sent:
-                                    #list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
-                                    flag_result = True
-                                    result_sentences.append((i, paper['dblpkey'], sent, "result"))
-                                    checker.add(sent)
-
-                            elif word.lower() in sent:
-                                #list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                    set_of_keywords = set()
+                    #if sent not in checker:
+                    #print(sent)
+                    for word in result_keys:
+                        #print(sent,word['term'])
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
                                 flag_result = True
-                                result_sentences.append((i, paper['dblpkey'], sent, "result"))
-                                checker.add(sent)
+                                set_of_keywords.add(word['key_id'])
 
-                            if flag_result:
-                                break
-                        if not flag_result:
-                            for word in dictionary.software:
-                                tokens = nltk.word_tokenize(word.lower())
-                                if len(tokens) > 1:
-                                    all_tokens_in_sent = check_tokens(sent, tokens)
-                                    if all_tokens_in_sent:
-                                        #list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
-                                        flag_software = True
-                                        software_sentences.append((i, paper['dblpkey'], sent, "software"))
-                                        checker.add(sent)
+                                    # list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                    # result_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                    # checker.add(sent)
 
-                                elif word.lower() in sent:
+                        elif word['term'].lower() in sent:
+                            set_of_keywords.add(word['key_id'])
+                            flag_result = True
+
+                                # list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                # result_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                # checker.add(sent)
+
+                                # if flag_result:
+                                #    break
+                        # if not flag_result:
+                    for word in software_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                set_of_keywords.add(word['key_id'])
+                                flag_software = True
+
+                                    # list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                    # software_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                    # checker.add(sent)
+
+                        elif word['term'].lower() in sent:
+                            set_of_keywords.add(word['key_id'])
+                            flag_software = True
+
+                                # list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                # software_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                # checker.add(sent)
+
+                                # if flag_software:
+                                #    break
+                        # if not flag_software:
+                    for word in method_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_method = True
+                                set_of_keywords.add(word['key_id'])
+
+                                    # list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                    # method_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                    # checker.add(sent)
+                        elif word['term'].lower() in sent:
+                            flag_method = True
+                            set_of_keywords.add(word['key_id'])
+
+                                # list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                # method_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                # checker.add(sent)
+                                # if flag_method:
+                                #    break
+
+                        # if not flag_method:
+                    for word in dataset_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_dataset = True
+                                set_of_keywords.add(word['key_id'])
+
+                                    # list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                    # dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                    # checker.add(sent)
+
+                        elif word['term'].lower() in sent:
+                            flag_dataset = True
+                            set_of_keywords.add(word['key_id'])
+
+                                # list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+
+                                # dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                # checker.add(sent)
+                                # if flag_dataset:
+                                #    break
+
+                    for word in objective_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        #print(sent,word['term'])
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_objective = True
+                                set_of_keywords.add(word['key_id'])
+
+                                    # objective_sentences.append(("abstract", dblpkey, sent, "objective"))
+                                    # break
+                        elif word['term'].lower() in sent:
+                            flag_objective = True
+                            set_of_keywords.add(word['key_id'])
+
+                                # objective_sentences.append(("abstract", dblpkey, sent, "objective"))
+                                # break
+                        #print(sent)
+                    store_sentence_in_mongo(db, sent_id, "abstract", paper['dblpkey'], set_of_keywords,
+                                                sent.replace(",", " "), flag_dataset, flag_objective, flag_software,
+                                                flag_result, flag_method)
+
+                    sent_id += 1
+
+
+                            # if not flag_dataset:
+                            # list_of_sentences.append((i, paper['dblpkey'], sent, "other"))
+                            #    other_sentences.append((i, paper['dblpkey'], sent, "other"))
+                    flag_result = False
+                    flag_method = False
+                    flag_software = False
+                    flag_dataset = False
+                    flag_objective = False
+
+
+
+            for i, chapter in enumerate(paper['chapters']):
+
+                sentences = (sent_detector.tokenize(chapter.lower().strip()))
+                for  sent in sentences:
+                    set_of_keywords = set()
+                    for word in result_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_result = True
+                                set_of_keywords.add(word['key_id'])
+
+                                    #list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                    #result_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                    #checker.add(sent)
+
+                        elif word['term'].lower() in sent:
+                            set_of_keywords.add(word['key_id'])
+                            flag_result = True
+
+                                #list_of_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                #result_sentences.append((i, paper['dblpkey'], sent, "result"))
+                                #checker.add(sent)
+
+                            #if flag_result:
+                            #    break
+                        #if not flag_result:
+                    for word in software_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                set_of_keywords.add(word['key_id'])
+                                flag_software = True
+
                                     #list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
-                                    flag_software = True
-                                    software_sentences.append((i, paper['dblpkey'], sent, "software"))
-                                    checker.add(sent)
+                                    #software_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                    #checker.add(sent)
 
-                                if flag_software:
-                                    break
-                        if not flag_software:
-                            for word in dictionary.method:
-                                tokens = nltk.word_tokenize(word.lower())
-                                if len(tokens) > 1:
-                                    all_tokens_in_sent = check_tokens(sent, tokens)
-                                    if all_tokens_in_sent:
-                                        #list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
-                                        flag_method = True
-                                        method_sentences.append((i, paper['dblpkey'], sent, "method"))
-                                        checker.add(sent)
-                                elif word.lower() in sent:
+                        elif word['term'].lower() in sent:
+                            set_of_keywords.add(word['key_id'])
+                            flag_software = True
+
+                                #list_of_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                #software_sentences.append((i, paper['dblpkey'], sent, "software"))
+                                #checker.add(sent)
+
+                            #if flag_software:
+                            #    break
+                        #if not flag_software:
+                    for word in method_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_method = True
+                                set_of_keywords.add(word['key_id'])
+
                                     #list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
-                                    flag_method = True
-                                    method_sentences.append((i, paper['dblpkey'], sent, "method"))
-                                    checker.add(sent)
-                                if flag_method:
-                                    break
-                        if not flag_method:
-                            for word in dictionary.dataset:
-                                tokens = nltk.word_tokenize(word.lower())
-                                if len(tokens) > 1:
-                                    all_tokens_in_sent = check_tokens(sent, tokens)
-                                    if all_tokens_in_sent:
-                                        #list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
-                                        flag_dataset = True
-                                        dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
-                                        checker.add(sent)
+                                    #method_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                    #checker.add(sent)
+                        elif word['term'].lower() in sent:
+                            flag_method = True
+                            set_of_keywords.add(word['key_id'])
 
-                                elif word.lower() in sent:
+                                #list_of_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                #method_sentences.append((i, paper['dblpkey'], sent, "method"))
+                                #checker.add(sent)
+                            #if flag_method:
+                            #    break
+
+
+                        #if not flag_method:
+                    for word in dataset_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_dataset = True
+                                set_of_keywords.add(word['key_id'])
+
                                     #list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
-                                    flag_dataset = True
-                                    dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
-                                    checker.add(sent)
-                                if flag_dataset:
-                                    break
-                        if not flag_dataset:
+                                    #dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                    #checker.add(sent)
+
+                        elif word['term'].lower() in sent:
+                            flag_dataset = True
+                            set_of_keywords.add(word['key_id'])
+
+                                #list_of_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+
+                                #dataset_sentences.append((i, paper['dblpkey'], sent, "dataset"))
+                                #checker.add(sent)
+                            #if flag_dataset:
+                            #    break
+
+                    for word in objective_keys:
+                        tokens = nltk.word_tokenize(word['term'].lower())
+                        if len(tokens) > 1:
+                            all_tokens_in_sent = check_tokens(sent, tokens)
+                            if all_tokens_in_sent:
+                                flag_objective = True
+                                set_of_keywords.add(word['key_id'])
+
+                                    #objective_sentences.append(("abstract", dblpkey, sent, "objective"))
+                                    #break
+                        elif word['term'].lower() in sent:
+                            flag_objective = True
+                            set_of_keywords.add(word['key_id'])
+
+                                #objective_sentences.append(("abstract", dblpkey, sent, "objective"))
+                                #break
+                    #print(flag_dataset,flag_method,flag_objective,flag_result,flag_software)
+                    store_sentence_in_mongo(db,sent_id, i, paper['dblpkey'], set_of_keywords,sent.replace(",", " "), flag_dataset,flag_objective,flag_software,flag_result,flag_method)
+                    sent_id += 1
+
+                        #if not flag_dataset:
                             #list_of_sentences.append((i, paper['dblpkey'], sent, "other"))
-                            other_sentences.append((i, paper['dblpkey'], sent, "other"))
-                        flag_result = False
-                        flag_method = False
-                        flag_software = False
-                        flag_dataset = False
+                        #    other_sentences.append((i, paper['dblpkey'], sent, "other"))
+                    flag_result = False
+                    flag_method = False
+                    flag_software = False
+                    flag_dataset = False
+                    flag_objective = False
 
     end = time.time()
     print("Time of the big loop {} seconds".format(end - start))
     #print("objective_sentences {}".format(len(objective_sentences)))
     #list_of_sentences.append(objective_sentences)
-    return objective_sentences,method_sentences,result_sentences,software_sentences,dataset_sentences,other_sentences
+    return  True
 
 
-def check_for_objective(abstract, dblpkey):
-    objective_sentences = list()
-    other_sentences = list()
-    sentences = (sent_detector.tokenize(abstract.lower().strip()))
-    #sentences = nltk.sent_tokenize(abstract.lower().strip())
-    flag_objective = False
-    for sent in sentences:
-        for word in dictionary.objective:
-            tokens = nltk.word_tokenize(word.lower())
-            if len(tokens) > 1:
-                all_tokens_in_sent = check_tokens(sent, tokens)
-                if all_tokens_in_sent:
-                    objective_sentences.append(("abstract", dblpkey, sent, "objective"))
-                    flag_objective = True
-                    break
-            elif word.lower() in sent:
-                objective_sentences.append(("abstract", dblpkey, sent, "objective"))
-                flag_objective = True
-                break
-        if not flag_objective:
-            other_sentences.append(("abstract", dblpkey, sent, "other"))
-
-    return objective_sentences
+def store_sentence_in_mongo(db,sentence_id, chapter_num, paper_id, keywords, sentence, f_data, f_obj, f_soft, f_res,f_meth):
+    my_sent = {
+        "sent_id": sentence_id,
+        "chapter_num": chapter_num,
+        "paper_id": paper_id,
+        "keywords": list(keywords),
+        "sentence":sentence,
+        "dataset": 1 if f_data else 0,
+        "objective": 1 if f_obj else 0,
+        "software": 1 if f_soft else 0,
+        "result": 1 if f_res else 0,
+        "method": 1 if f_meth else 0,
+        "other": 0 if f_data or f_obj or f_soft or f_res or f_meth else 1
+    }
+    check_string = {'$and': [{'chapter_num': chapter_num}, {'paper_id': paper_id}, {'sentence':sentence}]}
+    if db.sentences.find(check_string).count() > 1:
+        print("Already in db")
+        return True
+    else:
+        db.sentences.insert_one(my_sent)
+        return False
 
 
 def check_tokens(sent, tokens):
@@ -215,9 +399,10 @@ def return_chapters(mongo_string_search, db, publication_limit):
                     #print(r['dblpkey'])
                     if (chapter == {}):
                         continue
-                    elif str(chapter['title']).lower() in filter_chapters:
+                    # remove the filter that removes related works
+                    #elif str(chapter['title']).lower() in filter_chapters:
                         #print(chapter['title'])
-                        continue
+                    #    continue
                     section = ""
                     chapter_nums.append(chapter['chapter_num'])
                     # print(chapter['title'])
@@ -265,70 +450,6 @@ def merge_subsections(chapters):
     return new_list
 
 
-def randomly_selection(all_sentcences):
-    """
-
-    :param all_sentcences:
-    :return:
-    """
-
-    objective_sentences = list(all_sentcences[0])
-    method_sentences =  list(all_sentcences[1])
-    result_sentences =  list(all_sentcences[2])
-    software_sentences =  list(all_sentcences[3])
-    dataset_sentences =   list(all_sentcences[4])
-    other_sentences =   list(all_sentcences[5])
-
-    filenames = ['objective.csv', 'method.csv', 'result.csv', 'software.csv', 'dataset.csv', 'other.csv']
-
-    objective_sentences = random.sample(k=len(objective_sentences), population= objective_sentences)
-    #print("objective sentences in random selection: {}".format(len(objective_sentences)))
-    f = open(config.folder_datasets+filenames[0],'w', encoding='UTF-8')
-    for tu in objective_sentences:
-        my_string = ','.join([str(item).replace(",", "") for item in tu])
-        f.write(my_string)
-        f.write("\n")
-    f.close()
-
-    method_sentences = random.sample(k=len(method_sentences),population= method_sentences)
-    f = open(config.folder_datasets+filenames[1],'w', encoding='UTF-8')
-    for tu in method_sentences:
-        my_string = ','.join([str(item).replace(",", "") for item in tu])
-        f.write(my_string)
-        f.write("\n")
-    f.close()
-
-    result_sentences = random.sample(k=len(result_sentences),population= result_sentences)
-    f = open(config.folder_datasets+filenames[2],'w', encoding='UTF-8')
-    for tu in result_sentences:
-        my_string = ','.join([str(item).replace(",", "") for item in tu])
-        f.write(my_string)
-        f.write("\n")
-    f.close()
-
-    software_sentences = random.sample(k=len(software_sentences),population= software_sentences)
-    f = open(config.folder_datasets+filenames[3],'w', encoding='UTF-8')
-    for tu in software_sentences:
-        my_string = ','.join([str(item).replace(",", "") for item in tu])
-        f.write(my_string)
-        f.write("\n")
-    f.close()
-
-    dataset_sentences = random.sample(k=len(dataset_sentences),population= dataset_sentences)
-    f = open(config.folder_datasets+filenames[4],'w', encoding='UTF-8')
-    for tu in dataset_sentences:
-        my_string = ','.join([str(item).replace(",", "") for item in tu])
-        f.write(my_string)
-        f.write("\n")
-    f.close()
-
-    other_sentences = random.sample(k=len(other_sentences),population= other_sentences)
-    f = open(config.folder_datasets+filenames[5],'w', encoding='UTF-8')
-    for tu in other_sentences:
-        my_string = ','.join([str(item).replace(",", "") for item in tu])
-        f.write(my_string)
-        f.write("\n")
-    f.close()
 
 
 def check_collection_sentences_exist(db):
@@ -341,32 +462,123 @@ def check_collection_sentences_exist(db):
         db.create_collection("sentences")
         return False
 
+def check_collection_keywords_exist(db):
+    collections = db.collection_names()
+    if "keywords" in collections:
+        # db.sentences.drop()
+        # print("Collection dropped")
+        return True
+    else:
+        db.create_collection("keywords")
+        """
+        my_dict = {
+            "objective": dictionary.objective,
+            "dataset": dictionary.dataset,
+            "method": dictionary.method,
+            "software": dictionary.software,
+            "result": dictionary.result
+        }
+        """
+        key_id = 0
+        key_set = set()
+        for key in dictionary.objective:
+            if key.lower() not in key_set:
 
-def store_sentences_in_mongo(db, all_senteces):
-    for category in all_senteces:
-        for sent in category:
-            sentence_info = {
-                "chapter": sent[0],
-                "pubId": sent[1],
-                "sentence": sent[2].replace(",", ""),
-                "class": sent[3]
-            }
-            #print (sentence_info)
-            res = db.sentences.find({'sentence': sentence_info['sentence']}).count()
+                key_word = {
+                    'key_id': key_id,
+                    'label': "objective",
+                    'term': key.lower()
+                }
+                db.keywords.insert_one(key_word)
+                key_id += 1
+                key_set.add(key.lower())
 
-            #print (res)
+        key_set = set()
+        for key in dictionary.software:
+            if key.lower() not in key_set:
+                key_word = {
+                    'key_id': key_id,
+                    'label': "software",
+                    'term': key.lower()
+                }
+                db.keywords.insert_one(key_word)
+                key_id += 1
+                key_set.add(key.lower())
 
-            if res == 0:
-                #print("sentence not in the collection")
-                db.sentences.insert_one(sentence_info)
-            else:
-                #print("sentence already in the collection")
-                #print(sent[2])
-                continue
+        key_set = set()
+        for key in dictionary.method:
+            if key.lower() not in key_set:
+                key_word = {
+                    'key_id': key_id,
+                    'label': "method",
+                    'term': key.lower()
+                }
+                db.keywords.insert_one(key_word)
+                key_id += 1
+                key_set.add(key.lower())
+
+        key_set = set()
+        for key in dictionary.dataset:
+            if key.lower() not in key_set:
+                key_word = {
+                    'key_id': key_id,
+                    'label': "dataset",
+                    'term': key.lower()
+                }
+                db.keywords.insert_one(key_word)
+                key_id += 1
+                key_set.add(key.lower())
+
+        key_set = set()
+        for key in dictionary.result:
+            if key.lower() not in key_set:
+                key_word = {
+                    'key_id': key_id,
+                    'label': "result",
+                    'term': key.lower()
+                }
+                db.keywords.insert_one(key_word)
+                key_id += 1
+                key_set.add(key.lower())
+
+        return False
+
 
 
 def create_datasets(num_of_sentences,db):
     labels = ["objective", "software", "method", "dataset", "result", "other"]
+    size_of_collection = 0
+
+
+    for label in labels:
+        sent_id = []
+        res = db.sentences.find({label: 1})
+        for r in res:
+            sent_id.append(r['sent_id'])
+
+        #print(sent_id)
+        shuffle_list = random.sample(sent_id, len(sent_id))
+        f = open(config.folder_datasets + label + ".csv", "w", encoding="UTF-8")
+        for i in shuffle_list:
+            if i < num_of_sentences:
+                res = db.sentences.find_one({'sent_id': i})
+                chapter_num = res['chapter_num'];
+                pubid = res['paper_id'],
+                sent_id = res['sent_id']
+                keywords = res['keywords']
+                sentence = res['sentence']
+                objective = res['objective']
+                software = res['software']
+                dataset = res['dataset']
+                method = res['method']
+                result = res['result']
+                other = res['other']
+
+                f.write("{},{},{},{},{},{},{},{},{},{},{}".format(sent_id,chapter_num,pubid,keywords,res['sentence'], \
+                                                                  objective,software,dataset,method,result,other))
+                f.write("\n")
+        f.close()
+    """
     my_list = list()
     for label in labels:
         print(label)
@@ -387,6 +599,7 @@ def create_datasets(num_of_sentences,db):
                 break
         my_list = list()
         f.close()
+        """
 
 
 def main():
@@ -396,14 +609,19 @@ def main():
     else:
         print("Collection 'sentences' was created")
 
+    if check_collection_keywords_exist(db):
+        print("Collection 'keywords'  exist")
+    else:
+        print("Collection 'keywords' was created")
     start = time.time()
+    sentence_extraction(db,10)
     #extract sentences from 100 publication from each booktitle
-    all_sentences = sentence_extraction(db=db,publication_limit=170)
-    store_sentences_in_mongo(db,all_sentences)
+    #all_sentences = sentence_extraction(db=db,publication_limit=2)
+    #store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
     #randomly_selection(all_sentences)
-    create_datasets(1000,db)
+    create_datasets(100,db)
 
 
 if __name__ == '__main__':
