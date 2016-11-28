@@ -53,7 +53,8 @@ def sentence_extraction(db, publication_limit):
     flag_dataset = False
     flag_objective = False
     count = 1
-    sent_id = 0
+    collection_size = db.sentence.find({}).count()
+    sent_id = collection_size
 
     start = time.time()
     for pubs in list_of_pubs:
@@ -455,9 +456,9 @@ def merge_subsections(chapters):
 def check_collection_sentences_exist(db):
     collections = db.collection_names()
     if "sentences" in collections:
-        #db.sentences.drop()
-        #db.create_collection("sentences")
-        #print("Collection dropped and created")
+        db.sentences.drop()
+        db.create_collection("sentences")
+        print("Collection dropped and created")
         return True
     else:
         db.create_collection("sentences")
@@ -555,7 +556,7 @@ def create_datasets(num_of_sentences,db):
         sent_id = []
         res = db.sentences.find({label: 1})
         for r in res:
-            sent_id.append(r['sent_id'])
+            sent_id.append(r['_id'])
 
         #print(sent_id)
         shuffle_list = random.sample(sent_id, len(sent_id))
@@ -564,7 +565,7 @@ def create_datasets(num_of_sentences,db):
         f.write("\n")
         for i, sid in enumerate(shuffle_list):
             if i < num_of_sentences:
-                res = db.sentences.find_one({'sent_id': sid})
+                res = db.sentences.find_one({'_id': sid})
                 chapter_num = res['chapter_num']
                 pubid = res['paper_id']
                 sent_id = res['sent_id']
@@ -617,7 +618,7 @@ def main():
     else:
         print("Collection 'keywords' was created")
     start = time.time()
-    #sentence_extraction(db,5)
+    sentence_extraction(db,5)
     end = time.time()
     print("Total time {} seconds".format(end - start))
     create_datasets(50,db)
