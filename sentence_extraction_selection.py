@@ -547,7 +547,7 @@ def check_collection_keywords_exist(db):
 
 
 def create_datasets(num_of_sentences,db):
-    labels = ["objective", "software", "method", "dataset", "result", "other"]
+    labels = ["objective", "software", "method", "dataset", "result"]
     size_of_collection = 0
 
 
@@ -617,7 +617,7 @@ def main():
     else:
         print("Collection 'keywords' was created")
     start = time.time()
-    sentence_extraction(db,5)
+    #sentence_extraction(db,5)
     end = time.time()
     print("Total time {} seconds".format(end - start))
     create_datasets(50,db)
