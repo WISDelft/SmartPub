@@ -548,7 +548,7 @@ def check_collection_keywords_exist(db):
 
 
 def create_datasets(num_of_sentences,db):
-    labels = ["objective", "software", "method", "dataset", "result"]
+    labels = ["objective", "software", "method", "dataset", "result", "other"]
     size_of_collection = 0
 
 
@@ -568,7 +568,7 @@ def create_datasets(num_of_sentences,db):
                 res = db.sentences.find_one({'_id': sid})
                 chapter_num = res['chapter_num']
                 pubid = res['paper_id']
-                sent_id = res['sent_id']
+                sent_id = res['_id']
                 keywords = str(res['keywords']).replace(",","")
                 sentence = res['sentence']
                 objective = res['objective']
@@ -618,10 +618,10 @@ def main():
     else:
         print("Collection 'keywords' was created")
     start = time.time()
-    sentence_extraction(db,5)
+    sentence_extraction(db, 170)
     end = time.time()
     print("Total time {} seconds".format(end - start))
-    create_datasets(50,db)
+    create_datasets(1000,db)
 
 
 if __name__ == '__main__':
