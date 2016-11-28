@@ -560,11 +560,11 @@ def create_datasets(num_of_sentences,db):
         #print(sent_id)
         shuffle_list = random.sample(sent_id, len(sent_id))
         f = open(config.folder_datasets + label + ".csv", "w", encoding="UTF-8")
-        for i in shuffle_list:
+        for i, sid in enumerate(shuffle_list):
             if i < num_of_sentences:
-                res = db.sentences.find_one({'sent_id': i})
-                chapter_num = res['chapter_num'];
-                pubid = res['paper_id'],
+                res = db.sentences.find_one({'sent_id': sid})
+                chapter_num = res['chapter_num']
+                pubid = res['paper_id']
                 sent_id = res['sent_id']
                 keywords = res['keywords']
                 sentence = res['sentence']
@@ -574,8 +574,8 @@ def create_datasets(num_of_sentences,db):
                 method = res['method']
                 result = res['result']
                 other = res['other']
-
-                f.write("{},{},{},{},{},{},{},{},{},{},{}".format(sent_id,chapter_num,pubid,keywords,res['sentence'], \
+                print(pubid)
+                f.write("{},{},{},{},{},{},{},{},{},{},{}".format(sent_id,chapter_num,pubid,keywords,sentence,
                                                                   objective,software,dataset,method,result,other))
                 f.write("\n")
         f.close()
@@ -615,14 +615,14 @@ def main():
     else:
         print("Collection 'keywords' was created")
     start = time.time()
-    sentence_extraction(db,10)
+    sentence_extraction(db,5)
     #extract sentences from 100 publication from each booktitle
     #all_sentences = sentence_extraction(db=db,publication_limit=2)
     #store_sentences_in_mongo(db,all_sentences)
     end = time.time()
     print("Total time {} seconds".format(end - start))
     #randomly_selection(all_sentences)
-    create_datasets(100,db)
+    create_datasets(50,db)
 
 
 if __name__ == '__main__':
