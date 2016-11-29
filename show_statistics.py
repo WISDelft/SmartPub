@@ -58,5 +58,26 @@ def main():
     result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
+    print("#################################")
+
+    result = db.publications.distinct("journal")
+    print("Journals")
+    print()
+    for r in result:
+        count_journal = db.publications.find({"journal": r}).count()
+        print("{}: {}".format(r,count_journal))
+
+    print()
+    print("#################################")
+
+    result = db.publications.distinct("booktitle")
+    print("Booktitles")
+
+    for r in result:
+        count_booktitle = db.publications.find({"booktitle": r}).count()
+        print("{}: {}".format(r, count_booktitle))
+
+    print()
+
 if __name__ == '__main__':
     main()
