@@ -1,5 +1,6 @@
 import logging
 from pyhelpers import tools, grobid_mapping
+import config
 tools.setup_logging()
 import pprint
 
@@ -58,26 +59,28 @@ def main():
     result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
-    print("#################################")
 
     result = db.publications.distinct("journal")
-    print("Journals")
-    print()
+    #print("Journals")
+    f = open(config.folder_log+"journal_summary.csv", "w", encoding="UTF-8")
     for r in result:
         count_journal = db.publications.find({"journal": r}).count()
-        print("{}: {}".format(r,count_journal))
+        f.write("{},{}".format(r,count_journal))
+        f.write("\n")
+        #print("{}: {}".format(r,count_journal))
+    f.close()
 
-    print()
-    print("#################################")
 
     result = db.publications.distinct("booktitle")
-    print("Booktitles")
-
+    #print("Booktitles")
+    f = open(config.folder_log+"booktitles_summary.csv", "w", encoding="UTF-8")
     for r in result:
         count_booktitle = db.publications.find({"booktitle": r}).count()
-        print("{}: {}".format(r, count_booktitle))
+        f.write("{},{}".format(r, count_booktitle))
+        f.write("\n")
+        #print("{}: {}".format(r, count_booktitle))
+    f.close()
 
-    print()
 
 if __name__ == '__main__':
     main()
