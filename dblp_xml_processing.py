@@ -125,11 +125,7 @@ def download_and_store(paper, db):
         #print(enabledScrapers)
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
-            #my_source = paper['ee'].split("/")
-            #set_of_sources.add(my_source[0] + "//" + my_source[2])
-            #print(set_of_sources)
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
-
             if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ((paper['ee'].startswith("http://doi.acm.org")or paper['ee'].startswith("http://dl.acm.org")) and "acm" in enabledScrapers) or (paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers) or ((paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers) or (paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
@@ -166,7 +162,6 @@ def download_and_store(paper, db):
             if not skip:
                 try:
                     print(paper['dblpkey'])
-                    #if (paper['ee'].startswith("http://www.vldb2005.org"))
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers:
                         # Normal PDF download
@@ -273,9 +268,6 @@ def download_and_store(paper, db):
                         print(
                             "Crawler sleeps for {} min - Times Access ICWSM: {}".format(float(rndm_time/int(60)), num_of_access_in_icwsm))
                         time.sleep(rndm_time)
-
-
-
 
                     if skipped:
                         logging.info(' Used local PDF copy for ' + paper['dblpkey'])
