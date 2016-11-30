@@ -10,7 +10,7 @@ from nltk.tokenize import word_tokenize
 from string import punctuation
 from nltk.corpus import stopwords
 from gensim import corpora, models
-from K_means_clustering import  My_kmeans
+#from K_means_clustering import  My_kmeans
 import config
 # define the source of raw text, we could either add fulltext, or chapters
 to_sum = ["fulltext","chapters","paragraphs","abstract"]
