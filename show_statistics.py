@@ -59,7 +59,7 @@ def main():
     result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
-
+    """
     result = db.publications.distinct("journal")
     #print("Journals")
     f = open(config.folder_log+"journal_summary.csv", "w", encoding="UTF-8")
@@ -80,7 +80,7 @@ def main():
         f.write("\n")
         #print("{}: {}".format(r, count_booktitle))
     f.close()
-
+    """
 
 if __name__ == '__main__':
     main()
