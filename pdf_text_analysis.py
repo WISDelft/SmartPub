@@ -11,7 +11,7 @@ from string import punctuation
 from nltk.corpus import stopwords
 from gensim import corpora, models
 from K_means_clustering import  My_kmeans
-
+import config
 # define the source of raw text, we could either add fulltext, or chapters
 to_sum = ["fulltext","chapters","paragraphs","abstract"]
 lda_topics = 3
@@ -168,9 +168,28 @@ def LDA_process(mongo_string_search):
 
     return papers_lda
 
+def frequency_of_keywords_in_collection(db):
+    db_keywords = list(db.keywords.find({}))
+    sentences = list(db.sentences.find({"other": 0}))
+    f = open(config.folder_log+"keywords_frequency.csv", "w", encoding="UTF-8")
+    f.write("key_id,label,term,frequency")
+    f.write("\n")
+    for k in db_keywords:
+        count = 0
+        for sent in sentences:
+            if k["key_id"] in sent['keywords']:
+                count += 1
+        #print("{},{},{},{}".format(k['key_id'], k['label'], k['term'],count))
+        f.write("{},{},{},{}".format(k['key_id'], k['label'], k['term'],count))
+        f.write("\n")
+    f.close()
+
 def main():
     # mongo search query
     #mongo_string_search = {"dblpkey":{"$in":["journals_ijclclp_WuC07","journals_mala_Wadler00"]}}
+    """
+
+
     mongo_string_search = {"dblpkey": "journals_ijclclp_WuC07"}
     print("Summaries")
     summaries = summarize_process(mongo_string_search)
@@ -193,6 +212,10 @@ def main():
     kmeans.k_means_process()
     print("End of K-means")
     print()
+    """
+    db = tools.connect_to_mongo()
+    frequency_of_keywords_in_collection(db)
+
 
 if __name__ == '__main__':
     main()
