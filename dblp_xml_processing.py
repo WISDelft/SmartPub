@@ -125,11 +125,12 @@ def download_and_store(paper, db):
         #print(enabledScrapers)
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
-            my_source = paper['ee'].split("/")
-            set_of_sources.add(my_source[0] + "//" + my_source[2])
-            print(set_of_sources)
+            #my_source = paper['ee'].split("/")
+            #set_of_sources.add(my_source[0] + "//" + my_source[2])
+            #print(set_of_sources)
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
-            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers) or (paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers) or (paper['ee'].startswith("http://www.aaai.org") and "aaai" in enabledScrapers) or (paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers):
+
+            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers) or (paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers) or ((paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers) or (paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                 # which URLs have been accessed, and if that was successfull or not
@@ -222,9 +223,10 @@ def download_and_store(paper, db):
                         time.sleep(rndm_time)
 
                     # AAAI
-                    if paper['ee'].startswith("http://www.aaai.org") and "aaai" in enabledScrapers:
+                    if (paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers:
                         global num_of_access_in_aaai
                         num_of_access_in_aaai += 1
+                        #print(paper['ee'])
 
                         if num_of_access_in_aaai % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access AAAI: {}".format(num_of_access_in_aaai))
