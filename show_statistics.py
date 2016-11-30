@@ -59,6 +59,8 @@ def main():
     result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
+    sentences = db.sentences.find({"other": 0}).count()
+    print("Extracted Sentences: {}".format(sentences))
     """
     result = db.publications.distinct("journal")
     #print("Journals")
