@@ -119,14 +119,15 @@ def download_and_store(paper, db):
             if not skip:
                 if "dblpkey" in paper:
                     print ("Filter matched: "+str(paper["dblpkey"]))
-                    my_source = paper['ee'].split("/")
-                    set_of_sources.add(my_source[0]+"//" + my_source[2])
-                    print(set_of_sources)
+
                     #sys.exit()
                     #print(paper['ee'])
         #print(enabledScrapers)
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
+            my_source = paper['ee'].split("/")
+            set_of_sources.add(my_source[0] + "//" + my_source[2])
+            print(set_of_sources)
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
             if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or (paper['ee'].startswith("http://doi.acm.org") and "acm" in enabledScrapers) or (paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers) or (paper['ee'].startswith("http://www.aaai.org") and "aaai" in enabledScrapers) or (paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers):
                 filename = paper['dblpkey']+".pdf"
