@@ -193,8 +193,15 @@ def frequency_of_keywords_in_datasets(db):
     count_data=0
     count_meth=0
     count_res=0
-    print("key_id,label,term,correct_objective,correct_software,correct_dataset,correct_method,correct_results")
+
+    print("key_id,label,term,file,occurrences,correct_objective,correct_software,correct_dataset,correct_method,correct_results")
     for k in db_keywords:
+        appear_in_file = 0
+        count_obj = 0
+        count_soft = 0
+        count_data = 0
+        count_meth = 0
+        count_res = 0
         for file in filenames:
             with open(config.folder_datasets+file, "r",encoding="UTF-8") as f:
                 next(f) # skip header
@@ -204,6 +211,7 @@ def frequency_of_keywords_in_datasets(db):
                     line_keys = map(int, string_keys)
                     #print(k['key_id'], line_keys)
                     if k['key_id'] in line_keys:
+                        appear_in_file += 1
                         if my_line[5] == '1':
                             count_obj += 1
                         if my_line[6] == '1':
@@ -214,13 +222,13 @@ def frequency_of_keywords_in_datasets(db):
                             count_meth += 1
                         if my_line[9] == '1':
                             count_res += 1
-
-        print("{},{},{},{},{},{},{},{} ".format(k['key_id'], k['label'], k['term'], count_obj, count_soft, count_data, count_meth, count_res))
-        count_obj = 0
-        count_soft = 0
-        count_data = 0
-        count_meth = 0
-        count_res = 0
+            print("{},{},{},{},{},{},{},{},{},{} ".format(k['key_id'], k['label'], k['term'], file, appear_in_file, count_obj, count_soft, count_data, count_meth, count_res))
+            appear_in_file=0
+            count_obj = 0
+            count_soft = 0
+            count_data = 0
+            count_meth = 0
+            count_res = 0
 
 
 
@@ -256,7 +264,7 @@ def main():
     print()
     """
     db = tools.connect_to_mongo()
-    frequency_of_keywords_in_collection(db)
+    #frequency_of_keywords_in_collection(db)
     frequency_of_keywords_in_datasets(db)
 
 
