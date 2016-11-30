@@ -56,7 +56,7 @@ num_of_access_in_icwsm = 0
 numOfPDFobtained = 0
 numOfPDFobtainedInThisSession = 0
 
-
+set_of_sources = set()
 
 # helper just used for parsing the XML
 def clear_element(element):
@@ -119,6 +119,10 @@ def download_and_store(paper, db):
             if not skip:
                 if "dblpkey" in paper:
                     print ("Filter matched: "+str(paper["dblpkey"]))
+                    my_source = paper['ee'].split("/")
+                    set_of_sources.add(my_source[0]+"//" + my_source[2])
+                    print(set_of_sources)
+                    #sys.exit()
                     #print(paper['ee'])
         #print(enabledScrapers)
         # do NOT skip if paper has a key, an ee entry
