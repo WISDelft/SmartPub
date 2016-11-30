@@ -184,6 +184,48 @@ def frequency_of_keywords_in_collection(db):
         f.write("\n")
     f.close()
 
+def frequency_of_keywords_in_datasets(db):
+    db_keywords = list(db.keywords.find({}))
+    filenames = ['Objective_new_SM.csv', 'Software_new_SM.csv','Dataset_new_SM.csv', 'Method_new_SM.csv', 'Result_new_SM.csv']
+
+    count_obj=0
+    count_soft=0
+    count_data=0
+    count_meth=0
+    count_res=0
+    print("key_id,label,term,correct_objective,correct_software,correct_dataset,correct_method,correct_results")
+    for k in db_keywords:
+        for file in filenames:
+            with open(config.folder_datasets+file, "r",encoding="UTF-8") as f:
+                next(f) # skip header
+                for line in f:
+                    my_line = line.split(",")
+                    string_keys = my_line[3].replace('[',"").replace("]","").replace(" ",",").split(",")
+                    line_keys = map(int, string_keys)
+                    #print(k['key_id'], line_keys)
+                    if k['key_id'] in line_keys:
+                        if my_line[5] == '1':
+                            count_obj += 1
+                        if my_line[6] == '1':
+                            count_soft += 1
+                        if my_line[7] == '1':
+                            count_data += 1
+                        if my_line[8] == '1':
+                            count_meth += 1
+                        if my_line[9] == '1':
+                            count_res += 1
+
+        print("{},{},{},{},{},{},{},{} ".format(k['key_id'], k['label'], k['term'], count_obj, count_soft, count_data, count_meth, count_res))
+        count_obj = 0
+        count_soft = 0
+        count_data = 0
+        count_meth = 0
+        count_res = 0
+
+
+
+
+
 def main():
     # mongo search query
     #mongo_string_search = {"dblpkey":{"$in":["journals_ijclclp_WuC07","journals_mala_Wadler00"]}}
@@ -215,6 +257,7 @@ def main():
     """
     db = tools.connect_to_mongo()
     frequency_of_keywords_in_collection(db)
+    frequency_of_keywords_in_datasets(db)
 
 
 if __name__ == '__main__':
