@@ -169,7 +169,7 @@ def download_and_store(paper, db):
                     if (paper['ee'].startswith("http://doi.acm.org") or paper['ee'].startswith("http://dl.acm.org")) and "acm" in enabledScrapers:
                         global num_of_access_in_acm
                         num_of_access_in_acm += 1
-
+                        """
                         if num_of_access_in_acm % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(1800)
@@ -177,7 +177,7 @@ def download_and_store(paper, db):
                         elif num_of_access_in_acm % 50 == 0:
                             print("Crawler sleeps for 5 min - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(300)
-
+                        """
                         """
                         elif num_of_access_in_acm % 10 == 0:
                             print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
@@ -197,7 +197,7 @@ def download_and_store(paper, db):
                     if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
                         global num_of_access_in_springer
                         num_of_access_in_springer += 1
-
+                        """
                         if num_of_access_in_springer % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
                             time.sleep(1800)
@@ -205,6 +205,7 @@ def download_and_store(paper, db):
                         elif num_of_access_in_springer % 50 == 0:
                             print("Crawler sleeps for 5 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
                             time.sleep(300)
+                        """
                         """
                         elif num_of_access_in_springer % 10 == 0:
                             print("Crawler sleeps for 10 sec - Times Access SPRINGER: {}".format(num_of_access_in_springer))
@@ -224,6 +225,7 @@ def download_and_store(paper, db):
                         num_of_access_in_aaai += 1
                         #print(paper['ee'])
 
+                        """
                         if num_of_access_in_aaai % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access AAAI: {}".format(num_of_access_in_aaai))
                             time.sleep(1800)
@@ -231,6 +233,7 @@ def download_and_store(paper, db):
                         elif num_of_access_in_aaai % 50 == 0:
                             print("Crawler sleeps for 5 min - Times Access AAAI: {}".format(num_of_access_in_aaai))
                             time.sleep(300)
+                        """
                         """
                         elif num_of_access_in_aaai % 10 == 0:
                             print("Crawler sleeps for 10 sec - Times Access AAAI: {}".format(num_of_access_in_aaai))
@@ -248,7 +251,7 @@ def download_and_store(paper, db):
                     if paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers:
                         global num_of_access_in_icwsm
                         num_of_access_in_icwsm += 1
-
+                        """
                         if num_of_access_in_icwsm % 1000 == 0:
                             print("Crawler sleeps for 30 min - Times Access ICWSM: {}".format(num_of_access_in_icwsm))
                             time.sleep(1800)
@@ -256,6 +259,7 @@ def download_and_store(paper, db):
                         elif num_of_access_in_icwsm % 50 == 0:
                             print("Crawler sleeps for 5 min - Times Access ICWSM: {}".format(num_of_access_in_icwsm))
                             time.sleep(300)
+                        """
                         """
                         elif num_of_access_in_aaai % 10 == 0:
                             print("Crawler sleeps for 10 sec - Times Access ICWSM: {}".format(num_of_access_in_aaai))
