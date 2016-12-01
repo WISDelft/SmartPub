@@ -6,7 +6,7 @@ import time
 import config
 import sys
 
-booktitles = ['WWW', 'SIGIR', 'ESWC', 'ICWSM', 'VLDB']
+booktitles = ['WWW', 'ESWC', 'ICWSM', 'VLDB']
 journals = ['TACO', 'JOCCH']
 
 filter_chapters = ['related work' , 'background', 'state of the art' ,'previous works']
@@ -70,6 +70,10 @@ def sentence_extraction(db, publication_limit):
 
                 sentences = (sent_detector.tokenize(paper['abstract'].lower().strip()))
                 for sent in sentences:
+
+                    if check_if_sent_exist_in_db(db,"abstract",paper['dblpkey'],sent.replace(",", " ")):
+                        continue
+
                     set_of_keywords = set()
                     #if sent not in checker:
                     #print(sent)
@@ -199,12 +203,13 @@ def sentence_extraction(db, publication_limit):
                     flag_dataset = False
                     flag_objective = False
 
-
-
             for i, chapter in enumerate(paper['chapters']):
-
                 sentences = (sent_detector.tokenize(chapter.lower().strip()))
-                for  sent in sentences:
+                for sent in sentences:
+
+                    if check_if_sent_exist_in_db(db,i,paper['dblpkey'],sent.replace(",", " ")):
+                        continue
+
                     set_of_keywords = set()
                     for word in result_keys:
                         tokens = nltk.word_tokenize(word['term'].lower())
@@ -334,6 +339,17 @@ def sentence_extraction(db, publication_limit):
     return  True
 
 
+def check_if_sent_exist_in_db(db,chapter_num,paper_id,sentence):
+    #{"item.name": { $eq: "ab"}}
+    #check_string = {'$and': [{'chapter_num': chapter_num}, {'paper_id': paper_id}, {'sentence': {"$eq":sentence}}]}
+    check_string = {'chapter_num': chapter_num, 'paper_id': paper_id, 'sentence':sentence}
+    if db.sentences.find_one(check_string) is not None:
+        print("Already in db")
+        return True
+    else:
+        return False
+
+
 def store_sentence_in_mongo(db,sentence_id, chapter_num, paper_id, keywords, sentence, f_data, f_obj, f_soft, f_res,f_meth):
     my_sent = {
         "sent_id": sentence_id,
@@ -348,9 +364,9 @@ def store_sentence_in_mongo(db,sentence_id, chapter_num, paper_id, keywords, sen
         "method": 1 if f_meth else 0,
         "other": 0 if f_data or f_obj or f_soft or f_res or f_meth else 1
     }
-    check_string = {'$and': [{'chapter_num': chapter_num}, {'paper_id': paper_id}, {'sentence':sentence}]}
-    if db.sentences.find(check_string).count() > 1:
-        #print("Already in db")
+    #check_string = {'$and': [{'chapter_num': chapter_num}, {'paper_id': paper_id}, {'sentence':sentence}]}
+    if check_if_sent_exist_in_db(db,chapter_num,paper_id,sentence):
+        #already in our db
         return False
     else:
         db.sentences.insert_one(my_sent)
@@ -370,6 +386,7 @@ def check_tokens(sent, tokens):
         return True
     else:
         return False
+
 
 def return_chapters(mongo_string_search, db, publication_limit):
     # mongo_string_search = {"dblpkey": "{}".format(dblkey)}
@@ -449,8 +466,6 @@ def merge_subsections(chapters):
                 # print (num,ch_num)
         new_list.append(merged)
     return new_list
-
-
 
 
 def check_collection_sentences_exist(db):
@@ -548,9 +563,8 @@ def check_collection_keywords_exist(db):
 
 
 def create_datasets(num_of_sentences,db):
-    labels = ["objective", "software", "method", "dataset", "result", "other"]
+    labels = ["objective", "software", "method", "dataset", "result"]
     size_of_collection = 0
-
 
     for label in labels:
         sent_id = []
@@ -561,7 +575,7 @@ def create_datasets(num_of_sentences,db):
         #print(sent_id)
         shuffle_list = random.sample(sent_id, len(sent_id))
         f = open(config.folder_datasets + label + ".csv", "w", encoding="UTF-8")
-        f.write("sentence_id, chapter_id, paper_id, keywords, sentence, objective, software, dataset, method, result, other")
+        f.write("sentence_id, chapter_id, paper_id, keywords, sentence, objective, software, dataset, method, result, objective_entity, software_entity,method_entity,	dataset_entity,	result_entity")
         f.write("\n")
         for i, sid in enumerate(shuffle_list):
             if i < num_of_sentences:
@@ -576,10 +590,11 @@ def create_datasets(num_of_sentences,db):
                 dataset = res['dataset']
                 method = res['method']
                 result = res['result']
-                other = res['other']
+                #other = res['other']
+
                 #print(pubid)
-                f.write("{},{},{},{},{},{},{},{},{},{},{}".format(sent_id,chapter_num,pubid,keywords,sentence,
-                                                                  objective,software,dataset,method,result,other))
+                f.write("{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}".format(sent_id,chapter_num,pubid,keywords,sentence,
+                                                                  objective,software,dataset,method,result,0,0,0,0,0))
                 f.write("\n")
         f.close()
     """
@@ -618,7 +633,19 @@ def main():
     else:
         print("Collection 'keywords' was created")
     start = time.time()
-    sentence_extraction(db, 170)
+    sentence_extraction(db, 626)
+    """
+    re = db.sentences.aggregate([
+        {"$group": {
+            "_id": {"sentence": "$sentence", "chapter_num": "$chapter_num", "paper_id": "$paper_id"},
+            "uniqueIds": {"$addToSet": "$_id"},
+            "count": {"$sum": 1}
+        }},
+        {"$match": {
+            "count": {"$gt": 1}
+        }}
+    ])
+    """
     end = time.time()
     print("Total time {} seconds".format(end - start))
     create_datasets(1000,db)
