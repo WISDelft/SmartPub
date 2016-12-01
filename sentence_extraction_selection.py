@@ -71,7 +71,7 @@ def sentence_extraction(db, publication_limit):
                 sentences = (sent_detector.tokenize(paper['abstract'].strip()))
                 for sentence in sentences:
                     sent = sentence.lower().replace(",", " ")
-                    if check_if_sent_exist_in_db(db,"abstract",paper['dblpkey'],sent):
+                    if check_if_sent_exist_in_db(db,"abstract",paper['dblpkey'],sentence.replace(",", " ")):
                         continue
 
                     set_of_keywords = set()
@@ -207,7 +207,7 @@ def sentence_extraction(db, publication_limit):
                 sentences = (sent_detector.tokenize(chapter.strip()))
                 for sentence in sentences:
                     sent = sentence.lower().replace(",", " ")
-                    if check_if_sent_exist_in_db(db,i,paper['dblpkey'],sent):
+                    if check_if_sent_exist_in_db(db,i,paper['dblpkey'],sentence.replace(",", " ")):
                         continue
 
                     set_of_keywords = set()
