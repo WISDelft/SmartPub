@@ -183,12 +183,13 @@ def download_and_store(paper, db):
                             print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
                             time.sleep(10)
                         """
-                        skipped = not extract_paper_from_ACM(paper['ee'], filename)
+
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
                             "Crawler sleeps for {} min - Times Access ACM: {}".format(float(rndm_time/int(60)), num_of_access_in_acm))
                         time.sleep(rndm_time)
+                        skipped = not extract_paper_from_ACM(paper['ee'], filename)
 
 
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
@@ -212,12 +213,13 @@ def download_and_store(paper, db):
                             time.sleep(10)
                         """
 
-                        skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
+
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
                             "Crawler sleeps for {} min - Times Access SPRINGER: {}".format(float(rndm_time/int(60)), num_of_access_in_springer))
                         time.sleep(rndm_time)
+                        skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
 
                     # AAAI
                     if (paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers:
@@ -240,12 +242,13 @@ def download_and_store(paper, db):
                             time.sleep(10)
                         """
 
-                        skipped = not extract_paper_from_AAAI(paper['ee'], filename)
+
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
                             "Crawler sleeps for {} min - Times Access AAAI: {}".format(float(rndm_time/int(60)), num_of_access_in_aaai))
                         time.sleep(rndm_time)
+                        skipped = not extract_paper_from_AAAI(paper['ee'], filename)
 
                     # ICWSM
                     if paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers:
@@ -266,12 +269,13 @@ def download_and_store(paper, db):
                             time.sleep(10)
                         """
 
-                        skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
+
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
                             "Crawler sleeps for {} min - Times Access ICWSM: {}".format(float(rndm_time/int(60)), num_of_access_in_icwsm))
                         time.sleep(rndm_time)
+                        skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
 
                     if skipped:
                         logging.info(' Used local PDF copy for ' + paper['dblpkey'])
