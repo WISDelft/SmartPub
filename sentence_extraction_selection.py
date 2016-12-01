@@ -68,10 +68,10 @@ def sentence_extraction(db, publication_limit):
                 #    objective_sentences.append(obj_sent)
 
 
-                sentences = (sent_detector.tokenize(paper['abstract'].lower().strip()))
-                for sent in sentences:
-
-                    if check_if_sent_exist_in_db(db,"abstract",paper['dblpkey'],sent.replace(",", " ")):
+                sentences = (sent_detector.tokenize(paper['abstract'].strip()))
+                for sentence in sentences:
+                    sent = sentence.lower().replace(",", " ")
+                    if check_if_sent_exist_in_db(db,"abstract",paper['dblpkey'],sentence.replace(",", " ")):
                         continue
 
                     set_of_keywords = set()
@@ -188,7 +188,7 @@ def sentence_extraction(db, publication_limit):
                                 # break
                         #print(sent)
                     store_sentence_in_mongo(db, sent_id, "abstract", paper['dblpkey'], set_of_keywords,
-                                                sent.replace(",", " "), flag_dataset, flag_objective, flag_software,
+                                                sentence.replace(",", " "), flag_dataset, flag_objective, flag_software,
                                                 flag_result, flag_method)
 
                     sent_id += 1
@@ -204,10 +204,10 @@ def sentence_extraction(db, publication_limit):
                     flag_objective = False
 
             for i, chapter in enumerate(paper['chapters']):
-                sentences = (sent_detector.tokenize(chapter.lower().strip()))
-                for sent in sentences:
-
-                    if check_if_sent_exist_in_db(db,i,paper['dblpkey'],sent.replace(",", " ")):
+                sentences = (sent_detector.tokenize(chapter.strip()))
+                for sentence in sentences:
+                    sent = sentence.lower().replace(",", " ")
+                    if check_if_sent_exist_in_db(db,i,paper['dblpkey'],sentence.replace(",", " ")):
                         continue
 
                     set_of_keywords = set()
@@ -320,7 +320,7 @@ def sentence_extraction(db, publication_limit):
                                 #objective_sentences.append(("abstract", dblpkey, sent, "objective"))
                                 #break
                     #print(flag_dataset,flag_method,flag_objective,flag_result,flag_software)
-                    store_sentence_in_mongo(db,sent_id, i, paper['dblpkey'], set_of_keywords,sent.replace(",", " "), flag_dataset,flag_objective,flag_software,flag_result,flag_method)
+                    store_sentence_in_mongo(db,sent_id, i, paper['dblpkey'], set_of_keywords,sentence.replace(",", " "), flag_dataset,flag_objective,flag_software,flag_result,flag_method)
                     sent_id += 1
 
                         #if not flag_dataset:
@@ -468,25 +468,25 @@ def merge_subsections(chapters):
     return new_list
 
 
-def check_collection_sentences_exist(db):
+def drop_create_sentence_collection(db):
     collections = db.collection_names()
     if "sentences" in collections:
-        #db.sentences.drop()
-        #db.create_collection("sentences")
-        #print("Collection dropped and created")
+        db.sentences.drop()
+        db.create_collection("sentences")
+        print("Collection 'sentences' dropped and created")
         return True
     else:
         db.create_collection("sentences")
+        print("Collection 'sentences' created")
         return False
 
-def check_collection_keywords_exist(db):
+
+def drop_create_keyword_collection(db):
     collections = db.collection_names()
     if "keywords" in collections:
-        # db.sentences.drop()
-        # print("Collection dropped")
-        return True
-    else:
+        db.keywords.drop()
         db.create_collection("keywords")
+        print("Collection 'keywords' dropped and created")
         """
         my_dict = {
             "objective": dictionary.objective,
@@ -621,8 +621,14 @@ def create_datasets(num_of_sentences,db):
         """
 
 
+
+
+
 def main():
     db = tools.connect_to_mongo()
+    """
+
+
     if check_collection_sentences_exist(db):
         print("Collection 'sentences'  exist")
     else:
@@ -632,8 +638,11 @@ def main():
         print("Collection 'keywords'  exist")
     else:
         print("Collection 'keywords' was created")
+    """
+    drop_create_sentence_collection(db)
+    drop_create_keyword_collection(db)
     start = time.time()
-    sentence_extraction(db, 626)
+    sentence_extraction(db, 626) # 626
     """
     re = db.sentences.aggregate([
         {"$group": {
