@@ -639,10 +639,10 @@ def main():
     else:
         print("Collection 'keywords' was created")
     """
-    drop_create_sentence_collection(db)
-    drop_create_keyword_collection(db)
+    #drop_create_sentence_collection(db)
+    #drop_create_keyword_collection(db)
     start = time.time()
-    sentence_extraction(db, 626) # 626
+    #sentence_extraction(db, 626) # 626
     """
     re = db.sentences.aggregate([
         {"$group": {
