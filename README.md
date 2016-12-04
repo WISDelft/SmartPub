@@ -40,8 +40,8 @@ You will need to register your public RSA key first! (ask Christoph) The name of
         [
             {
                 "title" : "...",    // title of the chapter
-                "paragraphs:        // list of paragraphs
-                    [ "..." ]
+                "paragraphs":        // list of paragraphs
+                    [ "..." ],
                 "chapter_num": "..."// chapter number
             }
         ]    
