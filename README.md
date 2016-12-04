@@ -36,6 +36,15 @@ You will need to register your public RSA key first! (ask Christoph) The name of
     { // note that the stuff in content is probabilistically extracted from the PDF. It will not always be correct. Also, there is more information available currently not in mongoDB, as e.g., chapter structure or tables & figures
         "abstract" : "..."          // plain text abstract as string
         "fulltext" : "..."          // plain text fulltext as string, with all additional info / tags stripped
+        "chapters" :                // list of chapters
+        [
+            {
+                "title" : "...",    // title of the chapter
+                "paragraphs:        // list of paragraphs
+                    [ "..." ]
+                "chapter_num": "..."// chapter number
+            }
+        ]    
         "notes" : {"...", "..."}    // list of footnotes (or other types of notes) as plain strings
         "keywords" : {"...", "..."} // list of author-provided keywords as plain strings
         "references" :              // list of references
