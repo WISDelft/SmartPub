@@ -642,7 +642,7 @@ def main():
     #drop_create_sentence_collection(db)
     #drop_create_keyword_collection(db)
     start = time.time()
-    sentence_extraction(db, 626) # 626
+    #sentence_extraction(db, 626) # 626
     """
     re = db.sentences.aggregate([
         {"$group": {
@@ -657,7 +657,7 @@ def main():
     """
     end = time.time()
     print("Total time {} seconds".format(end - start))
-    create_datasets(1000,db)
+    #create_datasets(1000,db)
 
 
 if __name__ == '__main__':
