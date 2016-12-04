@@ -39,10 +39,9 @@ You will need to register your public RSA key first! (ask Christoph) The name of
         "chapters" :                // list of chapters
         [
             {
-                "title" : "...",    // title of the chapter
-                "paragraphs":        // list of paragraphs
-                    [ "..." ],
-                "chapter_num": "..."// chapter number
+              "title" : "...",     // title of the chapter
+              "paragraphs": [ ],   // list of paragraphs                    
+              "chapter_num": "..." // chapter number
             }
         ]    
         "notes" : {"...", "..."}    // list of footnotes (or other types of notes) as plain strings
