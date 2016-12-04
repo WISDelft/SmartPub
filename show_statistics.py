@@ -59,9 +59,8 @@ def main():
     result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
-    sentences = db.sentences.find({"other": 0}).count()
+    sentences = db.sentences.find({}).count()
     print("Extracted Sentences: {}".format(sentences))
-
 
     sentences = db.sentences.find({"objective": 1}).count()
     print("Extracted Sentences objective: {}".format(sentences))
