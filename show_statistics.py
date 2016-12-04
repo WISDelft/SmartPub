@@ -59,8 +59,29 @@ def main():
     result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
     print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
-    sentences = db.sentences.find({"other": 0}).count()
-    print("Extracted Sentences: {}".format(sentences))
+    sentences = db.sentences.find({"objective": 1}).count()
+    print("Extracted Sentences objective: {}".format(sentences))
+
+    sentences = db.sentences.find({"method": 1}).count()
+    print("Extracted Sentences method: {}".format(sentences))
+
+    sentences = db.sentences.find({"software": 1}).count()
+    print("Extracted Sentences software: {}".format(sentences))
+
+    sentences = db.sentences.find({"dataset": 1}).count()
+    print("Extracted Sentences dataset: {}".format(sentences))
+
+    sentences = db.sentences.find({"result": 1}).count()
+    print("Extracted Sentences result: {}".format(sentences))
+
+    print()
+    print("Collections in MongoDB")
+    collections = db.collection_names()
+    for collection in collections:
+        print(collection)
+    print()
+
+
     """
     result = db.publications.distinct("journal")
     #print("Journals")
