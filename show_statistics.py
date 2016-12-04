@@ -62,6 +62,7 @@ def main():
     sentences = db.sentences.find({"other": 0}).count()
     print("Extracted Sentences: {}".format(sentences))
 
+
     sentences = db.sentences.find({"objective": 1}).count()
     print("Extracted Sentences objective: {}".format(sentences))
 
@@ -77,14 +78,17 @@ def main():
     sentences = db.sentences.find({"result": 1}).count()
     print("Extracted Sentences result: {}".format(sentences))
 
-    """
+    sentences = db.sentences.find({"other": 1}).count()
+    print("Extracted Sentences other: {}".format(sentences))
+
+
     print()
     print("Collections in MongoDB")
     collections = db.collection_names()
     for collection in collections:
         print(collection)
     print()
-    """
+
 
     """
     result = db.publications.distinct("journal")
