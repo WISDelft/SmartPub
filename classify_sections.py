@@ -2,12 +2,13 @@ from pyhelpers import tools
 from playground import dictionary
 import nltk
 import time
-import pickle as cPickle
+import _pickle as cPickle
 import textrazor
+from nltk.corpus import wordnet
 
 textrazor.api_key = "9f466f8622a88d099f740d54b435845746914cbc43c831652408a5eb"
 
-booktitles = ['ESWC','ICWSM','VLDB','WWW']
+booktitles = ['WWW','VLDB']
 journals = ['TACO', 'JOCCH']
 
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -61,6 +62,7 @@ def sentence_extraction(db):
     start = time.time()
     for pubs in list_of_pubs:
         for paper in pubs:
+            print(paper['dblpkey'])
             if check_if_paperprocessed_exist_in_db(db, paper['dblpkey']):
                 print("This Paper has been checked already")
             else:
@@ -100,15 +102,25 @@ def sentence_extraction(db):
                                         # print(tokens)
                                         # print(entity.id.lower())
                                         if entity.id.lower() in tokens:
-                                            # print(entity.id, entity.relevance_score, entity.confidence_score, entity.wikipedia_link)
-                                            true_ner = store_ner_in_mongo(db, ner_id, cls, "abstract", paper['dblpkey'],
-                                                                          rhet_id,
-                                                                          entity.id,
-                                                                          entity.relevance_score,
-                                                                          entity.confidence_score,
-                                                                          entity.wikipedia_link, entity.freebase_types,
-                                                                          entity.dbpedia_types,
-                                                                          len(response.entities()))
+                                            if not wordnet.synsets(entity.id.lower()):
+
+                                                store_ner_in_mongo(db, ner_id, cls, 'abstract', paper['dblpkey'], rhet_id,
+                                                                   entity.id,
+                                                                   entity.relevance_score,
+                                                                   entity.confidence_score,
+                                                                   entity.wikipedia_link, entity.freebase_types,
+                                                                   entity.dbpedia_types,
+                                                                   len(response.entities()), 0)
+
+
+                                            else:
+                                                store_ner_in_mongo(db, ner_id, cls, 'abstract', paper['dblpkey'], rhet_id,
+                                                                   entity.id,
+                                                                   entity.relevance_score,
+                                                                   entity.confidence_score,
+                                                                   entity.wikipedia_link, entity.freebase_types,
+                                                                   entity.dbpedia_types,
+                                                                   len(response.entities()), 1)
 
 
 
@@ -152,26 +164,40 @@ def sentence_extraction(db):
                         for cls in classes:
 
                             label = classify_sentence(processed_sentences, cls)
-                            for i in range(len(label)):
-                                if label[i] == 1:
+                            for j in range(len(label)):
+                                if label[j] == 1:
 
                                     store_rhetorical_in_mongo(db, rhet_id, i, paper['dblpkey'],
-                                                              processed_sentences[i], cls, len(processed_sentences))
+                                                              processed_sentences[j], cls, len(processed_sentences))
                                     textrazor_ent = []
                                     for entity in response.entities():
                                         # print("entity.id")
                                         # print(entity.id)
-                                        tokens = processed_sentences[i].lower()
+                                        tokens = processed_sentences[j].lower()
                                         if entity.id.lower() in tokens:
+                                            if not wordnet.synsets(entity.id.lower()):
+                                                
+                                                store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
+                                                                   entity.id,
+                                                                   entity.relevance_score,
+                                                                   entity.confidence_score,
+                                                                   entity.wikipedia_link, entity.freebase_types,
+                                                                   entity.dbpedia_types,
+                                                                   len(response.entities()),0)
+
+                                                
+                                            else:
+                                                store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
+                                                                   entity.id,
+                                                                   entity.relevance_score,
+                                                                   entity.confidence_score,
+                                                                   entity.wikipedia_link, entity.freebase_types,
+                                                                   entity.dbpedia_types,
+                                                                   len(response.entities()), 1)
+                                                
 
                                             # print(entity.id, entity.relevance_score, entity.confidence_score, entity.wikipedia_link)
-                                            true_ner = store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
-                                                                          entity.id,
-                                                                          entity.relevance_score,
-                                                                          entity.confidence_score,
-                                                                          entity.wikipedia_link, entity.freebase_types,
-                                                                          entity.dbpedia_types,
-                                                                          len(response.entities()))
+                                            
 
 
                                             ner_id += 1
@@ -240,7 +266,7 @@ def store_rhetorical_in_mongo(db, rhetorical_id, chapter_num, paper_id, rhetoric
 
 
 def store_ner_in_mongo(db, ner_id, label, chapter_num, paper_id, rhetorical_id, ner, relevance_score, confidence_score,
-                       wikipedia_link, freebase_types, dbpedia_types, totalner):
+                       wikipedia_link, freebase_types, dbpedia_types, totalner, inWordnet):
     my_ner = {
         "ner_id": ner_id,
         "label": label,
@@ -253,17 +279,18 @@ def store_ner_in_mongo(db, ner_id, label, chapter_num, paper_id, rhetorical_id, 
         "wikipedia_link": wikipedia_link,
         "freebase_types": freebase_types,
         "dbpedia_types": dbpedia_types,
-        "totalner": totalner
+        "totalner": totalner,
+        'inWordnet':inWordnet
 
     }
 
-    if check_if_ner_exist_in_db(db, chapter_num, paper_id, ner, label):
-        return False
-    else:
-        print(chapter_num, paper_id, ner)
-        db.sentences_ner.insert_one(my_ner)
+    #if check_if_ner_exist_in_db(db, chapter_num, paper_id, ner, label):
+    #    return False
+    #else:
+    print(chapter_num, paper_id, ner)
+    db.sentences_ner.insert_one(my_ner)
 
-        return True
+    return True
 
 
 def check_tokens(sent, tokens):
