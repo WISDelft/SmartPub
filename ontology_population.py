@@ -264,5 +264,11 @@ def create_linked_data(db,g):
     g.serialize(destination='/data/SmartPub/logs/eswc.owl', format='xml')
 
 
-db = tools.connect_to_mongo()
-create_linked_data(db,g)
+def main():
+    db = tools.connect_to_mongo()
+    create_linked_data(db,g)
+
+
+if __name__ == '__main__':
+    main()
+
