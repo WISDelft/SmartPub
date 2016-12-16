@@ -224,7 +224,7 @@ def is_int_or_float(s):
 
 def create_linked_data(db,g):
 
-    paper_names = db.rhetorical_sentences.distinct('paper_id')
+    paper_names = db.rhetorical_sentences.distinct('paper_id',no_cursor_timeout=True)
     count=0
     for pub in paper_names:
 
@@ -235,7 +235,7 @@ def create_linked_data(db,g):
 
             paperauthors = list()
 
-            results = db.get_collection('rhetorical_sentences').find({'paper_id': pub})
+            results = db.get_collection('rhetorical_sentences').find({'paper_id': pub},no_cursor_timeout=True)
             paper = db.get_collection('publications').find({'_id': pub})
             for j, p in enumerate(paper):
                 for author in p['authors']:
