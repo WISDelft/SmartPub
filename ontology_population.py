@@ -274,9 +274,11 @@ def create_linked_data(db,g):
                         NER.append(namednr['ner'])
                         NER_ID.append(namednr['_id'])
                         NER_Wikipedia.append(namednr['wikipedia_link'])
+                rhetoricaltext=r['rhetorical'].replace(';','')
+                labeltext=r['label'].replace(';','')
 
                 rdf_paper_section(g, r['paper_id'], experiment, paperinstance, r['chapter_num'], r['_id'],
-                                  r['rhetorical'], r['label'], NER, NER_ID, NER_Wikipedia)
+                                  rhetoricaltext, labeltext, NER, NER_ID, NER_Wikipedia)
             #g.serialize(destination='/data/SmartPub/logs/eswc.owl', format='xml')
     g.serialize(destination='data/SmartPub/logs/eswc.owl', format='xml')
 
