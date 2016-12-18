@@ -243,7 +243,8 @@ def create_linked_data(db,g):
     paper_names = db.rhetorical_sentences.distinct('paper_id',no_cursor_timeout=True)
     count=0
     for pub in paper_names:
-        
+            if count == 3:
+                break
 
             count=count+1
 
