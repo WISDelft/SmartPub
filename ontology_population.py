@@ -5,6 +5,7 @@ from rdflib import Namespace, Literal, Graph, BNode, URIRef
 from rdflib.namespace import RDF, DC
 from pyhelpers import tools
 import datetime
+import config
 ''''
 This script is used to populate the DMS ontology
 '''
@@ -281,7 +282,8 @@ def create_linked_data(db,g):
                 rdf_paper_section(g, r['paper_id'], experiment, paperinstance, r['chapter_num'], r['_id'],
                                   rhetoricaltext, labeltext, NER, NER_ID, NER_Wikipedia)
             #g.serialize(destination='/data/SmartPub/logs/eswc.owl', format='xml')
-    g.serialize(destination='data/SmartPub/logs/eswc.owl', format='xml')
+    #g.serialize(destination='data/SmartPub/logs/eswc.owl', format='xml')
+    g.serialize(destination=config.folder_log+'eswc.owl', format='xml')
 
 
 db = tools.connect_to_mongo()
