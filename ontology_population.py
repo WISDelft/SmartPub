@@ -77,14 +77,16 @@ def rdf_paper_section(g, id, experiment, paper, section_id, sentence_id, sentenc
     """
         Adding sections and sentences along with their  corePipelineConcept to the graph
         """
-    section = rdflib.term.BNode(str(id) + '-' + str(section_id))
+    section = BNode()
 
     g.add((section, RDF.type, URIRef(doco + 'Section')))
+    g.add((section, DC.title, Literal(str(id) + '-' + str(section_id))))
     g.add((paper, contains, section))
     g.add((paper, describesExperiment, experiment))
 
-    sentence = rdflib.term.BNode(str(id) + '-' + str(section_id) + '-' + str(sentence_id))
+    sentence = BNode()
     g.add((sentence, RDF.type, URIRef(doco + 'Sentence')))
+    g.add((sentence,DC.title,Literal(str(id) + '-' + str(section_id) + '-' + str(sentence_id))))
     g.add((section, contains, sentence))
     g.add((sentence, provvalue, Literal(sentences)))
 
@@ -92,20 +94,22 @@ def rdf_paper_section(g, id, experiment, paper, section_id, sentence_id, sentenc
 
         for ii, nn in enumerate(NER):
 
-            corePipelineConcept = rdflib.term.BNode(
-                str(id) + '-' + 'CPC-dataset' + '-' + str(section_id) + '-' + str(NER_ID[ii]))
-            datafile = rdflib.term.BNode(str(id) + '-' + 'datafile' + '-' + str(section_id) + '-' + str(NER_ID[ii]))
+            corePipelineConcept =BNode()
+            datafile =BNode(str(id) + '-' + 'datafile' + '-' + str(section_id) + '-' + str(NER_ID[ii]))
+            temp=nn
             nn=nn.replace(" ","")
             nn=nn.lower()
             dataset = rdflib.term.BNode("dataset_" + nn)
             if (dataset, None, None) not in g:
 
                 g.add((dataset, RDF.type, URIRef(disco + 'LogicalDataset')))
+                g.add((dataset, DC.title, Literal(temp)))
 
             g.add((datafile, RDF.type, URIRef(disco + 'DataFile')))
             g.add((datafile, provvalue, Literal(nn)))
             g.add((dataset, datafileprop, URIRef(disco + datafile)))
             g.add((corePipelineConcept, RDF.type, URIRef(dms + 'CorePipelineConcept')))
+            g.add((corePipelineConcept,DC.title,Literal(str(id) + '-' + 'CPC-dataset' + '-' + str(section_id) + '-' + str(NER_ID[ii]))))
             g.add((dataset, isA, corePipelineConcept))
             g.add((corePipelineConcept, provvalue, Literal(nn)))
             g.add((corePipelineConcept, wasGeneratedBy, rhetoricalIdentiticationMethod))
@@ -123,18 +127,23 @@ def rdf_paper_section(g, id, experiment, paper, section_id, sentence_id, sentenc
     elif label == 'method':
 
         for ii, nn in enumerate(NER):
-            corePipelineConcept = rdflib.term.BNode(
-                str(id) + '-' + 'CPC-method' + '-' + str(section_id) + '-' +  str(NER_ID[ii]))
-            methodImplementation = rdflib.term.BNode(
-                str(id) + '-' + 'method' + '-' + str(section_id) + '-' +  str(NER_ID[ii]))
+            corePipelineConcept = BNode()
+            methodImplementation = BNode()
+            temp=nn
+            nn = nn.replace(" ", "")
+            nn = nn.lower()
             method = rdflib.term.BNode( "method_" + nn)
             if (method, None, None) not in g:
+                g.add((method, DC.title, Literal(temp)))
 
                 g.add((method, RDF.type, URIRef(deo + 'Methods')))
 
             g.add((methodImplementation, RDF.type, URIRef(dms + 'MethodImplementation')))
             g.add((methodImplementation, provvalue, Literal(nn)))
             g.add((corePipelineConcept, RDF.type, URIRef(dms + 'CorePipelineConcept')))
+            g.add((corePipelineConcept, DC.title,
+                   Literal(str(id) + '-' + 'CPC-method' + '-' + str(section_id) + '-' + str(NER_ID[ii]))))
+
             g.add((experiment, usesMethod, methodImplementation))
             g.add((methodImplementation, isImplementationOf, method))
             g.add((method, isA, corePipelineConcept))
@@ -148,20 +157,24 @@ def rdf_paper_section(g, id, experiment, paper, section_id, sentence_id, sentenc
                 g.add((corePipelineConcept, isDefinedBy, wiki))
     elif label == 'software':
         for ii, nn in enumerate(NER):
-            corePipelineConcept = rdflib.term.BNode(
-
-                str(id) + '-' + 'CPC-software' + '-' + str(section_id) + '-' + str(NER_ID[ii]))
-            softwareImplementation = rdflib.term.BNode(
-                str(id) + '-' + 'software' + '-' + str(section_id) + '-' + str(NER_ID[ii]))
-            software = rdflib.term.BNode( "software_" + Literal(nn))
+            corePipelineConcept = BNode()
+            softwareImplementation = BNode()
+            temp=nn
+            nn = nn.replace(" ", "")
+            nn = nn.lower()
+            software = rdflib.term.BNode( "software_" + nn)
             g.add((corePipelineConcept, provvalue, Literal(nn)))
             if (software, None, None) not in g:
 
                 g.add((software, RDF.type, URIRef(ontosoft + 'Software')))
+                g.add((software, DC.title, Literal(temp)))
 
             g.add((softwareImplementation, RDF.type, URIRef(dms + 'SoftwareConfiguration')))
             g.add((softwareImplementation, provvalue, Literal(nn)))
             g.add((corePipelineConcept, RDF.type, URIRef(dms + 'CorePipelineConcept')))
+            g.add((corePipelineConcept, DC.title,
+                   Literal(str(id) + '-' + 'CPC-software' + '-' + str(section_id) + '-' + str(NER_ID[ii]))))
+
             g.add((software, isA, corePipelineConcept))
             g.add((softwareImplementation, isConfigurationOf, software))
             g.add((experiment, usesSoftware, softwareImplementation))
@@ -174,12 +187,14 @@ def rdf_paper_section(g, id, experiment, paper, section_id, sentence_id, sentenc
                 g.add((corePipelineConcept, isDefinedBy, wiki))
     elif label == 'objective':
         for ii, nn in enumerate(NER):
-            corePipelineConcept = rdflib.term.BNode(
-                str(id) + '-' + 'CPC-objective' + '-' + str(section_id) + '-' +  str(NER_ID[ii]))
-            objective = rdflib.term.BNode(str(id) + '-' + 'objective' + '-' + str(section_id) + '-' +  str(NER_ID[ii]))
+            corePipelineConcept = BNode()
+            objective = BNode()
 
             g.add((objective, RDF.type, URIRef(dms + 'Objective')))
             g.add((corePipelineConcept, RDF.type, URIRef(dms + 'CorePipelineConcept')))
+            g.add((corePipelineConcept, DC.title,
+                   Literal(str(id) + '-' + 'CPC-objective' + '-' + str(section_id) + '-' + str(NER_ID[ii]))))
+
             g.add((experiment, hasObjective, objective))
 
             g.add((objective, isA, corePipelineConcept))
@@ -195,12 +210,13 @@ def rdf_paper_section(g, id, experiment, paper, section_id, sentence_id, sentenc
 
     elif label == 'result':
         for ii, nn in enumerate(NER):
-            corePipelineConcept = rdflib.term.BNode(
-                str(id) + '-' + 'CPC-result' + '-' + str(section_id) + '-' +  str(NER_ID[ii]))
-            result = rdflib.term.BNode(str(id) + '-' + 'result' + '-' + str(section_id) + '-' + str(NER_ID[ii]))
+            corePipelineConcept = BNode()
+            result = BNode()
 
             g.add((result, RDF.type, URIRef(deo + 'Results')))
             g.add((corePipelineConcept, RDF.type, URIRef(dms + 'CorePipelineConcept')))
+            g.add((corePipelineConcept, DC.title,
+                   Literal(str(id) + '-' + 'CPC-result' + '-' + str(section_id) + '-' + str(NER_ID[ii]))))
 
             g.add((result, isA, corePipelineConcept))
             g.add((corePipelineConcept, wasGeneratedBy, rhetoricalIdentiticationMethod))
@@ -227,6 +243,7 @@ def create_linked_data(db,g):
     paper_names = db.rhetorical_sentences.distinct('paper_id',no_cursor_timeout=True)
     count=0
     for pub in paper_names:
+        
 
             count=count+1
 
@@ -261,14 +278,8 @@ def create_linked_data(db,g):
                 rdf_paper_section(g, r['paper_id'], experiment, paperinstance, r['chapter_num'], r['_id'],
                                   r['rhetorical'], r['label'], NER, NER_ID, NER_Wikipedia)
             #g.serialize(destination='/data/SmartPub/logs/eswc.owl', format='xml')
-    g.serialize(destination='/data/SmartPub/logs/eswc.owl', format='xml')
+    g.serialize(destination='data/SmartPub/logs/eswc.owl', format='xml')
 
 
-def main():
-    db = tools.connect_to_mongo()
-    create_linked_data(db,g)
-
-
-if __name__ == '__main__':
-    main()
-
+db = tools.connect_to_mongo()
+create_linked_data(db,g)
