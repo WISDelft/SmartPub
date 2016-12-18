@@ -245,7 +245,7 @@ def create_linked_data(db,g):
     count=0
     for pub in paper_names:
             # just to check the pubs
-            if count == 50:
+            if count == 250:
                 break
 
             count=count+1
