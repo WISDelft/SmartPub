@@ -118,7 +118,7 @@ def main(filter:("filter","option")=None):
                     count_extracted = db.publications.find({'$and': [{'booktitle': r}, {'content.chapters': {'$exists': True}}]}).count()
                     count_not_extracted = db.publications.find(
                         {'$and': [{'booktitle': r}, {'content.chapters': {'$exists': False}}]}).count()
-                    f.write("{},{},{},{}".format(r, count_booktitle,count_extracted,count_not_extracted))
+                    f.write("{},{},{},{}".format(str(r).replace(",",""), count_booktitle,count_extracted,count_not_extracted))
                     f.write("\n")
                     # print("{}: {}".format(r, count_booktitle))
                 f.close()
