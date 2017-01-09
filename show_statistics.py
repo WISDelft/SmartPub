@@ -111,9 +111,14 @@ def main(filter:("filter","option")=None):
                 result = db.publications.distinct("booktitle")
                 # print("Booktitles")
                 f = open(config.folder_log + "booktitles_summary.csv", "w", encoding="UTF-8")
+                f.write("Conferences,#Papers,#Extracted,#Not Extracted")
+                f.write("\n")
                 for r in result:
                     count_booktitle = db.publications.find({"booktitle": r}).count()
-                    f.write("{},{}".format(r, count_booktitle))
+                    count_extracted = db.publications.find({'$and': [{'booktitle': r}, {'content.chapters': {'$exists': True}}]}).count()
+                    count_not_extracted = db.publications.find(
+                        {'$and': [{'booktitle': r}, {'content.chapters': {'$exists': False}}]}).count()
+                    f.write("{},{},{},{}".format(r, count_booktitle,count_extracted,count_not_extracted))
                     f.write("\n")
                     # print("{}: {}".format(r, count_booktitle))
                 f.close()
