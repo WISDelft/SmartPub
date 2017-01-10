@@ -21,7 +21,7 @@ import random
 # for testing
 import sys
 
-booktitles = ['JCDL']
+booktitles = ['JCDL,SIGIR,ECDL,TPDL,TREC']
 journals = ['TACO','JOCCH']
 
 def get_grobid_xml(paper_id):
