@@ -40,6 +40,39 @@ def main(filter:("filter","option")=None):
                 result = db.publications.count({'$and' : [{'booktitle' :'WWW'} , {'content.chapters':{'$exists':True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions WWW papers", result))
 
+                #'JCDL,SIGIR,ECDL,TPDL,TREC'
+                #Print JCDL papers
+                result = db.publications.count({"booktitle": "JCDL"})
+                print('{:>25} {:>8d}'.format("JCDL papers", result))
+
+                result = db.publications.count(
+                    {'$and': [{'booktitle': 'JCDL'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions JCDL papers", result))
+
+                # Print ECDL papers
+                result = db.publications.count({"booktitle": "ECDL"})
+                print('{:>25} {:>8d}'.format("ECDL papers", result))
+
+                result = db.publications.count(
+                    {'$and': [{'booktitle': 'ECDL'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ECDL papers", result))
+
+                # Print TPDL papers
+                result = db.publications.count({"booktitle": "TPDL"})
+                print('{:>25} {:>8d}'.format("TPDL papers", result))
+
+                result = db.publications.count(
+                    {'$and': [{'booktitle': 'TPDL'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions TPDL papers", result))
+
+                # Print TREC papers
+                result = db.publications.count({"booktitle": "TREC"})
+                print('{:>25} {:>8d}'.format("TREC papers", result))
+
+                result = db.publications.count(
+                    {'$and': [{'booktitle': 'TREC'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions TREC papers", result))
+
                 #print the papers from SIGIR
                 result = db.publications.count({"booktitle": "SIGIR"})
                 print('{:>25} {:>8d}'.format("SIGIR papers", result))
