@@ -95,36 +95,37 @@ def sentence_extraction(db):
                                                               processed_sentences[i], cls, len(processed_sentences))
 
                                     textrazor_ent = []
-                                    for entity in response.entities():
-                                        # print("entity.id#############")
-                                        # print(entity.id)
-                                        tokens = processed_sentences[i].lower()
-                                        # print(tokens)
-                                        # print(entity.id.lower())
-                                        if entity.id.lower() in tokens:
-                                            if not wordnet.synsets(entity.id.lower()):
+                                    if response:
+                                        for entity in response.entities():
+                                            # print("entity.id#############")
+                                            # print(entity.id)
+                                            tokens = processed_sentences[i].lower()
+                                            # print(tokens)
+                                            # print(entity.id.lower())
+                                            if entity.id.lower() in tokens:
+                                                if not wordnet.synsets(entity.id.lower()):
 
-                                                store_ner_in_mongo(db, ner_id, cls, 'abstract', paper['dblpkey'], rhet_id,
-                                                                   entity.id,
-                                                                   entity.relevance_score,
-                                                                   entity.confidence_score,
-                                                                   entity.wikipedia_link, entity.freebase_types,
-                                                                   entity.dbpedia_types,
-                                                                   len(response.entities()), 0)
-
-
-                                            else:
-                                                store_ner_in_mongo(db, ner_id, cls, 'abstract', paper['dblpkey'], rhet_id,
-                                                                   entity.id,
-                                                                   entity.relevance_score,
-                                                                   entity.confidence_score,
-                                                                   entity.wikipedia_link, entity.freebase_types,
-                                                                   entity.dbpedia_types,
-                                                                   len(response.entities()), 1)
+                                                    store_ner_in_mongo(db, ner_id, cls, 'abstract', paper['dblpkey'], rhet_id,
+                                                                       entity.id,
+                                                                       entity.relevance_score,
+                                                                       entity.confidence_score,
+                                                                       entity.wikipedia_link, entity.freebase_types,
+                                                                       entity.dbpedia_types,
+                                                                       len(response.entities()), 0)
 
 
+                                                else:
+                                                    store_ner_in_mongo(db, ner_id, cls, 'abstract', paper['dblpkey'], rhet_id,
+                                                                       entity.id,
+                                                                       entity.relevance_score,
+                                                                       entity.confidence_score,
+                                                                       entity.wikipedia_link, entity.freebase_types,
+                                                                       entity.dbpedia_types,
+                                                                       len(response.entities()), 1)
 
-                                            ner_id += 1
+
+
+                                                ner_id += 1
 
 
                                     rhet_id += 1
@@ -172,37 +173,38 @@ def sentence_extraction(db):
                                     store_rhetorical_in_mongo(db, rhet_id, i, paper['dblpkey'],
                                                               processed_sentences[j], cls, len(processed_sentences))
                                     textrazor_ent = []
-                                    for entity in response.entities():
-                                        # print("entity.id")
-                                        # print(entity.id)
-                                        tokens = processed_sentences[j].lower()
-                                        if entity.id.lower() in tokens:
-                                            if not wordnet.synsets(entity.id.lower()):
-                                                
-                                                store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
-                                                                   entity.id,
-                                                                   entity.relevance_score,
-                                                                   entity.confidence_score,
-                                                                   entity.wikipedia_link, entity.freebase_types,
-                                                                   entity.dbpedia_types,
-                                                                   len(response.entities()),0)
+                                    if response:
+                                        for entity in response.entities():
+                                            # print("entity.id")
+                                            # print(entity.id)
+                                            tokens = processed_sentences[j].lower()
+                                            if entity.id.lower() in tokens:
+                                                if not wordnet.synsets(entity.id.lower()):
 
-                                                
-                                            else:
-                                                store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
-                                                                   entity.id,
-                                                                   entity.relevance_score,
-                                                                   entity.confidence_score,
-                                                                   entity.wikipedia_link, entity.freebase_types,
-                                                                   entity.dbpedia_types,
-                                                                   len(response.entities()), 1)
-                                                
-
-                                            # print(entity.id, entity.relevance_score, entity.confidence_score, entity.wikipedia_link)
-                                            
+                                                    store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
+                                                                       entity.id,
+                                                                       entity.relevance_score,
+                                                                       entity.confidence_score,
+                                                                       entity.wikipedia_link, entity.freebase_types,
+                                                                       entity.dbpedia_types,
+                                                                       len(response.entities()),0)
 
 
-                                            ner_id += 1
+                                                else:
+                                                    store_ner_in_mongo(db, ner_id, cls, i, paper['dblpkey'], rhet_id,
+                                                                       entity.id,
+                                                                       entity.relevance_score,
+                                                                       entity.confidence_score,
+                                                                       entity.wikipedia_link, entity.freebase_types,
+                                                                       entity.dbpedia_types,
+                                                                       len(response.entities()), 1)
+
+
+                                                # print(entity.id, entity.relevance_score, entity.confidence_score, entity.wikipedia_link)
+
+
+
+                                                ner_id += 1
 
 
                                     rhet_id += 1
