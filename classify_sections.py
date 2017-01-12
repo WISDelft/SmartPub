@@ -75,11 +75,11 @@ def sentence_extraction(db):
 
                     processed_sentences = []
                     text_razor = paper['abstract']
-                    if text_razor:
+                    try: 
 
-                        response = client.analyze(text_razor)
-                    else:
-                        response = []
+                            response = client.analyze(text_razor)
+                    except:
+                            response = []
                     sentences = (sent_detector.tokenize(paper['abstract'].strip()))
                     for sentence in sentences:
                         sent = sentence.replace('"', '').strip()
@@ -141,12 +141,14 @@ def sentence_extraction(db):
 
                 for i, chapter in enumerate(paper['chapters']):
                     text_razor = chapter
-                    if text_razor:
+                    
+                    try: 
 
-                        response = client.analyze(text_razor)
-                    else:
-                        response = []
-                    # response = client.analyze(text_razor)
+                            response = client.analyze(text_razor)
+                    except:
+                            response = []
+                            
+                 
 
 
 
