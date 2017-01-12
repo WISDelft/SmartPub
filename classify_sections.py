@@ -8,7 +8,7 @@ from nltk.corpus import wordnet
 
 textrazor.api_key = "9f466f8622a88d099f740d54b435845746914cbc43c831652408a5eb"
 
-booktitles = ['JCDL','TPDL','ECDL','TREC','SIGIR','WWW','VLDB']
+booktitles = ['JCDL','TPDL','ECDL','SIGIR','WWW','VLDB','TREC']
 journals = ['TACO', 'JOCCH']
 
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
