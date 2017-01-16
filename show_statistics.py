@@ -73,6 +73,14 @@ def main(filter:("filter","option")=None):
                     {'$and': [{'booktitle': 'TREC'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions TREC papers", result))
 
+                # Print ICSE papers
+                result = db.publications.count({"booktitle": "ICSE"})
+                print('{:>25} {:>8d}'.format("ICSE papers", result))
+
+                result = db.publications.count(
+                    {'$and': [{'booktitle': 'ICSE'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ICSE papers", result))
+
                 #print the papers from SIGIR
                 result = db.publications.count({"booktitle": "SIGIR"})
                 print('{:>25} {:>8d}'.format("SIGIR papers", result))
