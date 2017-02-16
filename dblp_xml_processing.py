@@ -15,6 +15,8 @@ from urllib.request import Request, urlopen
 #import time to set a sleeping mode to avoid HTTP error: 503/403/303
 import  time
 import random
+import json
+import re
 
 import urllib
 
@@ -40,7 +42,7 @@ statusEveryXxmlLoops = 1000
 
 filters = {}
 
-#enabledScrapers = ["pdf", "acm", "springer"]
+enabledScrapers = ["pdf", "acm", "springer", "ieee", "aaai", 'icwsm']
 enabledScrapers = {"pdf"}
 
 # add the number of access in acm to set sleep mode
@@ -51,6 +53,10 @@ num_of_access_in_springer = 0
 num_of_access_in_aaai = 0
 # add the number of access in icwsm site to set sleep mode
 num_of_access_in_icwsm = 0
+# add the number of access in ieee site to set sleep mode
+num_of_access_in_ieee = 0
+
+num_of_access = 0
 
 
 numOfPDFobtained = 0
@@ -126,7 +132,28 @@ def download_and_store(paper, db):
         # do NOT skip if paper has a key, an ee entry
         if (not skip and type(paper['dblpkey']) is str and type(paper['ee']) is str):
             # check if it one of our supported types. IMPORTANT: ADD NEW TYPES HERE IF WE HAVE THEM!
-            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ((paper['ee'].startswith("http://doi.acm.org")or paper['ee'].startswith("http://dl.acm.org")) and "acm" in enabledScrapers) or (paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers) or ((paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers) or (paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers):
+            # also here we are checking if the resolved doi belonges in to one of our crawlers
+            # if yes then we proceed with the download otherwise we store the url in a file
+            # with the not-supported repositories
+            req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
+            url_open = urlopen(req)
+            actual_url = url_open.geturl()
+            global num_of_access
+            # Here we need to add a time delay because we access the
+            # sleep for a random duration of time between 60 and 360 seconds
+            rndm_time = int(random.uniform(60, 300))
+            print(
+              "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
+                                                                                 num_of_access))
+
+            num_of_access += 1
+            time.sleep(rndm_time)
+            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers)\
+              or ("ieee" in actual_url) \
+              or("springer" in actual_url) \
+              or ("acm" in actual_url) \
+              or paper['ee'].startswith("http://www.aaai.org") \
+              or paper['ee'].startswith("http://www.icwsm.org"):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                 # which URLs have been accessed, and if that was successfull or not
@@ -157,6 +184,9 @@ def download_and_store(paper, db):
                     skip = False # url not in download collection of mongo db
             else:
                 skip = True # this ee entry is not interesting to us
+                with open(cfg.folder_log+"not_supported_repos.txt", 'a',encoding='UTF-8') as f:
+                  f.write(actual_url)
+                  f.write("\n")
 
             # Do the Download and store to MongoDB
             if not skip:
@@ -166,23 +196,35 @@ def download_and_store(paper, db):
                     if paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers:
                         # Normal PDF download
                         skipped = not tools.downloadFile(downloadinfo['url'], overwrite = False, folder = cfg.folder_pdf, localfilename=filename)
+
+
+                    if "springer" in actual_url:
+                      # go to springer crawller
+                      skipped = not extract_paper_from_SPRINGER(url_open, filename)
+                    elif "acm" in actual_url:
+                      # go to acm crawler
+                      skipped = not extract_paper_from_ACM(url_open, filename)
+                    elif "ieee" in actual_url:
+                      # go to ieee crawler
+                      skipped = not extract_paper_from_IEEE(url_open,filename)
+                    elif paper['ee'].startswith("http://www.aaai.org"):
+                      # go to aaai crawler
+                      skipped = not extract_paper_from_AAAI(url_open, filename)
+                    elif  paper['ee'].startswith("http://www.icwsm.org"):
+                      # got to icwsm crawler
+                      skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
+                    else:
+                      skipped = True
+
+
+
+
+
+
+                    """
                     if (paper['ee'].startswith("http://doi.acm.org") or paper['ee'].startswith("http://dl.acm.org")) and "acm" in enabledScrapers:
                         global num_of_access_in_acm
                         num_of_access_in_acm += 1
-                        """
-                        if num_of_access_in_acm % 1000 == 0:
-                            print("Crawler sleeps for 30 min - Times Access ACM: {}".format(num_of_access_in_acm))
-                            time.sleep(1800)
-
-                        elif num_of_access_in_acm % 50 == 0:
-                            print("Crawler sleeps for 5 min - Times Access ACM: {}".format(num_of_access_in_acm))
-                            time.sleep(300)
-                        """
-                        """
-                        elif num_of_access_in_acm % 10 == 0:
-                            print("Crawler sleeps for 10 sec - Times Access ACM: {}".format(num_of_access_in_acm))
-                            time.sleep(10)
-                        """
 
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
@@ -193,27 +235,12 @@ def download_and_store(paper, db):
 
 
                         #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
-
+                    """
                     #SPRINGER
+                    """
                     if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
                         global num_of_access_in_springer
                         num_of_access_in_springer += 1
-                        """
-                        if num_of_access_in_springer % 1000 == 0:
-                            print("Crawler sleeps for 30 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
-                            time.sleep(1800)
-
-                        elif num_of_access_in_springer % 50 == 0:
-                            print("Crawler sleeps for 5 min - Times Access SPRINGER: {}".format(num_of_access_in_springer))
-                            time.sleep(300)
-                        """
-                        """
-                        elif num_of_access_in_springer % 10 == 0:
-                            print("Crawler sleeps for 10 sec - Times Access SPRINGER: {}".format(num_of_access_in_springer))
-                            time.sleep(10)
-                        """
-
-
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
@@ -221,26 +248,25 @@ def download_and_store(paper, db):
                         time.sleep(rndm_time)
                         skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
 
+
+                    # IEEE
+                    if paper['ee'].startswith("http://dx.doi.org") and "ieee" in enabledScrapers:
+                      global num_of_access_in_ieee
+                      num_of_access_in_ieee += 1
+                      # sleep for a random duration of time between 60 and 360 seconds
+                      rndm_time = int(random.uniform(60, 360))
+                      print(
+                           "Crawler sleeps for {} min - Times Access IEEE: {}".format(float(rndm_time / int(60)),
+                                                                                           num_of_access_in_ieee))
+                      time.sleep(rndm_time)
+                      skipped = not extract_paper_from_IEEE(paper['ee'], filename)
+                    """
                     # AAAI
+                    """
                     if (paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers:
                         global num_of_access_in_aaai
                         num_of_access_in_aaai += 1
                         #print(paper['ee'])
-
-                        """
-                        if num_of_access_in_aaai % 1000 == 0:
-                            print("Crawler sleeps for 30 min - Times Access AAAI: {}".format(num_of_access_in_aaai))
-                            time.sleep(1800)
-
-                        elif num_of_access_in_aaai % 50 == 0:
-                            print("Crawler sleeps for 5 min - Times Access AAAI: {}".format(num_of_access_in_aaai))
-                            time.sleep(300)
-                        """
-                        """
-                        elif num_of_access_in_aaai % 10 == 0:
-                            print("Crawler sleeps for 10 sec - Times Access AAAI: {}".format(num_of_access_in_aaai))
-                            time.sleep(10)
-                        """
 
 
                         # sleep for a random duration of time between 60 and 360 seconds
@@ -254,20 +280,10 @@ def download_and_store(paper, db):
                     if paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers:
                         global num_of_access_in_icwsm
                         num_of_access_in_icwsm += 1
-                        """
-                        if num_of_access_in_icwsm % 1000 == 0:
-                            print("Crawler sleeps for 30 min - Times Access ICWSM: {}".format(num_of_access_in_icwsm))
-                            time.sleep(1800)
 
-                        elif num_of_access_in_icwsm % 50 == 0:
-                            print("Crawler sleeps for 5 min - Times Access ICWSM: {}".format(num_of_access_in_icwsm))
-                            time.sleep(300)
-                        """
-                        """
-                        elif num_of_access_in_aaai % 10 == 0:
-                            print("Crawler sleeps for 10 sec - Times Access ICWSM: {}".format(num_of_access_in_aaai))
-                            time.sleep(10)
-                        """
+
+
+
 
 
                         # sleep for a random duration of time between 60 and 360 seconds
@@ -276,12 +292,12 @@ def download_and_store(paper, db):
                             "Crawler sleeps for {} min - Times Access ICWSM: {}".format(float(rndm_time/int(60)), num_of_access_in_icwsm))
                         time.sleep(rndm_time)
                         skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
-
+                    """
                     if skipped:
                         logging.info(' Used local PDF copy for ' + paper['dblpkey'])
                     else:
                         logging.info(' Downloaded '+paper['dblpkey'])
-                    global numOfPDFobtainedInThisSession
+                    #global numOfPDFobtainedInThisSession
                     numOfPDFobtainedInThisSession += 1
                     # store
                     if storeToMongo:
@@ -298,7 +314,7 @@ def download_and_store(paper, db):
                         downloadinfo['error'] = repr(ex)
                         db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
-def extract_paper_from_ICWSM(paper_url, filename):
+def extract_paper_from_ICWSM(req, filename):
     """
     this function will access a given url  and will find the link of the pdf.
     Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
@@ -307,8 +323,8 @@ def extract_paper_from_ICWSM(paper_url, filename):
     """
     #reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
     #the site will strike you out because you are a robot!
-    req = Request(paper_url ,headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
+    #req = Request(paper_url ,headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = req.read()
     #parse the html code
     soup = BeautifulSoup(webpage, 'html.parser')
     #select only the link tags
@@ -320,10 +336,10 @@ def extract_paper_from_ICWSM(paper_url, filename):
         print("Access in "+ pdf_link)
         return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
                                    localfilename= filename, printOutput=False)
-    raise BaseException(paper_url+' does not contain a valid ICWSM download link.')
+    raise BaseException(req.geturl()+' does not contain a valid ICWSM download link.')
 
 
-def extract_paper_from_AAAI(paper_url, filename):
+def extract_paper_from_AAAI(req, filename):
     """
     this function will access a given url  and will find the link of the pdf.
     Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
@@ -332,7 +348,7 @@ def extract_paper_from_AAAI(paper_url, filename):
     """
     # reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
     # the site will strike you out because you are a robot!
-
+    paper_url = req.geturl()
     if "viewPaper" not in paper_url:
         paper_url = paper_url.replace("view", "viewPaper")
 
@@ -347,9 +363,10 @@ def extract_paper_from_AAAI(paper_url, filename):
         print("Access in " + pdf_link)
         return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
                             localfilename=filename, printOutput=False)
-    raise BaseException(paper_url + ' does not contain a valid AAAI download link.')
+    raise BaseException(req.geturl() + ' does not contain a valid AAAI download link.')
 
-def extract_paper_from_SPRINGER(paper_url, filename):
+#python3 dblp_xml_processing.py -filter="{'booktitle' : 'ICSE', 'scraper' : 'acm'}"
+def extract_paper_from_IEEE(req, filename):
     """
     this function will access a given url  and will find the link of the pdf.
     Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
@@ -358,8 +375,31 @@ def extract_paper_from_SPRINGER(paper_url, filename):
     """
     # reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
     # the site will strike you out because you are a robot!
-    req = Request(paper_url, headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
+
+    webpage = req.read()
+    # parse the html code
+    soup = BeautifulSoup(webpage, 'html.parser')
+    menus = json.loads(re.search(r"global.document.metadata\s*=\s*(.*);", soup.getText()).group(1))
+    pdfpath = str(menus['pdfPath']).replace("iel7" , "ielx7")
+    pdf_link =  "http://ieeexplore.ieee.org/" + pdfpath
+
+
+    print("Access in " + pdf_link)
+    return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
+                                      localfilename=filename, printOutput=False)
+    #raise BaseException(req.geturl() + ' does not contain a valid IEEE download link.')
+
+def extract_paper_from_SPRINGER(req, filename):
+    """
+    this function will access a given url  and will find the link of the pdf.
+    Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
+    :param paper_url: e.g. "http://dx.doi.org/10.1007/BF00264597"
+    :return:
+    """
+    # reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
+    # the site will strike you out because you are a robot!
+    #req = Request(paper_url, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = req.read()
     # parse the html code
     soup = BeautifulSoup(webpage, 'html.parser')
     # select only the link tags
@@ -374,10 +414,10 @@ def extract_paper_from_SPRINGER(paper_url, filename):
             print("Access in " + pdf_link)
             return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
                                       localfilename=filename, printOutput=False)
-    raise BaseException(paper_url + ' does not contain a valid SPRINGER download link.')
+    raise BaseException(req.geturl() + ' does not contain a valid SPRINGER download link.')
 
 
-def extract_paper_from_ACM(paper_url, filename):
+def extract_paper_from_ACM(req, filename):
     """
     this function will access a given url  and will find the link of the pdf.
     Attention: WORKS ONLY IN THE TU DELFT NETWORK or VPN
@@ -386,8 +426,8 @@ def extract_paper_from_ACM(paper_url, filename):
     """
     #reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
     #the site will strike you out because you are a robot!
-    req = Request(paper_url ,headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
+    #req = Request(paper_url ,headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = req.read()
     #parse the html code
     soup = BeautifulSoup(webpage, 'html.parser')
     #select only the link tags
@@ -407,7 +447,7 @@ def extract_paper_from_ACM(paper_url, filename):
             print("donwload file "+pdf_link)
             return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
                                    localfilename= filename, printOutput=False)
-    raise BaseException(paper_url+' does not contain a valid ACM download link.')
+    raise BaseException(req.geturl()+' does not contain a valid ACM download link.')
 
 def main(filter:("filter","option")=None):
     """
