@@ -141,7 +141,7 @@ def download_and_store(paper, db):
             global num_of_access
             # Here we need to add a time delay because we access the
             # sleep for a random duration of time between 60 and 360 seconds
-            rndm_time = int(random.uniform(60, 300))
+            rndm_time = int(random.uniform(60, 360))
             print(
               "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
                                                                                  num_of_access))
@@ -179,6 +179,7 @@ def download_and_store(paper, db):
                     skip = False # url not in download collection of mongo db
             else:
                 skip = True # this ee entry is not interesting to us
+                print("{}, Repository not supported: {}".format(paper['dblpkey'],actual_url))
                 with open(cfg.folder_log+"not_supported_repos.txt", 'a',encoding='UTF-8') as f:
                   f.write(actual_url)
                   f.write("\n")
