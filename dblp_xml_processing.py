@@ -148,12 +148,7 @@ def download_and_store(paper, db):
 
             num_of_access += 1
             time.sleep(rndm_time)
-            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers)\
-              or ("ieee" in actual_url) \
-              or("springer" in actual_url) \
-              or ("acm" in actual_url) \
-              or paper['ee'].startswith("http://www.aaai.org") \
-              or paper['ee'].startswith("http://www.icwsm.org"):
+            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ("ieee" in actual_url) or("springer" in actual_url)  or ("acm" in actual_url) or paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                 # which URLs have been accessed, and if that was successfull or not
@@ -191,7 +186,7 @@ def download_and_store(paper, db):
             # Do the Download and store to MongoDB
             if not skip:
                 try:
-                    print(paper['dblpkey'])
+
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers:
                         # Normal PDF download
@@ -200,19 +195,39 @@ def download_and_store(paper, db):
 
                     if "springer" in actual_url:
                       # go to springer crawller
+                      global num_of_access_in_springer
+                      num_of_access_in_springer += 1
+                      print("{}, publisher: Springer, #Access: {}".format(paper['dblpkey'],num_of_access_in_springer))
                       skipped = not extract_paper_from_SPRINGER(url_open, filename)
+
                     elif "acm" in actual_url:
                       # go to acm crawler
+                      global num_of_access_in_acm
+                      num_of_access_in_acm += 1
+                      print("{}, publisher: ACM, #Access: {}".format(paper['dblpkey'], num_of_access_in_acm))
                       skipped = not extract_paper_from_ACM(url_open, filename)
+
                     elif "ieee" in actual_url:
                       # go to ieee crawler
+                      global num_of_access_in_ieee
+                      num_of_access_in_ieee += 1
+                      print("{}, publisher: IEEE, #Access: {}".format(paper['dblpkey'], num_of_access_in_ieee))
                       skipped = not extract_paper_from_IEEE(url_open,filename)
+
                     elif paper['ee'].startswith("http://www.aaai.org"):
                       # go to aaai crawler
+                      global num_of_access_in_aaai
+                      num_of_access_in_aaai += 1
+                      print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
                       skipped = not extract_paper_from_AAAI(url_open, filename)
+
                     elif  paper['ee'].startswith("http://www.icwsm.org"):
                       # got to icwsm crawler
+                      global num_of_access_in_icwsm
+                      num_of_access_in_icwsm += 1
+                      print("{}, publisher: ICWSM, #Access: {}".format(paper['dblpkey'], num_of_access_in_icwsm))
                       skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
+
                     else:
                       skipped = True
 

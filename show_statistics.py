@@ -117,6 +117,31 @@ def main(filter:("filter","option")=None):
                 result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
+                # print the papers from SOCROB
+                result = db.publications.count({"booktitle": "SOCROB"})
+                print('{:>25} {:>8d}'.format("SOCROB papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'SOCROB'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions SOCROB papers", result))
+
+                # print the papers from HRI
+                result = db.publications.count({"booktitle": "HRI"})
+                print('{:>25} {:>8d}'.format("HRI papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'HRI'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions HRI papers", result))
+
+                # print the papers from TROB
+                result = db.publications.count({"journal": "TROB"})
+                print('{:>25} {:>8d}'.format("TROB papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'journal': 'TROB'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions TROB papers", result))
+
+
             if k == "printColl" and v == "yes":
                 print("Collections in MongoDB")
                 collections = db.collection_names()
