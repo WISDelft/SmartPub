@@ -118,12 +118,12 @@ def main(filter:("filter","option")=None):
                 print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
                 # print the papers from SOCROB
-                result = db.publications.count({"booktitle": "SOCROB"})
-                print('{:>25} {:>8d}'.format("SOCROB papers", result))
+                result = db.publications.count({"booktitle": "ICSR"})
+                print('{:>25} {:>8d}'.format("ICSR papers", result))
 
                 result = db.publications.count(
-                  {'$and': [{'booktitle': 'SOCROB'}, {'content.chapters': {'$exists': True}}]})
-                print('{:>25} {:>8d}'.format("Successful extractions SOCROB papers", result))
+                  {'$and': [{'booktitle': 'ICSR'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ICSR papers", result))
 
                 # print the papers from HRI
                 result = db.publications.count({"booktitle": "HRI"})

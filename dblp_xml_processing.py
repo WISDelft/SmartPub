@@ -141,6 +141,7 @@ def download_and_store(paper, db):
             global num_of_access
             # Here we need to add a time delay because we access the
             # sleep for a random duration of time between 60 and 360 seconds
+
             rndm_time = int(random.uniform(60, 360))
             print(
               "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
@@ -148,7 +149,7 @@ def download_and_store(paper, db):
 
             num_of_access += 1
             time.sleep(rndm_time)
-            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ("ieee" in actual_url) or("springer" in actual_url)  or ("acm" in actual_url) or paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
+            if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ("ieee" in str(actual_url)) or("springer" in actual_url)  or ("acm" in actual_url) or paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
                 filename = paper['dblpkey']+".pdf"
                 # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                 # which URLs have been accessed, and if that was successfull or not
@@ -164,6 +165,9 @@ def download_and_store(paper, db):
                     result = db.downloads.find_one({'_id': downloadinfo['_id']})
                     if result is None:
                         skip = False
+                    # if it wasn't successful try once more
+                    elif not result['success']:
+                      skip = False
                     else:
                         skip = True
                         if result['success']:
