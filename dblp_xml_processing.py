@@ -409,7 +409,7 @@ def extract_paper_from_IEEE(req, filename):
     # parse the html code
     soup = BeautifulSoup(webpage, 'html.parser')
     menus = json.loads(re.search(r"global.document.metadata\s*=\s*(.*);", soup.getText()).group(1))
-    pdfpath = str(menus['pdfPath']).replace("iel7" , "ielx7")
+    pdfpath = str(menus['pdfPath']).replace("iel" , "ielx")
     pdf_link =  "http://ieeexplore.ieee.org" + pdfpath
 
 
