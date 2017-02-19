@@ -133,13 +133,29 @@ def main(filter:("filter","option")=None):
                   {'$and': [{'booktitle': 'HRI'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions HRI papers", result))
 
-                # print the papers from TROB
-                result = db.publications.count({"journal": "TROB"})
-                print('{:>25} {:>8d}'.format("TROB papers", result))
+                # print the papers from IEEE Trans. Robotics
+                result = db.publications.count({"journal": "IEEE Trans. Robotics"})
+                print('{:>25} {:>8d}'.format("IEEE Trans. Robotics papers", result))
 
                 result = db.publications.count(
-                  {'$and': [{'journal': 'TROB'}, {'content.chapters': {'$exists': True}}]})
-                print('{:>25} {:>8d}'.format("Successful extractions TROB papers", result))
+                  {'$and': [{'journal': 'IEEE Trans. Robotics'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions IEEE Trans. Robotics papers", result))
+
+                # print the papers from IEEE Trans. Robotics and Automation
+                result = db.publications.count({"journal": "IEEE Trans. Robotics and Automation"})
+                print('{:>25} {:>8d}'.format("IEEE Trans. Robotics and Automation papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'journal': 'IEEE Trans. Robotics and Automation'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions IEEE Trans. Robotics and Automation", result))
+
+                # print the papers from IEEE J. Robotics and Automation
+                result = db.publications.count({"journal": "IEEE J. Robotics and Automation"})
+                print('{:>25} {:>8d}'.format("IEEE J. Robotics and Automation papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'journal': 'IEEE J. Robotics and Automation'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions IEEE J. Robotics and Automation papers", result))
 
 
             if k == "printColl" and v == "yes":
