@@ -233,7 +233,7 @@ def download_and_store(paper, db):
                       global num_of_access_in_aaai
                       num_of_access_in_aaai += 1
                       print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
-                      skipped = not extract_paper_from_AAAI(url_open, filename)
+                      skipped = not extract_paper_from_AAAI(paper['ee'], filename)
 
                     elif  paper['ee'].startswith("http://www.icwsm.org"):
                       # got to icwsm crawler
