@@ -233,7 +233,7 @@ def download_and_store(paper, db):
                       global num_of_access_in_aaai
                       num_of_access_in_aaai += 1
                       print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
-                      skipped = not extract_paper_from_AAAI(paper['ee'], filename)
+                      skipped = not extract_paper_from_AAAI(actual_url, filename)
 
                     elif  paper['ee'].startswith("http://www.icwsm.org"):
                       # got to icwsm crawler
@@ -377,7 +377,7 @@ def extract_paper_from_AAAI(req, filename):
     """
     # reguest to the url, add headers to avoid  HTTP Error: 403 Forbidden
     # the site will strike you out because you are a robot!
-    paper_url = req.geturl()
+    paper_url = req
     if "viewPaper" not in paper_url:
         paper_url = paper_url.replace("view", "viewPaper")
 
