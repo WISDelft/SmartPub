@@ -142,7 +142,7 @@ def download_and_store(paper, db):
             if (down_info is None) or (down_info['success'] is False):
 
               req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
-              url_open = urlopen(req)
+              url_open = urlopen(req, timeout=6)
               if url_open.status != 200:
                 raise BaseException("HTTPError {}".format(url_open.status))
               else:
