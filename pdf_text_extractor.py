@@ -21,9 +21,10 @@ import random
 # for testing
 import sys
 
-#booktitles = ['JCDL','SIGIR','ECDL','TPDL','TREC']
-booktitles = ['SIGIR']
-#journals = ['TACO','JOCCH']
+# The booktitles are located in the config.py
+# If you are interested in specific conference just add it there
+booktitles = cfg.booktitles
+journals = cfg.journals
 
 def get_grobid_xml(paper_id):
     """
