@@ -137,36 +137,20 @@ def download_and_store(paper, db):
             # with the not-supported repositories
 
             ## check if the paper was already succefully downloaded
-            downloadinfo = {
-              '_id': paper['ee'],
-              'url': paper['ee'],
-              'dblpkey': paper['dblpkey'],
-              'lastaccessed': datetime.datetime.now(),
-              'success': True
-            }
-            req = ""
-            url_open = ""
+
             down_info = db.downloads.find_one({'dblpkey' : paper['dblpkey']})
             if (down_info is None) or (down_info['success'] is False):
 
-              try:
-                req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
-                url_open = urlopen(req)
-              except BaseException:
-                logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
-                                  exc_info=True)
-                if storeToMongo:
-                  downloadinfo['success'] = False
-                  ex = sys.exc_info()
-                  downloadinfo['error'] = repr(ex)
-                  db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+
+              req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
+              url_open = urlopen(req)
 
 
 
 
-              #if url_open.status != 200:
-              #  raise BaseException("HTTPError {}".format(url_open.status))
-              #else:
+              if url_open.status != 200:
+                raise BaseException("HTTPError {}".format(url_open.status))
+              else:
                 downloadinfo = {}
                 actual_url = url_open.geturl()
                 global num_of_access
@@ -184,13 +168,13 @@ def download_and_store(paper, db):
                     filename = paper['dblpkey']+".pdf"
                     # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                     # which URLs have been accessed, and if that was successfull or not
-                    #downloadinfo = {
-                    #    '_id': paper['ee'],
-                    #    'url': paper['ee'],
-                    #    'dblpkey': paper['dblpkey'],
-                    #    'lastaccessed': datetime.datetime.now(),
-                    #    'success': True
-                    #}
+                    downloadinfo = {
+                        '_id': paper['ee'],
+                        'url': paper['ee'],
+                        'dblpkey': paper['dblpkey'],
+                        'lastaccessed': datetime.datetime.now(),
+                        'success': True
+                    }
                     # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
                     if skipPreviouslyAccessedURLs and storeToMongo:
                         result = db.downloads.find_one({'_id': downloadinfo['_id']})
