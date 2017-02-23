@@ -22,8 +22,8 @@ import random
 import sys
 
 #booktitles = ['JCDL','SIGIR','ECDL','TPDL','TREC']
-booktitles = ['ICSE']
-journals = ['TACO','JOCCH']
+booktitles = ['SIGIR']
+#journals = ['TACO','JOCCH']
 
 def get_grobid_xml(paper_id):
     """
