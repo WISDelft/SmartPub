@@ -137,77 +137,94 @@ def download_and_store(paper, db):
             # with the not-supported repositories
 
             ## check if the paper was already succefully downloaded
-            try:
-              down_info = db.downloads.find_one({'dblpkey' : paper['dblpkey']})
-              if (down_info is None) or (down_info['success'] is False):
+            downloadinfo = {
+              '_id': paper['ee'],
+              'url': paper['ee'],
+              'dblpkey': paper['dblpkey'],
+              'lastaccessed': datetime.datetime.now(),
+              'success': True
+            }
+            req = ""
+            url_open = ""
+            down_info = db.downloads.find_one({'dblpkey' : paper['dblpkey']})
+            if (down_info is None) or (down_info['success'] is False):
 
-
+              try:
                 req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
                 url_open = urlopen(req)
+              except BaseException:
+                logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
+                                  exc_info=True)
+                if storeToMongo:
+                  downloadinfo['success'] = False
+                  ex = sys.exc_info()
+                  downloadinfo['error'] = repr(ex)
+                  db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 
 
-                if url_open.status != 200:
-                  raise BaseException("HTTPError {}".format(url_open.status))
-                else:
-                  downloadinfo = {}
-                  actual_url = url_open.geturl()
-                  global num_of_access
-                  # Here we need to add a time delay because we access the
-                  # sleep for a random duration of time between 60 and 360 seconds
 
-                  rndm_time = int(random.uniform(60, 360))
-                  print(
-                    "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
-                                                                                     num_of_access))
+              #if url_open.status != 200:
+              #  raise BaseException("HTTPError {}".format(url_open.status))
+              #else:
+                downloadinfo = {}
+                actual_url = url_open.geturl()
+                global num_of_access
+                # Here we need to add a time delay because we access the
+                # sleep for a random duration of time between 60 and 360 seconds
 
-                  num_of_access += 1
-                  time.sleep(rndm_time)
-                  if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ("ieee" in str(actual_url)) or("springer" in actual_url)  or ("acm" in actual_url) or paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
-                      filename = paper['dblpkey']+".pdf"
-                      # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
-                      # which URLs have been accessed, and if that was successfull or not
-                      downloadinfo = {
-                          '_id': paper['ee'],
-                          'url': paper['ee'],
-                          'dblpkey': paper['dblpkey'],
-                          'lastaccessed': datetime.datetime.now(),
-                          'success': True
-                      }
-                      # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
-                      if skipPreviouslyAccessedURLs and storeToMongo:
-                          result = db.downloads.find_one({'_id': downloadinfo['_id']})
-                          if result is None:
-                              skip = False
-                          # if it wasn't successful try once more
-                          elif not result['success']:
+                rndm_time = int(random.uniform(60, 360))
+                print(
+                  "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
+                                                                                   num_of_access))
+
+                num_of_access += 1
+                time.sleep(rndm_time)
+                if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ("ieee" in str(actual_url)) or("springer" in actual_url)  or ("acm" in actual_url) or paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
+                    filename = paper['dblpkey']+".pdf"
+                    # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
+                    # which URLs have been accessed, and if that was successfull or not
+                    #downloadinfo = {
+                    #    '_id': paper['ee'],
+                    #    'url': paper['ee'],
+                    #    'dblpkey': paper['dblpkey'],
+                    #    'lastaccessed': datetime.datetime.now(),
+                    #    'success': True
+                    #}
+                    # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
+                    if skipPreviouslyAccessedURLs and storeToMongo:
+                        result = db.downloads.find_one({'_id': downloadinfo['_id']})
+                        if result is None:
                             skip = False
-                          else:
-                              skip = True
-                              if result['success']:
-                                  global numOfPDFobtained
-                                  global paperCounter
-                                  global numOfPDFobtainedInThisSession
-                                  numOfPDFobtained += 1
-                                  if numOfPDFobtained % statusEveryXdownloads is 0:
-                                      logging.info(
-                                          'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
-                                              paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
-                      else:
-                          skip = False # url not in download collection of mongo db
-                  else:
-                      skip = True # this ee entry is not interesting to us
-                      print("{}, Repository not supported: {}".format(paper['dblpkey'],actual_url))
-                      with open(cfg.folder_log+"not_supported_repos.txt", 'a',encoding='UTF-8') as f:
-                        f.write(actual_url)
-                        f.write("\n")
-              else:
-                print("{} already in DB".format(paper['dblpkey']))
-                skip = True # already exist in the db
+                        # if it wasn't successful try once more
+                        elif not result['success']:
+                          skip = False
+                        else:
+                            skip = True
+                            if result['success']:
+                                global numOfPDFobtained
+                                global paperCounter
+                                global numOfPDFobtainedInThisSession
+                                numOfPDFobtained += 1
+                                if numOfPDFobtained % statusEveryXdownloads is 0:
+                                    logging.info(
+                                        'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
+                                            paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
+                    else:
+                        skip = False # url not in download collection of mongo db
+                else:
+                    skip = True # this ee entry is not interesting to us
+                    print("{}, Repository not supported: {}".format(paper['dblpkey'],actual_url))
+                    with open(cfg.folder_log+"not_supported_repos.txt", 'a',encoding='UTF-8') as f:
+                      f.write(actual_url)
+                      f.write("\n")
+            else:
+              print("{} already in DB".format(paper['dblpkey']))
+              skip = True # already exist in the db
 
-              # Do the Download and store to MongoDB
-              if not skip:
-
+            # Do the Download and store to MongoDB
+            if not skip:
+                try:
 
                     # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
                     if paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers:
@@ -258,78 +275,78 @@ def download_and_store(paper, db):
 
 
 
-                      """
-                      if (paper['ee'].startswith("http://doi.acm.org") or paper['ee'].startswith("http://dl.acm.org")) and "acm" in enabledScrapers:
-                          global num_of_access_in_acm
-                          num_of_access_in_acm += 1
+                    """
+                    if (paper['ee'].startswith("http://doi.acm.org") or paper['ee'].startswith("http://dl.acm.org")) and "acm" in enabledScrapers:
+                        global num_of_access_in_acm
+                        num_of_access_in_acm += 1
 
-                          # sleep for a random duration of time between 60 and 360 seconds
-                          rndm_time = int(random.uniform(60, 360))
-                          print(
-                              "Crawler sleeps for {} min - Times Access ACM: {}".format(float(rndm_time/int(60)), num_of_access_in_acm))
-                          time.sleep(rndm_time)
-                          skipped = not extract_paper_from_ACM(paper['ee'], filename)
-
-
-                          #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
-                      """
-                      #SPRINGER
-                      """
-                      if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
-                          global num_of_access_in_springer
-                          num_of_access_in_springer += 1
-                          # sleep for a random duration of time between 60 and 360 seconds
-                          rndm_time = int(random.uniform(60, 360))
-                          print(
-                              "Crawler sleeps for {} min - Times Access SPRINGER: {}".format(float(rndm_time/int(60)), num_of_access_in_springer))
-                          time.sleep(rndm_time)
-                          skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
-
-
-                      # IEEE
-                      if paper['ee'].startswith("http://dx.doi.org") and "ieee" in enabledScrapers:
-                        global num_of_access_in_ieee
-                        num_of_access_in_ieee += 1
                         # sleep for a random duration of time between 60 and 360 seconds
                         rndm_time = int(random.uniform(60, 360))
                         print(
-                             "Crawler sleeps for {} min - Times Access IEEE: {}".format(float(rndm_time / int(60)),
-                                                                                             num_of_access_in_ieee))
+                            "Crawler sleeps for {} min - Times Access ACM: {}".format(float(rndm_time/int(60)), num_of_access_in_acm))
                         time.sleep(rndm_time)
-                        skipped = not extract_paper_from_IEEE(paper['ee'], filename)
-                      """
-                      # AAAI
-                      """
-                      if (paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers:
-                          global num_of_access_in_aaai
-                          num_of_access_in_aaai += 1
-                          #print(paper['ee'])
+                        skipped = not extract_paper_from_ACM(paper['ee'], filename)
 
 
-                          # sleep for a random duration of time between 60 and 360 seconds
-                          rndm_time = int(random.uniform(60, 360))
-                          print(
-                              "Crawler sleeps for {} min - Times Access AAAI: {}".format(float(rndm_time/int(60)), num_of_access_in_aaai))
-                          time.sleep(rndm_time)
-                          skipped = not extract_paper_from_AAAI(paper['ee'], filename)
-
-                      # ICWSM
-                      if paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers:
-                          global num_of_access_in_icwsm
-                          num_of_access_in_icwsm += 1
-
-
-
-
+                        #raise BaseException('ACM DOI not supported yet: '+paper['dblpkey'])
+                    """
+                    #SPRINGER
+                    """
+                    if paper['ee'].startswith("http://dx.doi.org") and "springer" in enabledScrapers:
+                        global num_of_access_in_springer
+                        num_of_access_in_springer += 1
+                        # sleep for a random duration of time between 60 and 360 seconds
+                        rndm_time = int(random.uniform(60, 360))
+                        print(
+                            "Crawler sleeps for {} min - Times Access SPRINGER: {}".format(float(rndm_time/int(60)), num_of_access_in_springer))
+                        time.sleep(rndm_time)
+                        skipped = not extract_paper_from_SPRINGER(paper['ee'], filename)
 
 
-                          # sleep for a random duration of time between 60 and 360 seconds
-                          rndm_time = int(random.uniform(60, 360))
-                          print(
-                              "Crawler sleeps for {} min - Times Access ICWSM: {}".format(float(rndm_time/int(60)), num_of_access_in_icwsm))
-                          time.sleep(rndm_time)
-                          skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
-                      """
+                    # IEEE
+                    if paper['ee'].startswith("http://dx.doi.org") and "ieee" in enabledScrapers:
+                      global num_of_access_in_ieee
+                      num_of_access_in_ieee += 1
+                      # sleep for a random duration of time between 60 and 360 seconds
+                      rndm_time = int(random.uniform(60, 360))
+                      print(
+                           "Crawler sleeps for {} min - Times Access IEEE: {}".format(float(rndm_time / int(60)),
+                                                                                           num_of_access_in_ieee))
+                      time.sleep(rndm_time)
+                      skipped = not extract_paper_from_IEEE(paper['ee'], filename)
+                    """
+                    # AAAI
+                    """
+                    if (paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://aaai.org")) and "aaai" in enabledScrapers:
+                        global num_of_access_in_aaai
+                        num_of_access_in_aaai += 1
+                        #print(paper['ee'])
+
+
+                        # sleep for a random duration of time between 60 and 360 seconds
+                        rndm_time = int(random.uniform(60, 360))
+                        print(
+                            "Crawler sleeps for {} min - Times Access AAAI: {}".format(float(rndm_time/int(60)), num_of_access_in_aaai))
+                        time.sleep(rndm_time)
+                        skipped = not extract_paper_from_AAAI(paper['ee'], filename)
+
+                    # ICWSM
+                    if paper['ee'].startswith("http://www.icwsm.org") and "icwsm" in enabledScrapers:
+                        global num_of_access_in_icwsm
+                        num_of_access_in_icwsm += 1
+
+
+
+
+
+
+                        # sleep for a random duration of time between 60 and 360 seconds
+                        rndm_time = int(random.uniform(60, 360))
+                        print(
+                            "Crawler sleeps for {} min - Times Access ICWSM: {}".format(float(rndm_time/int(60)), num_of_access_in_icwsm))
+                        time.sleep(rndm_time)
+                        skipped = not extract_paper_from_ICWSM(paper['ee'], filename)
+                    """
                     if skipped:
                         logging.info(' Used local PDF copy for ' + paper['dblpkey'])
                     else:
@@ -343,13 +360,13 @@ def download_and_store(paper, db):
                         # store to mongo
                         db.publications.replace_one({'_id' : paper['_id']}, paper, upsert = True )
                         db.downloads.replace_one({'_id' : downloadinfo['_id']}, downloadinfo, upsert = True )
-            except BaseException:
-              logging.exception('Cannot download or store '+paper['ee'] + " with dblpkey: " + paper['dblpkey'], exc_info=True)
-              if storeToMongo:
-                downloadinfo['success'] = False
-                ex=sys.exc_info()
-                downloadinfo['error'] = repr(ex)
-                db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+                except BaseException:
+                    logging.exception('Cannot download or store '+paper['ee'] + " with dblpkey: " + paper['dblpkey'], exc_info=True)
+                    if storeToMongo:
+                        downloadinfo['success'] = False
+                        ex=sys.exc_info()
+                        downloadinfo['error'] = repr(ex)
+                        db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 def extract_paper_from_ICWSM(req, filename):
     """
