@@ -179,9 +179,16 @@ def main():
         mongo_search_string = {'$and': [{'booktitle': booktitle}, {'content.chapters': {'$exists': False}}]}
         process_papers(mongo_search_string)
 
+    for journal in journals:
+      print("Processing journal: {}".format(journal))
+      # {'$and': [{'booktitle': 'ESWC'}, {'content.chapters': {'$exists': True}}]}
+      # mongo_search_string = {'content.chapters': {'$exists': False}}
+      mongo_search_string = {'$and': [{'journal': journal}, {'content.chapters': {'$exists': False}}]}
+      process_papers(mongo_search_string)
+
 
     #mongo_search_string = {'content.chapters': {'$exists': False}}
-    process_papers(mongo_search_string)
+    #process_papers(mongo_search_string)
 
 if __name__ == '__main__':
     main()

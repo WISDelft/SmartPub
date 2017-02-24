@@ -133,6 +133,22 @@ def main(filter:("filter","option")=None):
                   {'$and': [{'booktitle': 'HRI'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions HRI papers", result))
 
+                # print the papers from ICARCV
+                result = db.publications.count({"booktitle": "ICARCV"})
+                print('{:>25} {:>8d}'.format("ICARCV papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'ICARCV'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ICARCV papers", result))
+
+                # print the papers from ICRA
+                result = db.publications.count({"booktitle": "ICRA"})
+                print('{:>25} {:>8d}'.format("ICRA papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'ICRA'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ICRA papers", result))
+
                 # print the papers from IEEE Trans. Robotics
                 result = db.publications.count({"journal": "IEEE Trans. Robotics"})
                 print('{:>25} {:>8d}'.format("IEEE Trans. Robotics papers", result))
