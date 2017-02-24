@@ -1,6 +1,7 @@
 import pickle
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
+from pymongo import ReturnDocument
 from pyhelpers import tools
 import config
 
@@ -27,8 +28,14 @@ def main():
     cls = pickle.load(handle)
   my_cursor = list(db.rhetorical_sentences.find({'multiLabel_cls': {'$exists': False}}))
   for res in my_cursor:
-    db.rhetorical_sentences.find_one_and_update(res,
-                                                {'$set': {"multiLabel_cls": update_classes(res['rhetorical'], cls)}})
+    doc = db.rhetorical_sentences.find_one_and_update(res,
+                                                {'$set': {"multiLabel_cls": update_classes(res['rhetorical'], cls)}},
+                                                return_document=ReturnDocument.AFTER)
+    if doc is None:
+      print("No matching query")
+    else:
+      print("{}: Updated".format(doc['paper_id']))
+
 
 if __name__ == '__main__':
     main()
