@@ -137,71 +137,91 @@ def download_and_store(paper, db):
             # with the not-supported repositories
 
             ## check if the paper was already succefully downloaded
-
+            downloadinfo = {
+              '_id': paper['ee'],
+              'url': paper['ee'],
+              'dblpkey': paper['dblpkey'],
+              'lastaccessed': datetime.datetime.now(),
+              'success': True
+            }
             down_info = db.downloads.find_one({'dblpkey' : paper['dblpkey']})
             if (down_info is None) or (down_info['success'] is False):
 
+              req = ""
+              actual_url = ""
+              url_open = ""
+              try:
 
-              req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
-              url_open = urlopen(req)
+                req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
+                url_open = urlopen(req)
+                if url_open.status != 200:
+                  raise BaseException("HTTPError {}".format(url_open.status))
+                else:
+                  downloadinfo = {}
+                  actual_url = url_open.geturl()
+                  global num_of_access
+                  # Here we need to add a time delay because we access the
+                  # sleep for a random duration of time between 60 and 360 seconds
 
+                  rndm_time = int(random.uniform(60, 360))
+                  print(
+                    "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
+                                                                                       num_of_access))
 
-
-
-              if url_open.status != 200:
-                raise BaseException("HTTPError {}".format(url_open.status))
-              else:
-                downloadinfo = {}
-                actual_url = url_open.geturl()
-                global num_of_access
-                # Here we need to add a time delay because we access the
-                # sleep for a random duration of time between 60 and 360 seconds
-
-                rndm_time = int(random.uniform(60, 360))
-                print(
-                  "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
-                                                                                   num_of_access))
-
-                num_of_access += 1
-                time.sleep(rndm_time)
-                if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or ("ieee" in str(actual_url)) or("springer" in actual_url)  or ("acm" in actual_url) or paper['ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
-                    filename = paper['dblpkey']+".pdf"
+                  num_of_access += 1
+                  time.sleep(rndm_time)
+                  if (paper['ee'].lower().endswith("pdf") and "pdf" in enabledScrapers) or (
+                    "ieee" in str(actual_url)) or ("springer" in actual_url) or ("acm" in actual_url) or paper[
+                    'ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
+                    filename = paper['dblpkey'] + ".pdf"
                     # downloadinfo is the dictionary which is later stored in the Mongo "downloads" collection to memorize
                     # which URLs have been accessed, and if that was successfull or not
-                    downloadinfo = {
-                        '_id': paper['ee'],
-                        'url': paper['ee'],
-                        'dblpkey': paper['dblpkey'],
-                        'lastaccessed': datetime.datetime.now(),
-                        'success': True
-                    }
+                    #   downloadinfo = {
+                    #       '_id': paper['ee'],
+                    #       'url': paper['ee'],
+                    #       'dblpkey': paper['dblpkey'],
+                    #       'lastaccessed': datetime.datetime.now(),
+                    #       'success': True
+                    #   }
                     # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
                     if skipPreviouslyAccessedURLs and storeToMongo:
-                        result = db.downloads.find_one({'_id': downloadinfo['_id']})
-                        if result is None:
-                            skip = False
-                        # if it wasn't successful try once more
-                        elif not result['success']:
-                          skip = False
-                        else:
-                            skip = True
-                            if result['success']:
-                                global numOfPDFobtained
-                                global paperCounter
-                                global numOfPDFobtainedInThisSession
-                                numOfPDFobtained += 1
-                                if numOfPDFobtained % statusEveryXdownloads is 0:
-                                    logging.info(
-                                        'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
-                                            paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
+                      result = db.downloads.find_one({'_id': downloadinfo['_id']})
+                      if result is None:
+                        skip = False
+                      # if it wasn't successful try once more
+                      elif not result['success']:
+                        skip = False
+                      else:
+                        skip = True
+                        if result['success']:
+                          global numOfPDFobtained
+                          global paperCounter
+                          global numOfPDFobtainedInThisSession
+                          numOfPDFobtained += 1
+                          if numOfPDFobtained % statusEveryXdownloads is 0:
+                            logging.info(
+                              'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
+                                paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
                     else:
-                        skip = False # url not in download collection of mongo db
-                else:
-                    skip = True # this ee entry is not interesting to us
-                    print("{}, Repository not supported: {}".format(paper['dblpkey'],actual_url))
-                    with open(cfg.folder_log+"not_supported_repos.txt", 'a',encoding='UTF-8') as f:
+                      skip = False  # url not in download collection of mongo db
+                  else:
+                    skip = True  # this ee entry is not interesting to us
+                    print("{}, Repository not supported: {}".format(paper['dblpkey'], actual_url))
+                    with open(cfg.folder_log + "not_supported_repos.txt", 'a', encoding='UTF-8') as f:
                       f.write(actual_url)
                       f.write("\n")
+
+
+
+              except BaseException:
+                logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
+                                  exc_info=True)
+                skip = True # error with the url_open so skip the download
+                if storeToMongo:
+                  downloadinfo['success'] = False
+                  ex = sys.exc_info()
+                  downloadinfo['error'] = repr(ex)
+                  db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
             else:
               print("{} already in DB".format(paper['dblpkey']))
               skip = True # already exist in the db
