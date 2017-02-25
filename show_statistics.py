@@ -118,11 +118,20 @@ def main(filter:("filter","option")=None):
                 print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
                 # print the papers from SOCROB
-                result = db.publications.count({"booktitle": "ICSR"})
-                print('{:>25} {:>8d}'.format("ICSR papers", result))
+                result = db.publications.count({'$and' : [{"booktitle": "ICSR"}, {'_id' : {'$regex':'socrob'}}]})
+                print('{:>25} {:>8d}'.format("ICSR (Social Robotis) papers", result))
 
                 result = db.publications.count(
-                  {'$and': [{'booktitle': 'ICSR'}, {'content.chapters': {'$exists': True}}]})
+                  {'$and': [{'booktitle': 'ICSR'}, {'content.chapters': {'$exists': True}},{'_id' : {'$regex':'socrob'}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ICSR papers", result))
+
+                # print the papers from icsr SOFTWARE REUSE
+                result = db.publications.count({'$and': [{"booktitle": "ICSR"}, {'_id': {'$regex': 'icsr'}}]})
+                print('{:>25} {:>8d}'.format("ICSR (Software Reuse) papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'ICSR'}, {'content.chapters': {'$exists': True}},
+                            {'_id': {'$regex': 'icsr'}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions ICSR papers", result))
 
                 # print the papers from HRI
