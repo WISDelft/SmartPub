@@ -157,7 +157,7 @@ def download_and_store(paper, db):
                 if url_open.status != 200:
                   raise BaseException("HTTPError {}".format(url_open.status))
                 else:
-                  downloadinfo = {}
+                  #downloadinfo = {}
                   actual_url = url_open.geturl()
                   global num_of_access
                   # Here we need to add a time delay because we access the
