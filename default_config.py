@@ -22,9 +22,10 @@ booktitles = ['JCDL','SIGIR','ECDL','TPDL','TREC', 'ICWSM', 'ESWC', 'ICSR','WWW'
 ## journals we like
 journals = ['IEEE Trans. Robotics' , 'IEEE Trans. Robotics and Automation', 'IEEE J. Robotics and Automation']
 
-
-## Update process (for later use)
-update = True
+## Update process
+updateNow = True
+checkDaily = True
+checkWeekly = True
 
 ####################### XML processing configurations #######################
 

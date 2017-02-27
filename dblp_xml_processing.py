@@ -79,7 +79,7 @@ class XmlProcessing:
     self.booktitles = cfg.booktitles
     self.journals = cfg.journals
 
-    tools.create_all_folders()
+    #tools.create_all_folders()
     # just a counter
     global numOfPDFobtained
     global numOfPDFobtainedInThisSession

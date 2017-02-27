@@ -20,7 +20,7 @@ class TextExtraction:
     # If you are interested in specific conference just add it there
     self.booktitles = cfg.booktitles
     self.journals = cfg.journals
-    tools.create_all_folders()
+
 
     for booktitle in self.booktitles:
       print("Processing booktitle: {}".format(booktitle))
