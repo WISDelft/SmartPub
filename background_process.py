@@ -6,12 +6,9 @@ import schedule
 import time
 
 def update_process():
-  try:
-    XmlProcessing()
-    TextExtraction()
-    return True
-  except BaseException:
-    return False
+  XmlProcessing()
+  TextExtraction()
+
 
 
 def main():
@@ -21,15 +18,19 @@ def main():
     update_process()
 
   if cfg.checkDaily:
-    # perform update every Monday
-    schedule.every().day.at("10:30").do(update_process)
+    # perform update every Day
+    schedule.every().day.at("18:00").do(update_process)
 
   if cfg.checkWeekly:
+    # Perform update every Friday
     schedule.every().friday.at("18:00").do(update_process)
 
   while True:
-    schedule.run_pending()
-    time.sleep(1)
+    if not cfg.checkWeekly and not cfg.checkDaily:
+      break
+    else:
+      schedule.run_pending()
+      time.sleep(1)
 
 if __name__ == '__main__':
     main()

@@ -85,11 +85,14 @@ class XmlProcessing:
     global numOfPDFobtainedInThisSession
     #numOfPDFobtained = 0
     #numOfPDFobtainedInThisSession = 0
+
+    # In each update attempt the xml files are deleted
+    # and downloaded again  overwrite= True
     # get xml files
     tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.xml.gz', incrementKB=10 * 1024,
-                                   folder=cfg.folder_dblp_xml, overwrite=False)
+                                   folder=cfg.folder_dblp_xml, overwrite=True)
     tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.dtd', incrementKB=10 * 1024,
-                                   folder=cfg.folder_dblp_xml, overwrite=False)
+                                   folder=cfg.folder_dblp_xml, overwrite=True)
 
     # open xml and iterate over xml tree to extract relevant stuff
     with gzip.open(cfg.folder_dblp_xml + "dblp.xml.gz", 'rb') as file:
