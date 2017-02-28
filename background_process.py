@@ -1,5 +1,6 @@
 from dblp_xml_processing import XmlProcessing
 from pdf_text_extractor import TextExtraction
+from classify_and_NEE import classify_and_NEEextraction
 from pyhelpers import tools
 import config as cfg
 import schedule
@@ -8,6 +9,7 @@ import time
 def update_process():
   XmlProcessing()
   TextExtraction()
+  classify_and_NEEextraction()
 
 
 
