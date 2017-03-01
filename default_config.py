@@ -23,6 +23,7 @@ booktitles = ['JCDL','SIGIR','ECDL','TPDL','TREC', 'ICWSM', 'ESWC', 'ICSR','WWW'
 journals = ['IEEE Trans. Robotics' , 'IEEE Trans. Robotics and Automation', 'IEEE J. Robotics and Automation']
 
 ## Update process
+overwriteDBLP_XML = False
 updateNow = True
 checkDaily = True
 checkWeekly = True

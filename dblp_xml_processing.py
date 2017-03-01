@@ -42,7 +42,16 @@ class XmlProcessing:
     Initialize the xml processing thingy
     """
     # set to true if you want to persist to a local mongo DB (default connection)
+
     self.storeToMongo = cfg.storeToMongo
+
+    print('Conference of Interest: {}'.format(cfg.booktitles))
+    print('Journals of Interest: {}'.format(cfg.journals))
+
+
+
+    # create all the  folders
+    tools.create_all_folders()
 
     # initialize connection to local mongoDB, database is named pub
     if self.storeToMongo:
@@ -54,6 +63,10 @@ class XmlProcessing:
     # this only works if storeToMongo is set to True because the MongoDB must be accessed for that. (if you set storeToMongo to false, I will
     # just assume that MongoDB is simply not active / there
     self.skipPreviouslyAccessedURLs = cfg.skipPreviouslyAccessedURLs
+
+    # if they are new additions of papers this variable will be True
+    # if it is true then proceed to the text_extraction phase
+    self.newPapersIn= False
 
     # the categories you are interested in
     self.CATEGORIES = cfg.CATEGORIES
@@ -90,9 +103,9 @@ class XmlProcessing:
     # and downloaded again  overwrite= True
     # get xml files
     tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.xml.gz', incrementKB=10 * 1024,
-                                   folder=cfg.folder_dblp_xml, overwrite=True)
+                                   folder=cfg.folder_dblp_xml, overwrite=cfg.overwriteDBLP_XML)
     tools.downloadFileWithProgress('http://dblp.uni-trier.de/xml/dblp.dtd', incrementKB=10 * 1024,
-                                   folder=cfg.folder_dblp_xml, overwrite=True)
+                                   folder=cfg.folder_dblp_xml, overwrite=cfg.overwriteDBLP_XML)
 
     # open xml and iterate over xml tree to extract relevant stuff
     with gzip.open(cfg.folder_dblp_xml + "dblp.xml.gz", 'rb') as file:
@@ -128,32 +141,35 @@ class XmlProcessing:
     :return:
     """
     global paperCounter
-    for paperCounter, element in enumerate(self.extract_paper_elements(context)):
-      # extract basic metadata from the dblp XML
-      paper = {
-        'type': element.tag
-        # 'mdate': element.get("mdate"),
-      }
-      if 'key' in element.attrib:
-        paper['dblpkey'] = element.get('key', default=None)
-      else:
-        paper['dblpkey'] = None
-      if paper['dblpkey'] is not None:
-        paper['dblpkey'] = tools.normalizeDBLPkey(paper['dblpkey'])
+    try:
+      for paperCounter, element in enumerate(self.extract_paper_elements(context)):
+        # extract basic metadata from the dblp XML
+        paper = {
+          'type': element.tag
+          # 'mdate': element.get("mdate"),
+        }
+        if 'key' in element.attrib:
+          paper['dblpkey'] = element.get('key', default=None)
+        else:
+          paper['dblpkey'] = None
+        if paper['dblpkey'] is not None:
+          paper['dblpkey'] = tools.normalizeDBLPkey(paper['dblpkey'])
 
-      paper['authors'] = [author.text for author in element.findall("author")]
-      for data_item in self.DATA_ITEMS:
-        data = element.find(data_item)
-        if data is not None:
-          paper[data_item] = data.text
+        paper['authors'] = [author.text for author in element.findall("author")]
+        for data_item in self.DATA_ITEMS:
+          data = element.find(data_item)
+          if data is not None:
+            paper[data_item] = data.text
 
-      if paper['type'] not in self.SKIP_CATEGORIES:
-        # try to download and store the thing if it is not in one of the skipped categories
-        self.download_and_store(paper, db)
-      # print(paperCounter, paperCounter % statusEveryXxmlLoops)
-      if (paperCounter % self.statusEveryXxmlLoops) == 0:
-        print('.', end="")
-        sys.stdout.flush()
+        if paper['type'] not in self.SKIP_CATEGORIES:
+          # try to download and store the thing if it is not in one of the skipped categories
+          self.download_and_store(paper, db)
+        # print(paperCounter, paperCounter % statusEveryXxmlLoops)
+        if (paperCounter % self.statusEveryXxmlLoops) == 0:
+          print('.', end="")
+          sys.stdout.flush()
+    except etree.XMLSyntaxError:
+      print("End of XML file")
 
 
   def download_and_store(self, paper, db):
@@ -203,6 +219,7 @@ class XmlProcessing:
           'success': True
         }
         print("Publication matched: " + str(paper["dblpkey"]))
+
         down_info = db.downloads.find_one({'dblpkey': paper['dblpkey']})
         if (down_info is None) or (down_info['success'] is False):
 
@@ -285,11 +302,13 @@ class XmlProcessing:
             # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
             if paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers:
               # Normal PDF download
+              self.newPapersIn = True  # There are new additions
               skipped = not tools.downloadFile(downloadinfo['url'], overwrite=False, folder=cfg.folder_pdf,
                                                localfilename=filename)
 
             if "springer" in actual_url:
               # go to springer crawller
+              self.newPapersIn = True  # There are new additions
               global num_of_access_in_springer
               num_of_access_in_springer += 1
               print("{}, publisher: Springer, #Access: {}".format(paper['dblpkey'], num_of_access_in_springer))
@@ -297,6 +316,7 @@ class XmlProcessing:
 
             elif "acm" in actual_url:
               # go to acm crawler
+              self.newPapersIn = True  # There are new additions
               global num_of_access_in_acm
               num_of_access_in_acm += 1
               print("{}, publisher: ACM, #Access: {}".format(paper['dblpkey'], num_of_access_in_acm))
@@ -304,6 +324,7 @@ class XmlProcessing:
 
             elif "ieee" in actual_url:
               # go to ieee crawler
+              self.newPapersIn = True  # There are new additions
               global num_of_access_in_ieee
               num_of_access_in_ieee += 1
               print("{}, publisher: IEEE, #Access: {}".format(paper['dblpkey'], num_of_access_in_ieee))
@@ -311,6 +332,7 @@ class XmlProcessing:
 
             elif paper['ee'].startswith("http://www.aaai.org"):
               # go to aaai crawler
+              self.newPapersIn = True  # There are new additions
               global num_of_access_in_aaai
               num_of_access_in_aaai += 1
               print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
@@ -318,6 +340,7 @@ class XmlProcessing:
 
             elif paper['ee'].startswith("http://www.icwsm.org"):
               # got to icwsm crawler
+              self.newPapersIn = True  # There are new additions
               global num_of_access_in_icwsm
               num_of_access_in_icwsm += 1
               print("{}, publisher: ICWSM, #Access: {}".format(paper['dblpkey'], num_of_access_in_icwsm))

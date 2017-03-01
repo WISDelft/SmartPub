@@ -27,7 +27,7 @@ class classify_and_NEEextraction:
 
 
   def vectorize(self, labeleddata, name_of_class):
-      with open('classifiers/vectorizer_' + name_of_class + '.pkl', 'rb') as pickle_file:
+      with open(cfg.folder_classifiers+'vectorizer_' + name_of_class + '.pkl', 'rb') as pickle_file:
           vectorizer = cPickle.load(pickle_file)
       X = vectorizer.transform(labeleddata)
       return X
@@ -35,7 +35,7 @@ class classify_and_NEEextraction:
 
   def classify_sentence(self, sent, name_of_class):
       X = self.vectorize(sent, name_of_class)
-      with open('classifiers/LogisticR_' + name_of_class + '_classifier.pkl', 'rb') as pickle_file:
+      with open(cfg.folder_classifiers+'LogisticR_' + name_of_class + '_classifier.pkl', 'rb') as pickle_file:
           clf = cPickle.load(pickle_file)
 
       label = clf.predict(X)
@@ -185,7 +185,7 @@ class classify_and_NEEextraction:
                               for j in range(len(label)):
                                   if label[j] == 1:
 
-                                    self.store_rhetorical_in_mongo(db, rhet_id, i, paper['dblpkey'],processed_sentences[j], cls, self.update_classes(multi_label[i]), len(processed_sentences))
+                                    self.store_rhetorical_in_mongo(db, rhet_id, i, paper['dblpkey'],processed_sentences[j], cls, self.update_classes(multi_label[j]), len(processed_sentences))
                                     textrazor_ent = []
                                     if response:
                                         for entity in response.entities():
@@ -194,7 +194,7 @@ class classify_and_NEEextraction:
                                             tokens = processed_sentences[j].lower()
                                             if entity.id.lower() in tokens:
                                               if not wordnet.synsets(entity.id.lower()):
-                                                self.store_ner_in_mongo(db, ner_id, cls, self.update_classes(multi_label[i]), i, paper['dblpkey'], rhet_id,
+                                                self.store_ner_in_mongo(db, ner_id, cls, self.update_classes(multi_label[j]), i, paper['dblpkey'], rhet_id,
                                                                          entity.id,
                                                                          entity.relevance_score,
                                                                          entity.confidence_score,
@@ -202,7 +202,7 @@ class classify_and_NEEextraction:
                                                                          entity.dbpedia_types,
                                                                          len(response.entities()),0)
                                               else:
-                                                self.store_ner_in_mongo(db, ner_id, cls, self.update_classes(multi_label[i]), i, paper['dblpkey'], rhet_id,
+                                                self.store_ner_in_mongo(db, ner_id, cls, self.update_classes(multi_label[j]), i, paper['dblpkey'], rhet_id,
                                                                          entity.id,
                                                                          entity.relevance_score,
                                                                          entity.confidence_score,
