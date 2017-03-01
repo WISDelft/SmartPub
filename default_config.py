@@ -28,6 +28,15 @@ updateNow = True
 checkDaily = True
 checkWeekly = True
 
+## Only pdf download
+only_pdf_download = False
+
+## Only text extraction
+only_text_extraction = False
+
+## Only classify and name entity extraction
+only_classify_nee = True
+
 ####################### XML processing configurations #######################
 
 # set to true if you want to persist to a local mongo DB (default connection)
