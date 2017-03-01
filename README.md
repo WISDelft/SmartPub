@@ -85,8 +85,8 @@ Grobid needs to be installed and running on the machine in order for this to wor
 stores it back into the MongoDB entry of the publication (currently, that will be the abstract, a stripped version of the fulltext and all the chapters of each publication). Note that currently, the script seems to support only UTF-8 characters. Weird UTF-16-only characters
 gets lost during extraction. se ```nohup python pdf_text_extractor.py &``` to run this on the server. You likely do not want to run this on your own machine.
 
-- **classift_NEE.py**: Extract, rhetorical sentences, Name Entities and classify them in 5 different facetts (Maethod, Dataset, Objective, Result, Software).
-Get the text from each publication and use the nltk sentece tokenizer to parse each sentence separately. Then we classify each sentence using 2 trained classifiers, one classifier based on our voucabulary and one classifier using multilabel techniques. The Name entity extraction is done using the TextRazon which is a name entity extractor and we classify each name entity based on the label of the rhetorical sentence from which derived. From these process we have two main collections, the rhetorical_sentences and sentences_ner that contain the sentences and the name entities.
+- **classift_NEE.py**: Extract, rhetorical sentences, Name Entities and classify them in 5 different facets (Method, Dataset, Objective, Result, Software).
+Get the text from each publication and use the nltk sentece tokenizer to parse each sentence separately. Then we classify each sentence using 2 trained classifiers, one classifier based on our voucabulary and one classifier using multilabel techniques. The Name entity extraction is done using the TextRazor API which is a name entity extractor and we classify each name entity based on the label of the rhetorical sentence from which derived. From these process we have two main collections, the rhetorical_sentences and sentences_ner that contain the sentences and the name entities.
 
 ## Auxiliary code
 
