@@ -66,6 +66,22 @@ def main():
     # Perform update every Friday
     schedule.every().friday.at("18:00").do(update_process)
 
+  # In order to perform  separetly one of the three
+  # main phases, all the update features need to be False
+  if cfg.updateNow is False and cfg.checkDaily is False and cfg.checkWeekly is False:
+
+    if cfg.only_pdf_download:
+      print("Perform XML processing!")
+      XmlProcessing()
+
+    if cfg.only_text_extraction:
+      print("Perform Text Extraction processing!")
+      TextExtraction()
+
+    if cfg.only_classify_nee:
+      print("Perform Rhetorical/Name entity extraction and classify!")
+      classify_and_NEEextraction()
+
   while True:
     if not cfg.checkWeekly and not cfg.checkDaily:
       break
