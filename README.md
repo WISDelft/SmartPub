@@ -66,20 +66,29 @@ You will need to register your public RSA key first! (ask Christoph) The name of
 # Quick Overview of relevant files:
 
 - **config_default.py**: Default config file. Copy this file, and rename it ```config.py```, and change it in order to have your own configuration. 
-One thing you might want to change is for example the MongoDB port to 4321 if you use the remote Mongo instance on SURFsara. 
+One thing you might want to change is for example the MongoDB port to 4321 if you use the remote Mongo instance on SURFsara. In this files you can define an automated process by modifing the Update features like overwriteDBLP_XML, updateNow, checkDaily and
+checkWeekly. These features will enable an ongoing process that will check for any recent updates/changes that occur in the dblp xml file. 
 
 - **config.py**: This file should not exist, and you create it yourself as described above. Don't check the new ```config.py``` into GitHub... Put it into your ```.gitignore```
 
+## The backbone of SmartPub
 - **dblp_xml-processing.py**: This will download the full XML file from DBLP, scan through it, find all PDF links, and tries to download the respective papers. 
 If a paper could be downloaded, an entry with limited metadata (title, authors, journal/conference, year) will be stored in a local MongoDB database named "pub", in a collection named "publications".
 It also logs each attempt of downloading something in a collection called "downloads". By default, you can simple start this file, and it will skip all papers / downloads it has tried before, therefore it is suitable
 for incrementally building a library. Use ```nohup python dblp_xml_processing.py &``` to run this on the server. You likely do not want to run this on your own machine.
-You can also provide a filter property like this: ```-filter="{'booktitle' : 'SIGIR', 'year' : '2015'}"``` or ```-filter="{'journal' : 'PVLDB'}"```
+For more targeted searching and filtering, the user should provide the conferences/journals of interest in the config.py along side with other XML processing configurations like storeToMongo, skipPreviouslyAccessedURLs, CATEGORIES, SKIP_CATEGORIES and DATA_ITEMS. The process is able to download publications from six Digital Libraries: ACM, SPRINGER, IEEE, AAAI, ICWSM, and from open source digital libraries. 
+
+This is out: You can also provide a filter property like this: ```-filter="{'booktitle' : 'SIGIR', 'year' : '2015'}"``` or ```-filter="{'journal' : 'PVLDB'}"```
 
 - **pdf_text_extractor.py**: Work in progress. You can specify a MongoDB search string, and then it tries to extract content from all papers which match that search. 
 Grobid needs to be installed and running on the machine in order for this to work. As grobid is rather slow, the resulting TEI XML will be cached. Then, the script extracts relevant content from the TEI and 
-stores it back into the MongoDB entry of the publication (currently, that will be the abstract and a stripped version of the fulltext). Note that currently, the script seems to support only UTF-8 characters. Weird UTF-16-only characters
+stores it back into the MongoDB entry of the publication (currently, that will be the abstract, a stripped version of the fulltext and all the chapters of each publication). Note that currently, the script seems to support only UTF-8 characters. Weird UTF-16-only characters
 gets lost during extraction. se ```nohup python pdf_text_extractor.py &``` to run this on the server. You likely do not want to run this on your own machine.
+
+- **classift_NEE.py**: Extract, rhetorical sentences, Name Entities and classify them in 5 different facetts (Maethod, Dataset, Objective, Result, Software).
+Get the text from each publication and use the nltk sentece tokenizer to parse each sentence separately. Then we classify each sentence using 2 trained classifiers, one classifier based on our voucabulary and one classifier using multilabel techniques. The Name entity extraction is done using the TextRazon which is a name entity extractor and we classify each name entity based on the label of the rhetorical sentence from which derived. From these process we have two main collections, the rhetorical_sentences and sentences_ner that contain the sentences and the name entities.
+
+## Auxiliary code
 
 - **access_fulltexts.py**: Simple example script for demonstrating how you can access the fulltexts via MongoDB and the aforementioned SSH tunnel from the SURFsara server (assuming you configured ````config.py```correctly)
 
