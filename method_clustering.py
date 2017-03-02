@@ -58,34 +58,37 @@ def facet_embedding(db):
 
   return docs
 
-"""
-The matplot give error on the server!!
-  def plot_shilouete(X, min_k, max_k):
-    s = []
+
+#The matplot give error on the server!!
+def calculate_s_scores(X, min_k, max_k):
+  s = []
+  with open(cfg.folder_culsters + "silhouette_scores_between_{}_{}.csv".format(min_k,max_k), 'w', encoding="UTF-8") as f:
     for n_clusters in range(min_k, max_k):
       kmeans = KMeans(n_clusters=n_clusters, init='k-means++', max_iter=100, n_init=1)
       kmeans.fit(X)  # instead of the countvectorizer
 
       labels = kmeans.labels_
       centroids = kmeans.cluster_centers_
-
-      s.append(silhouette_score(X, labels, sample_size=10000))
-    x = range(15, 30)
-    y = s
-    # my_xticks = np.arange(2, 40, 5)
-    # markers_on = [20,22] #, 'rD', markevery=markers_on
-    # k = [2,4,11,15,26,34]
-    plt.show()
-    plt.xticks(np.arange(min(x), max(x) + 1, 2))
-    plt.yticks(np.arange(min(y), max(y), 0.001))
-    plt.xlabel("k-values")
-    plt.ylabel("Silouette")
-    plt.title("Silouette for K-means cell's behaviour")
-    plt.plot(x, y)
-    #plt.plot(x, y, 'rD', markevery=[3, 5, 9, 13])
-    plt.grid(axis='y', linestyle='-')
-    plt.savefig(cfg.folder_culsters +'silhouette_4_kmeans_methods_large.png', bbox_inches='tight')
-    plt.show()
+      f.write("{},{}".format(n_clusters,silhouette_score(X, labels)))
+      f.write("\n")
+      #s.append(silhouette_score(X, labels, sample_size=10000))
+"""
+  x = range(15, 30)
+  y = s
+  # my_xticks = np.arange(2, 40, 5)
+  # markers_on = [20,22] #, 'rD', markevery=markers_on
+  # k = [2,4,11,15,26,34]
+  plt.show()
+  plt.xticks(np.arange(min(x), max(x) + 1, 2))
+  plt.yticks(np.arange(min(y), max(y), 0.001))
+  plt.xlabel("k-values")
+  plt.ylabel("Silouette")
+  plt.title("Silouette for K-means cell's behaviour")
+  plt.plot(x, y)
+  #plt.plot(x, y, 'rD', markevery=[3, 5, 9, 13])
+  plt.grid(axis='y', linestyle='-')
+  plt.savefig(cfg.folder_culsters +'silhouette_4_kmeans_methods_large.png', bbox_inches='tight')
+  plt.show()
 """
 
 
@@ -141,8 +144,8 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  #plot_shilouete(X=X, min_k = 5 , max_k = 10)
-  write_clusters(X=X, k_values= [5], svd=svd, vectorizer=vectorizer)
+  calculate_s_scores(X=X, min_k = 5 , max_k = 30)
+  write_clusters(X=X, k_values= [5,10,15,20,28,30], svd=svd, vectorizer=vectorizer)
 
 
 
