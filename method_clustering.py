@@ -30,9 +30,18 @@ def hasNumbers(inputString):
 def facet_embedding(db):
   papers = db.sentences_ner.distinct('paper_id')
   docs = []
+  conf_flag = False
+  journal_flag = False
+
   for p in papers:
     find_paper = db.publications.find({'_id':p})
-    if find_paper in cfg.booktitles or find_paper in cfg.journals:
+    if 'booktitle' in find_paper and find_paper['booktitle'] in cfg.booktitles:
+      conf_flag = True
+
+    if 'journal' in find_paper and find_paper['journal'] in cfg.journals:
+      journal_flag = True
+
+    if conf_flag or journal_flag:
       ners = db.sentences_ner.distinct('ner', {'paper_id': p, 'inWordnet': 0})
       methodsString = ''
       for ne in ners:
@@ -44,6 +53,9 @@ def facet_embedding(db):
           methodsString = methodsString + str(ne) + ' '
 
       docs.append(methodsString)
+    conf_flag = False
+    journal_flag = False
+
   return docs
 
 
@@ -76,6 +88,8 @@ def plot_shilouete(X, min_k, max_k):
 
 
 def write_clusters(X,k_values,svd,vectorizer):
+  print()
+  print("Write results in Methods_Clusters_ROBOTS.csv ")
   with open(cfg.folder_culsters + "Methods_Clusters_ROBOTS.csv", 'w', encoding="UTF-8") as f:
     for k in k_values:
       km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
@@ -100,17 +114,26 @@ def write_clusters(X,k_values,svd,vectorizer):
 def main():
 
   db = tools.connect_to_mongo()
+  print("Collect list of NEE per publication")
   documents = facet_embedding(db)
+  print()
+  print("Create tfidfVectorixaer")
   vectorizer = TfidfVectorizer(ngram_range=(1, 1),lowercase= False)
 
+  print()
+  print("Fit documents tfidfVectorixaer")
   X = vectorizer.fit_transform(documents)
   Xc = (X.T * X)
   len(vectorizer.get_feature_names())
 
+  print()
+  print("Create SVD pipeline with {} components and normalization".format(900))
   svd = decomposition.TruncatedSVD(n_components=900, n_iter=5)
   normalizer = Normalizer(copy=False)
   lsa = make_pipeline(svd, normalizer)
 
+  print()
+  print("Fit SVD+Normalization")
   X = lsa.fit_transform(Xc)
 
   explained_variance = svd.explained_variance_ratio_.sum()
