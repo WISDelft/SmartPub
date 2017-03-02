@@ -34,7 +34,7 @@ def facet_embedding(db):
   journal_flag = False
 
   for p in papers:
-    find_paper = db.publications.find({'_id':p})
+    find_paper = db.publications.find_one({'_id':p})
     if 'booktitle' in find_paper and find_paper['booktitle'] in cfg.booktitles:
       conf_flag = True
 
