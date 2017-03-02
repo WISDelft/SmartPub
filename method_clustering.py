@@ -42,7 +42,7 @@ def facet_embedding(db):
       journal_flag = True
 
     if conf_flag or journal_flag:
-      ners = db.sentences_ner.distinct('ner', {'paper_id': p, 'inWordnet': 0})
+      ners = db.sentences_ner.distinct('ner', {'paper_id': p, 'multiLabel_cls': {'$in': ['method']}, 'inWordnet': 0})
       methodsString = ''
       for ne in ners:
         isint = is_int_or_float(ne)
