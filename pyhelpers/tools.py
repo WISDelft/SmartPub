@@ -150,6 +150,13 @@ def create_all_folders():
     os.makedirs(cfg.folder_pdf, exist_ok=True)
     os.makedirs(cfg.folder_log, exist_ok=True)
 
+    # New additions
+    os.makedirs(cfg.folder_datasets, exist_ok=True)
+    os.makedirs(cfg.folder_classifiers, exist_ok=True)
+    os.makedirs(cfg.folder_pickle, exist_ok=True)
+    os.makedirs(cfg.folder_culsters, exist_ok=True)
+
+
 ##
 def setup_logging(file_name = "last_log.log"):
     # setup logging
