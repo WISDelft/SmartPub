@@ -309,85 +309,85 @@ class XmlProcessing:
           else:
             db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo)
             skip = True
-      else:
-        print("{} already in DB".format(paper['dblpkey']))
-        skip = True  # already exist in the db
+        else:
+          print("{} already in DB".format(paper['dblpkey']))
+          skip = True  # already exist in the db
 
         # Do the Download and store to MongoDB
-      if not skip:
-        try:
+        if not skip:
+          try:
 
-          # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
-          if paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers:
-            # Normal PDF download
-            self.newPapersIn = True  # There are new additions
-            skipped = not tools.downloadFile(downloadinfo['url'], overwrite=False, folder=cfg.folder_pdf,
-                                               localfilename=filename)
+            # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
+            if paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers:
+              # Normal PDF download
+              self.newPapersIn = True  # There are new additions
+              skipped = not tools.downloadFile(downloadinfo['url'], overwrite=False, folder=cfg.folder_pdf,
+                                                 localfilename=filename)
 
-          elif "springer" in actual_url:
-            # go to springer crawller
-            self.newPapersIn = True  # There are new additions
-            global num_of_access_in_springer
-            num_of_access_in_springer += 1
-            print("{}, publisher: Springer, #Access: {}".format(paper['dblpkey'], num_of_access_in_springer))
-            skipped = not self.extract_paper_from_SPRINGER(url_open, filename)
+            elif "springer" in actual_url:
+              # go to springer crawller
+              self.newPapersIn = True  # There are new additions
+              global num_of_access_in_springer
+              num_of_access_in_springer += 1
+              print("{}, publisher: Springer, #Access: {}".format(paper['dblpkey'], num_of_access_in_springer))
+              skipped = not self.extract_paper_from_SPRINGER(url_open, filename)
 
-          elif "acm" in actual_url:
-            # go to acm crawler
-            self.newPapersIn = True  # There are new additions
-            global num_of_access_in_acm
-            num_of_access_in_acm += 1
-            print("{}, publisher: ACM, #Access: {}".format(paper['dblpkey'], num_of_access_in_acm))
-            skipped = not self.extract_paper_from_ACM(url_open, filename)
+            elif "acm" in actual_url:
+              # go to acm crawler
+              self.newPapersIn = True  # There are new additions
+              global num_of_access_in_acm
+              num_of_access_in_acm += 1
+              print("{}, publisher: ACM, #Access: {}".format(paper['dblpkey'], num_of_access_in_acm))
+              skipped = not self.extract_paper_from_ACM(url_open, filename)
 
-          elif "ieee" in actual_url:
-            # go to ieee crawler
-            self.newPapersIn = True  # There are new additions
-            global num_of_access_in_ieee
-            num_of_access_in_ieee += 1
-            print("{}, publisher: IEEE, #Access: {}".format(paper['dblpkey'], num_of_access_in_ieee))
-            skipped = not self.extract_paper_from_IEEE(url_open, filename)
+            elif "ieee" in actual_url:
+              # go to ieee crawler
+              self.newPapersIn = True  # There are new additions
+              global num_of_access_in_ieee
+              num_of_access_in_ieee += 1
+              print("{}, publisher: IEEE, #Access: {}".format(paper['dblpkey'], num_of_access_in_ieee))
+              skipped = not self.extract_paper_from_IEEE(url_open, filename)
 
-          elif paper['ee'].startswith("http://www.aaai.org"):
-            # go to aaai crawler
-            self.newPapersIn = True  # There are new additions
-            global num_of_access_in_aaai
-            num_of_access_in_aaai += 1
-            print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
-            skipped = not self.extract_paper_from_AAAI(actual_url, filename)
+            elif paper['ee'].startswith("http://www.aaai.org"):
+              # go to aaai crawler
+              self.newPapersIn = True  # There are new additions
+              global num_of_access_in_aaai
+              num_of_access_in_aaai += 1
+              print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
+              skipped = not self.extract_paper_from_AAAI(actual_url, filename)
 
-          elif paper['ee'].startswith("http://www.icwsm.org"):
-            # got to icwsm crawler
-            self.newPapersIn = True  # There are new additions
-            global num_of_access_in_icwsm
-            num_of_access_in_icwsm += 1
-            print("{}, publisher: ICWSM, #Access: {}".format(paper['dblpkey'], num_of_access_in_icwsm))
-            skipped = not self.extract_paper_from_ICWSM(paper['ee'], filename)
+            elif paper['ee'].startswith("http://www.icwsm.org"):
+              # got to icwsm crawler
+              self.newPapersIn = True  # There are new additions
+              global num_of_access_in_icwsm
+              num_of_access_in_icwsm += 1
+              print("{}, publisher: ICWSM, #Access: {}".format(paper['dblpkey'], num_of_access_in_icwsm))
+              skipped = not self.extract_paper_from_ICWSM(paper['ee'], filename)
 
-          else:
-            skipped = True
+            else:
+              skipped = True
 
-          if skipped:
-            logging.info(' Used local PDF copy for ' + paper['dblpkey'])
-          else:
-            logging.info(' Downloaded ' + paper['dblpkey'])
-            # global numOfPDFobtainedInThisSession
-            numOfPDFobtainedInThisSession += 1
-            # store
+            if skipped:
+              logging.info(' Used local PDF copy for ' + paper['dblpkey'])
+            else:
+              logging.info(' Downloaded ' + paper['dblpkey'])
+              # global numOfPDFobtainedInThisSession
+              numOfPDFobtainedInThisSession += 1
+              # store
+              if self.storeToMongo:
+                # set additional data
+                paper['_id'] = paper['dblpkey']
+                # store to mongo
+                db.publications.replace_one({'_id': paper['_id']}, paper, upsert=True)
+                db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+          except BaseException:
+            logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
+                                exc_info=True)
             if self.storeToMongo:
-              # set additional data
-              paper['_id'] = paper['dblpkey']
-              # store to mongo
-              db.publications.replace_one({'_id': paper['_id']}, paper, upsert=True)
+              downloadinfo['success'] = False
+              ex = sys.exc_info()
+              downloadinfo['error'] = repr(ex)
               db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
-        except BaseException:
-          logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
-                              exc_info=True)
-          if self.storeToMongo:
-            downloadinfo['success'] = False
-            ex = sys.exc_info()
-            downloadinfo['error'] = repr(ex)
-            db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 
   def extract_paper_from_ICWSM(self, req, filename):
