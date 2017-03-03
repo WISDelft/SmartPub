@@ -241,6 +241,7 @@ class XmlProcessing:
             req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
             url_open = urlopen(req)
             if url_open.status != 200:
+              skip = True
               raise BaseException("HTTPError {}".format(url_open.status))
             else:
               # downloadinfo = {}
@@ -273,6 +274,7 @@ class XmlProcessing:
                   else:
                     skip = True
                     if result['success']:
+                      skip = True
                       global numOfPDFobtained
                       global paperCounter
                       global numOfPDFobtainedInThisSession
