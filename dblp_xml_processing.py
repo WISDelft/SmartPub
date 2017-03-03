@@ -288,6 +288,9 @@ class XmlProcessing:
               else:
                 skip = True  # this ee entry is not interesting to us
                 print("{}, Repository not supported: {}".format(paper['dblpkey'], actual_url))
+                downloadinfo['success'] = False
+                downloadinfo['error'] = "{}, Repository not supported: {}".format(paper['dblpkey'], actual_url)
+                db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
                 with open(cfg.folder_log + "not_supported_repos.txt", 'a', encoding='UTF-8') as f:
                   f.write(actual_url)
                   f.write("\n")
