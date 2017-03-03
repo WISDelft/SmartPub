@@ -41,11 +41,11 @@ def exist_papers_with_out_content():
 
 @catch_exceptions(cancel_on_failure=False)
 def update_process():
-  XmlProcessing()
+  XmlProcessing(booktitles=None, journals=None)
   if exist_papers_with_out_content():
     # if there are papers with out content proceed to text extraction & classify_NEE
-    TextExtraction()
-    classify_and_NEEextraction()
+    TextExtraction(booktitles=None, journals=None)
+    classify_and_NEEextraction(booktitles=None, journals=None)
   else:
     print("No new paper additions!")
 
@@ -54,40 +54,66 @@ def update_process():
 
 def main():
   # create all the necessary folders
+  import argparse
+  parser = argparse.ArgumentParser()
 
-  if cfg.updateNow:
-    update_process()
+  # optional parameters to increase the modularity of the script
+  # you can start multiple parallel scripts with different conferences or journals
+  parser.add_argument("--conf", help="Provide the (Only one) conference you like")
+  parser.add_argument("--journal", help="Provide the (Only one) journal you like")
+  args, leftovers = parser.parse_known_args()
 
-  if cfg.checkDaily:
-    # perform update every Day
-    schedule.every().day.at("18:00").do(update_process)
+  booktitles = None
+  journals = None
 
-  if cfg.checkWeekly:
-    # Perform update every Friday
-    schedule.every().friday.at("18:00").do(update_process)
+  if args.conf is None and args.journal is None:
+    print("No optional parameter proceed with configuration file")
+    if cfg.updateNow:
+      update_process()
 
-  # In order to perform  separetly one of the three
-  # main phases, all the update features need to be False
-  if cfg.updateNow is False and cfg.checkDaily is False and cfg.checkWeekly is False:
+    if cfg.checkDaily:
+      # perform update every Day
+      schedule.every().day.at("18:00").do(update_process)
 
-    if cfg.only_pdf_download:
-      print("Perform XML processing!")
-      XmlProcessing()
+    if cfg.checkWeekly:
+      # Perform update every Friday
+      schedule.every().friday.at("18:00").do(update_process)
 
-    if cfg.only_text_extraction:
-      print("Perform Text Extraction processing!")
-      TextExtraction()
+    # In order to perform  separetly one of the three
+    # main phases, all the update features need to be False
+    if cfg.updateNow is False and cfg.checkDaily is False and cfg.checkWeekly is False:
 
-    if cfg.only_classify_nee:
-      print("Perform Rhetorical/Name entity extraction and classify!")
-      classify_and_NEEextraction()
+      if cfg.only_pdf_download:
+        print("Perform XML processing!")
+        XmlProcessing(booktitles=None, journals=None)
 
-  while True:
-    if not cfg.checkWeekly and not cfg.checkDaily:
-      break
-    else:
-      schedule.run_pending()
-      time.sleep(1)
+      if cfg.only_text_extraction:
+        print("Perform Text Extraction processing!")
+        TextExtraction(booktitles=None, journals=None)
+
+      if cfg.only_classify_nee:
+        print("Perform Rhetorical/Name entity extraction and classify!")
+        classify_and_NEEextraction(booktitles=None, journals=None)
+
+    while True:
+      if not cfg.checkWeekly and not cfg.checkDaily:
+        break
+      else:
+        schedule.run_pending()
+        time.sleep(1)
+
+  elif args.conf is not None or args.journal is not None:
+    if args.conf is not None:
+      booktitles = [str(args.conf)]
+    if args.journal is not None:
+      journals = [str(args.journal)]
+
+    XmlProcessing(booktitles=booktitles, journals=journals)
+    TextExtraction(booktitles=booktitles, journals=journals)
+    classify_and_NEEextraction(booktitles=booktitles, journals=journals)
+
+
+
 
 if __name__ == '__main__':
     main()

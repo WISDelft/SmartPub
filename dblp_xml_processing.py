@@ -37,7 +37,7 @@ numOfPDFobtainedInThisSession = 0
 
 class XmlProcessing:
 
-  def __init__(self):
+  def __init__(self, booktitles, journals):
     """
     Initialize the xml processing thingy
     """
@@ -45,9 +45,21 @@ class XmlProcessing:
 
     self.storeToMongo = cfg.storeToMongo
 
-    print('Conference of Interest: {}'.format(cfg.booktitles))
-    print('Journals of Interest: {}'.format(cfg.journals))
+    if booktitles is None:
+      # GET THE VENUES WE LIKE from config.py
+      self.booktitles = cfg.booktitles
+      print('Conference of Interest: {}'.format(cfg.booktitles))
+    else:
+      self.booktitles = booktitles
+      print('Conference of Interest: {}'.format(self.booktitles))
 
+    if journals is None:
+      # GET THE VENUES WE LIKE from config.py
+      self.journals = cfg.journals
+      print('Journals of Interest: {}'.format(cfg.journals))
+    else:
+      self.journals = journals
+      print('Journals of Interest: {}'.format(self.journals))
 
 
     # create all the  folders
@@ -88,9 +100,7 @@ class XmlProcessing:
 
 
 
-    # GET THE VENUES WE LIKE
-    self.booktitles = cfg.booktitles
-    self.journals = cfg.journals
+
 
     #tools.create_all_folders()
     # just a counter

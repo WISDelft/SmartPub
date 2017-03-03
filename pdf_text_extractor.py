@@ -14,13 +14,28 @@ import os
 
 class TextExtraction:
 
-  def __init__(self):
+  def __init__(self, booktitles, journals):
 
     # The booktitles are located in the config.py
     # If you are interested in specific conference just add it there
-    self.booktitles = cfg.booktitles
-    self.journals = cfg.journals
+    #self.booktitles = cfg.booktitles
+    #self.journals = cfg.journals
 
+    if booktitles is None:
+      # GET THE VENUES WE LIKE from config.py
+      self.booktitles = cfg.booktitles
+      print('Conference of Interest: {}'.format(cfg.booktitles))
+    else:
+      self.booktitles = booktitles
+      print('Conference of Interest: {}'.format(self.booktitles))
+
+    if journals is None:
+      # GET THE VENUES WE LIKE from config.py
+      self.journals = cfg.journals
+      print('Journals of Interest: {}'.format(cfg.journals))
+    else:
+      self.journals = journals
+      print('Journals of Interest: {}'.format(self.journals))
 
     for booktitle in self.booktitles:
       print("Processing booktitle: {}".format(booktitle))

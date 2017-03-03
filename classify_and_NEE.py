@@ -10,12 +10,28 @@ from nltk.corpus import wordnet
 
 class classify_and_NEEextraction:
 
-  def __init__(self):
+  def __init__(self, booktitles, journals):
 
     textrazor.api_key = "9f466f8622a88d099f740d54b435845746914cbc43c831652408a5eb"
 
-    self.booktitles = cfg.booktitles
-    self.journals = cfg.journals
+    #self.booktitles = cfg.booktitles
+    #self.journals = cfg.journals
+
+    if booktitles is None:
+      # GET THE VENUES WE LIKE from config.py
+      self.booktitles = cfg.booktitles
+      print('Conference of Interest: {}'.format(cfg.booktitles))
+    else:
+      self.booktitles = booktitles
+      print('Conference of Interest: {}'.format(self.booktitles))
+
+    if journals is None:
+      # GET THE VENUES WE LIKE from config.py
+      self.journals = cfg.journals
+      print('Journals of Interest: {}'.format(cfg.journals))
+    else:
+      self.journals = journals
+      print('Journals of Interest: {}'.format(self.journals))
 
     self.sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 
