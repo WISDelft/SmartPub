@@ -193,6 +193,7 @@ class XmlProcessing:
     # the ee XML tag indicates that this paper has some kind of source attached (this will usually be an URL)
     if 'ee' in paper:
       # Do we want to skip this file? There are lots of reasons, see below... Skipping means we will not try to download it
+      global  skip
       skip = False
       # filters have been set
       """
@@ -229,142 +230,147 @@ class XmlProcessing:
           'success': True
         }
         print("Publication matched: " + str(paper["dblpkey"]))
+        skip = False
 
         down_info = db.downloads.find_one({'dblpkey': paper['dblpkey']})
         if (down_info is None) or (down_info['success'] is False):
 
-          req = ""
-          actual_url = ""
-          url_open = ""
-          try:
-
-            req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
-            url_open = urlopen(req)
-            if url_open.status != 200:
-              skip = True
-              raise BaseException("HTTPError {}".format(url_open.status))
-            else:
-              # downloadinfo = {}
-              actual_url = url_open.geturl()
-              global num_of_access
-              # Here we need to add a time delay because we access the
-              # sleep for a random duration of time between 60 and 360 seconds
-
-              rndm_time = int(random.uniform(60, 360))
-              print(
-                "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
-                                                                                   num_of_access))
-
-              num_of_access += 1
-              time.sleep(rndm_time)
-              if (paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers) or (
-                  "ieee" in str(actual_url)) or ("springer" in actual_url) or ("acm" in actual_url) or paper[
-                'ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
-                filename = paper['dblpkey'] + ".pdf"
-
-
-                # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
-                if self.skipPreviouslyAccessedURLs and self.storeToMongo:
-                  result = db.downloads.find_one({'_id': downloadinfo['_id']})
-                  if result is None:
-                    skip = False
-                  # if it wasn't successful try once more
-                  elif not result['success']:
-                    skip = False
-                  else:
-                    skip = True
-                    if result['success']:
-                      skip = True
-                      global numOfPDFobtained
-                      global paperCounter
-                      global numOfPDFobtainedInThisSession
-                      numOfPDFobtained += 1
-                      if numOfPDFobtained % self.statusEveryXdownloads is 0:
-                        logging.info(
-                          'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
-                            paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
-                else:
-                  skip = False  # url not in download collection of mongo db
+          pub_info = db.publications.find_one({'dblpkey': paper['dblpkey']})
+          if pub_info is None:
+            skip = False
+            req = ""
+            actual_url = ""
+            url_open = ""
+            try:
+              req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
+              url_open = urlopen(req)
+              if url_open.status != 200:
+                skip = True
+                raise BaseException("HTTPError {}".format(url_open.status))
               else:
-                skip = True  # this ee entry is not interesting to us
-                print("{}, Repository not supported: {}".format(paper['dblpkey'], actual_url))
+                # downloadinfo = {}
+                actual_url = url_open.geturl()
+                global num_of_access
+                # Here we need to add a time delay because we access the
+                # sleep for a random duration of time between 60 and 360 seconds
+
+                rndm_time = int(random.uniform(60, 360))
+                print(
+                  "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
+                                                                                       num_of_access))
+
+                num_of_access += 1
+                time.sleep(rndm_time)
+                if (paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers) or (
+                      "ieee" in str(actual_url)) or ("springer" in actual_url) or ("acm" in actual_url) or paper[
+                    'ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
+                  filename = paper['dblpkey'] + ".pdf"
+
+                  # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
+                  if self.skipPreviouslyAccessedURLs and self.storeToMongo:
+                    result = db.downloads.find_one({'_id': downloadinfo['_id']})
+                    if result is None:
+                      skip = False
+                    # if it wasn't successful try once more
+                    elif not result['success']:
+                      skip = False
+                    else:
+                      skip = True
+                      if result['success']:
+                        skip = True
+                        global numOfPDFobtained
+                        global paperCounter
+                        global numOfPDFobtainedInThisSession
+                        numOfPDFobtained += 1
+                        if numOfPDFobtained % self.statusEveryXdownloads is 0:
+                          logging.info(
+                            'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
+                              paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
+                  else:
+                    skip = False  # url not in download collection of mongo db
+                else:
+                  skip = True  # this ee entry is not interesting to us
+                  print("{}, Repository not supported: {}".format(paper['dblpkey'], actual_url))
+                  downloadinfo['success'] = False
+                  downloadinfo['error'] = "{}, Repository not supported: {}".format(paper['dblpkey'], actual_url)
+                  db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+                  with open(cfg.folder_log + "not_supported_repos.txt", 'a', encoding='UTF-8') as f:
+                    f.write(actual_url)
+                    f.write("\n")
+            except BaseException:
+              logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
+                                  exc_info=True)
+              skip = True  # error with the url_open so skip the download
+              if self.storeToMongo:
                 downloadinfo['success'] = False
-                downloadinfo['error'] = "{}, Repository not supported: {}".format(paper['dblpkey'], actual_url)
+                ex = sys.exc_info()
+                downloadinfo['error'] = repr(ex)
                 db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
-                with open(cfg.folder_log + "not_supported_repos.txt", 'a', encoding='UTF-8') as f:
-                  f.write(actual_url)
-                  f.write("\n")
-          except BaseException:
-            logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
-                              exc_info=True)
-            skip = True  # error with the url_open so skip the download
-            if self.storeToMongo:
-              downloadinfo['success'] = False
-              ex = sys.exc_info()
-              downloadinfo['error'] = repr(ex)
-              db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
-        else:
-          print("{} already in DB".format(paper['dblpkey']))
-          skip = True  # already exist in the db
+          else:
+            db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo)
+            skip = True
+      else:
+        print("{} already in DB".format(paper['dblpkey']))
+        skip = True  # already exist in the db
 
         # Do the Download and store to MongoDB
-        if not skip:
-          try:
+      if not skip:
+        try:
 
-            # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
-            if paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers:
-              # Normal PDF download
-              self.newPapersIn = True  # There are new additions
-              skipped = not tools.downloadFile(downloadinfo['url'], overwrite=False, folder=cfg.folder_pdf,
+          # download based on type. IMPORTANT: Add supported types here, and also a few lines above!
+          if paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers:
+            # Normal PDF download
+            self.newPapersIn = True  # There are new additions
+            skipped = not tools.downloadFile(downloadinfo['url'], overwrite=False, folder=cfg.folder_pdf,
                                                localfilename=filename)
 
-            elif "springer" in actual_url:
-              # go to springer crawller
-              self.newPapersIn = True  # There are new additions
-              global num_of_access_in_springer
-              num_of_access_in_springer += 1
-              print("{}, publisher: Springer, #Access: {}".format(paper['dblpkey'], num_of_access_in_springer))
-              skipped = not self.extract_paper_from_SPRINGER(url_open, filename)
+          elif "springer" in actual_url:
+            # go to springer crawller
+            self.newPapersIn = True  # There are new additions
+            global num_of_access_in_springer
+            num_of_access_in_springer += 1
+            print("{}, publisher: Springer, #Access: {}".format(paper['dblpkey'], num_of_access_in_springer))
+            skipped = not self.extract_paper_from_SPRINGER(url_open, filename)
 
-            elif "acm" in actual_url:
-              # go to acm crawler
-              self.newPapersIn = True  # There are new additions
-              global num_of_access_in_acm
-              num_of_access_in_acm += 1
-              print("{}, publisher: ACM, #Access: {}".format(paper['dblpkey'], num_of_access_in_acm))
-              skipped = not self.extract_paper_from_ACM(url_open, filename)
+          elif "acm" in actual_url:
+            # go to acm crawler
+            self.newPapersIn = True  # There are new additions
+            global num_of_access_in_acm
+            num_of_access_in_acm += 1
+            print("{}, publisher: ACM, #Access: {}".format(paper['dblpkey'], num_of_access_in_acm))
+            skipped = not self.extract_paper_from_ACM(url_open, filename)
 
-            elif "ieee" in actual_url:
-              # go to ieee crawler
-              self.newPapersIn = True  # There are new additions
-              global num_of_access_in_ieee
-              num_of_access_in_ieee += 1
-              print("{}, publisher: IEEE, #Access: {}".format(paper['dblpkey'], num_of_access_in_ieee))
-              skipped = not self.extract_paper_from_IEEE(url_open, filename)
+          elif "ieee" in actual_url:
+            # go to ieee crawler
+            self.newPapersIn = True  # There are new additions
+            global num_of_access_in_ieee
+            num_of_access_in_ieee += 1
+            print("{}, publisher: IEEE, #Access: {}".format(paper['dblpkey'], num_of_access_in_ieee))
+            skipped = not self.extract_paper_from_IEEE(url_open, filename)
 
-            elif paper['ee'].startswith("http://www.aaai.org"):
-              # go to aaai crawler
-              self.newPapersIn = True  # There are new additions
-              global num_of_access_in_aaai
-              num_of_access_in_aaai += 1
-              print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
-              skipped = not self.extract_paper_from_AAAI(actual_url, filename)
+          elif paper['ee'].startswith("http://www.aaai.org"):
+            # go to aaai crawler
+            self.newPapersIn = True  # There are new additions
+            global num_of_access_in_aaai
+            num_of_access_in_aaai += 1
+            print("{}, publisher: AAAI, #Access: {}".format(paper['dblpkey'], num_of_access_in_aaai))
+            skipped = not self.extract_paper_from_AAAI(actual_url, filename)
 
-            elif paper['ee'].startswith("http://www.icwsm.org"):
-              # got to icwsm crawler
-              self.newPapersIn = True  # There are new additions
-              global num_of_access_in_icwsm
-              num_of_access_in_icwsm += 1
-              print("{}, publisher: ICWSM, #Access: {}".format(paper['dblpkey'], num_of_access_in_icwsm))
-              skipped = not self.extract_paper_from_ICWSM(paper['ee'], filename)
+          elif paper['ee'].startswith("http://www.icwsm.org"):
+            # got to icwsm crawler
+            self.newPapersIn = True  # There are new additions
+            global num_of_access_in_icwsm
+            num_of_access_in_icwsm += 1
+            print("{}, publisher: ICWSM, #Access: {}".format(paper['dblpkey'], num_of_access_in_icwsm))
+            skipped = not self.extract_paper_from_ICWSM(paper['ee'], filename)
 
-            else:
-              skipped = True
+          else:
+            skipped = True
 
-            if skipped:
-              logging.info(' Used local PDF copy for ' + paper['dblpkey'])
-            else:
-              logging.info(' Downloaded ' + paper['dblpkey'])
+          if skipped:
+            logging.info(' Used local PDF copy for ' + paper['dblpkey'])
+          else:
+            logging.info(' Downloaded ' + paper['dblpkey'])
             # global numOfPDFobtainedInThisSession
             numOfPDFobtainedInThisSession += 1
             # store
@@ -374,14 +380,14 @@ class XmlProcessing:
               # store to mongo
               db.publications.replace_one({'_id': paper['_id']}, paper, upsert=True)
               db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
-          except BaseException:
-            logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
+        except BaseException:
+          logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
                               exc_info=True)
-            if self.storeToMongo:
-              downloadinfo['success'] = False
-              ex = sys.exc_info()
-              downloadinfo['error'] = repr(ex)
-              db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
+          if self.storeToMongo:
+            downloadinfo['success'] = False
+            ex = sys.exc_info()
+            downloadinfo['error'] = repr(ex)
+            db.downloads.replace_one({'_id': downloadinfo['_id']}, downloadinfo, upsert=True)
 
 
   def extract_paper_from_ICWSM(self, req, filename):
