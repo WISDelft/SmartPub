@@ -193,7 +193,7 @@ class XmlProcessing:
     # the ee XML tag indicates that this paper has some kind of source attached (this will usually be an URL)
     if 'ee' in paper:
       # Do we want to skip this file? There are lots of reasons, see below... Skipping means we will not try to download it
-      global  skip
+
       skip = False
       # filters have been set
       """
