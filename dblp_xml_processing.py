@@ -291,9 +291,6 @@ class XmlProcessing:
                 with open(cfg.folder_log + "not_supported_repos.txt", 'a', encoding='UTF-8') as f:
                   f.write(actual_url)
                   f.write("\n")
-
-
-
           except BaseException:
             logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
                               exc_info=True)
@@ -318,7 +315,7 @@ class XmlProcessing:
               skipped = not tools.downloadFile(downloadinfo['url'], overwrite=False, folder=cfg.folder_pdf,
                                                localfilename=filename)
 
-            if "springer" in actual_url:
+            elif "springer" in actual_url:
               # go to springer crawller
               self.newPapersIn = True  # There are new additions
               global num_of_access_in_springer
