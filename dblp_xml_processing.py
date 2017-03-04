@@ -190,6 +190,7 @@ class XmlProcessing:
     :return:
     """
     #global filters
+    global skip
     # the ee XML tag indicates that this paper has some kind of source attached (this will usually be an URL)
     if 'ee' in paper:
       # Do we want to skip this file? There are lots of reasons, see below... Skipping means we will not try to download it
@@ -231,64 +232,68 @@ class XmlProcessing:
         }
         print("Publication matched: " + str(paper["dblpkey"]))
         skip = False
+        filename = paper['dblpkey'] + ".pdf"
+        req = ""
+        actual_url = ""
+        url_open = ""
+        #down_info = db.downloads.find_one({'dblpkey': paper['dblpkey']})
 
-        down_info = db.downloads.find_one({'dblpkey': paper['dblpkey']})
-        if (down_info is None) or (down_info['success'] is False):
+        if self.skipPreviouslyAccessedURLs and self.storeToMongo:
+          result = db.downloads.find_one({'_id': downloadinfo['_id']})
+          if result is None:
+            skip = False
+          # if it wasn't successful try once more
+          elif result['success'] is False:
+            skip = False
+          else:
+            # skip = True
+            if result['success']:
+              skip = True
+              global numOfPDFobtained
+              global paperCounter
+              global numOfPDFobtainedInThisSession
+              numOfPDFobtained += 1
+              if numOfPDFobtained % self.statusEveryXdownloads is 0:
+                logging.info(
+                  'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
+                    paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
+        else:
+          skip = False  # url not in download collection of mongo db
+
+
+        if skip is False:
 
           pub_info = db.publications.find_one({'dblpkey': paper['dblpkey']})
           if pub_info is None:
             skip = False
-            req = ""
-            actual_url = ""
-            url_open = ""
+
             try:
               req = Request(paper['ee'], headers={'User-Agent': 'Mozilla/5.0'})
               url_open = urlopen(req)
-              if url_open.status != 200:
-                skip = True
-                raise BaseException("HTTPError {}".format(url_open.status))
-              else:
+              #if url_open.status != 200:
+              #  skip = True
+                #raise BaseException("HTTPError {}".format(url_open.status))
+              #else:
                 # downloadinfo = {}
-                actual_url = url_open.geturl()
-                global num_of_access
-                # Here we need to add a time delay because we access the
-                # sleep for a random duration of time between 60 and 360 seconds
+              actual_url = url_open.geturl()
+              global num_of_access
+              # Here we need to add a time delay because we access the
+              # sleep for a random duration of time between 60 and 360 seconds
 
-                rndm_time = int(random.uniform(60, 360))
-                print(
+              rndm_time = int(random.uniform(60, 360))
+              print(
                   "Crawler sleeps for {} min - Times Access Repositories: {}".format(float(rndm_time / int(60)),
                                                                                        num_of_access))
 
-                num_of_access += 1
-                time.sleep(rndm_time)
-                if (paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers) or (
+              num_of_access += 1
+              time.sleep(rndm_time)
+              if (paper['ee'].lower().endswith("pdf") and "pdf" in self.enabledScrapers) or (
                       "ieee" in str(actual_url)) or ("springer" in actual_url) or ("acm" in actual_url) or paper[
                     'ee'].startswith("http://www.aaai.org") or paper['ee'].startswith("http://www.icwsm.org"):
-                  filename = paper['dblpkey'] + ".pdf"
-
-                  # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
-                  if self.skipPreviouslyAccessedURLs and self.storeToMongo:
-                    result = db.downloads.find_one({'_id': downloadinfo['_id']})
-                    if result is None:
-                      skip = False
-                    # if it wasn't successful try once more
-                    elif not result['success']:
-                      skip = False
-                    else:
-                      skip = True
-                      if result['success']:
-                        skip = True
-                        global numOfPDFobtained
-                        global paperCounter
-                        global numOfPDFobtainedInThisSession
-                        numOfPDFobtained += 1
-                        if numOfPDFobtained % self.statusEveryXdownloads is 0:
-                          logging.info(
-                            'DBLP XML PROGRESS: XML Paper Entries {}      PDFs {}     PDFs in this Session {} '.format(
-                              paperCounter, numOfPDFobtained, numOfPDFobtainedInThisSession))
-                  else:
-                    skip = False  # url not in download collection of mongo db
-                else:
+                filename = paper['dblpkey'] + ".pdf"
+                skip = False
+                # decide if we want to skip this entry (e.g., it has been accessed before and we are in the mood for skipping)
+              else:
                   skip = True  # this ee entry is not interesting to us
                   print("{}, Repository not supported: {}".format(paper['dblpkey'], actual_url))
                   downloadinfo['success'] = False
@@ -301,6 +306,7 @@ class XmlProcessing:
               logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
                                   exc_info=True)
               skip = True  # error with the url_open so skip the download
+              print("first try catch!!! skip: {}".format(skip))
               if self.storeToMongo:
                 downloadinfo['success'] = False
                 ex = sys.exc_info()
@@ -314,6 +320,7 @@ class XmlProcessing:
           skip = True  # already exist in the db
 
         # Do the Download and store to MongoDB
+        print("Proceed with: {} : the download and store: Skip: {}".format(paper['dblpkey'],skip))
         if not skip:
           try:
 
@@ -383,6 +390,7 @@ class XmlProcessing:
           except BaseException:
             logging.exception('Cannot download or store ' + paper['ee'] + " with dblpkey: " + paper['dblpkey'],
                                 exc_info=True)
+            print("second try catch")
             if self.storeToMongo:
               downloadinfo['success'] = False
               ex = sys.exc_info()
