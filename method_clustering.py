@@ -42,7 +42,7 @@ def facet_embedding(db):
       journal_flag = True
 
     if conf_flag or journal_flag:
-      ners = db.sentences_ner.distinct('ner', {'paper_id': p, 'tfidf_cls': 'method', 'inWordnet': 0})
+      ners = db.sentences_ner.distinct('ner', {'paper_id': p, 'multiLabel_cls': {'$in': ['method']}, 'inWordnet': 0})
       methodsString = ''
       for ne in ners:
         isint = is_int_or_float(ne)
@@ -62,7 +62,7 @@ def facet_embedding(db):
 #The matplot give error on the server!!
 def calculate_s_scores(X, min_k, max_k):
   s = []
-  with open(cfg.folder_culsters + "silhouette_scores_between_tfidfCls_{}_{}.csv".format(min_k,max_k), 'w', encoding="UTF-8") as f:
+  with open(cfg.folder_culsters + "silhouette_scores_between_multilabel_{}_{}.csv".format(min_k,max_k), 'w', encoding="UTF-8") as f:
     for n_clusters in range(min_k, max_k):
       kmeans = KMeans(n_clusters=n_clusters, init='k-means++', max_iter=100, n_init=1)
       kmeans.fit(X)  # instead of the countvectorizer
@@ -95,15 +95,21 @@ def calculate_s_scores(X, min_k, max_k):
 def write_clusters(X,k_values,svd,vectorizer):
   print()
   print("Write results in Methods_Clusters_ROBOTS.csv ")
-  with open(cfg.folder_culsters + "Methods_Clusters_ROBOTS_tfidfCls.csv", 'w', encoding="UTF-8") as f:
+  with open(cfg.folder_culsters + "Methods_Clusters_ROBOTS_multilabel.csv", 'w', encoding="UTF-8") as f:
     for k in k_values:
       km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
       km.fit(X)
       # save the classifier
-      with open(cfg.folder_pickle + 'k_means_methods_tfidfCls_{}.pkl'.format(k), 'wb') as fid:
+      with open(cfg.folder_pickle + 'k_means_methods_multilabel_{}.pkl'.format(k), 'wb') as fid:
         pkl.dump(km, fid)
       original_space_centroids = svd.inverse_transform(km.cluster_centers_)
       order_centroids = original_space_centroids.argsort()[:, ::-1]
+
+      with open(cfg.folder_pickle + 'svd_multilabel_{}.pkl'.format(k), 'wb') as decom:
+        pkl.dump(svd,decom)
+
+      with open(cfg.folder_pickle + 'vectorizer_multilabel_{}.pkl'.format(k), 'wb') as vec:
+        pkl.dump(vectorizer,vec)
 
       terms = vectorizer.get_feature_names()
       f.write("Top terms with {} clusters".format(k))
@@ -144,8 +150,8 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  calculate_s_scores(X=X, min_k = 5 , max_k = 30)
-  write_clusters(X=X, k_values= [5,10,15,20,28,30], svd=svd, vectorizer=vectorizer)
+  calculate_s_scores(X=X, min_k = 3 , max_k = 50)
+  write_clusters(X=X, k_values= [5,10,15,20,28,30,40,50], svd=svd, vectorizer=vectorizer)
 
 
 
