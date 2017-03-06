@@ -243,17 +243,24 @@ class XmlProcessing:
         if self.skipPreviouslyAccessedURLs and self.storeToMongo:
           result = db.downloads.find_one({'_id': downloadinfo['_id']})
           last_access = result['lastaccessed']
-          #download_date = download_date.replace(tzinfo=None) # remove the time zone to enable substraction
+          current_Date = downloadinfo['lastaccessed']
+
+          days_previous_check = (current_Date - last_access).days
+
+          print()
+          print("Paper: {}, Last Check: {} days ago!".format(paper['dblpkey'],days_previous_check))
+          print()
 
           if result is None:
             skip = False
           # if it wasn't successful try once more
-          elif result['success'] is False:
+          elif result['success'] is False and days_previous_check > 30:
             skip = False
 
           # check if the download date was greater than 30 days
-          elif  (downloadinfo['lastaccessed'] - last_access).days > 30:
-            skip = False
+
+         #elif number_of_Days < 2:
+         #  skip = False
           else:
             skip = True
             if result['success']:
