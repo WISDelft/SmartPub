@@ -139,7 +139,7 @@ def main():
 
   print()
   print("Create SVD pipeline with {} components and normalization".format(1300))
-  svd = decomposition.TruncatedSVD(n_components=1300, n_iter=5)
+  svd = decomposition.TruncatedSVD(n_components=900, n_iter=5)
   normalizer = Normalizer(copy=False)
   lsa = make_pipeline(svd, normalizer)
 
