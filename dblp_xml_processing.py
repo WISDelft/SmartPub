@@ -1,5 +1,5 @@
 import logging
-
+import dateutil.parser
 import config as cfg
 from pyhelpers import tools
 import plac
@@ -10,6 +10,7 @@ import sys
 from lxml import etree
 import gzip
 import datetime
+
 # modules to extract acm papers
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
@@ -190,6 +191,7 @@ class XmlProcessing:
     :return:
     """
     #global filters
+
     global skip
     # the ee XML tag indicates that this paper has some kind of source attached (this will usually be an URL)
     if 'ee' in paper:
@@ -240,13 +242,20 @@ class XmlProcessing:
 
         if self.skipPreviouslyAccessedURLs and self.storeToMongo:
           result = db.downloads.find_one({'_id': downloadinfo['_id']})
+          last_access = result['lastaccessed']
+          #download_date = download_date.replace(tzinfo=None) # remove the time zone to enable substraction
+
           if result is None:
             skip = False
           # if it wasn't successful try once more
           elif result['success'] is False:
             skip = False
+
+          # check if the download date was greater than 30 days
+          elif  (downloadinfo['lastaccessed'] - last_access).days > 30:
+            skip = False
           else:
-            # skip = True
+            skip = True
             if result['success']:
               skip = True
               global numOfPDFobtained
@@ -320,7 +329,7 @@ class XmlProcessing:
           skip = True  # already exist in the db
 
         # Do the Download and store to MongoDB
-        print("Proceed with: {} : the download and store: Skip: {}".format(paper['dblpkey'],skip))
+        #print("Proceed with: {} : the download and store: Skip: {}".format(paper['dblpkey'],skip))
         if not skip:
           try:
 

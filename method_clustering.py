@@ -100,7 +100,7 @@ def write_clusters(X,k_values,svd,vectorizer):
       km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
       km.fit(X)
       # save the classifier
-      with open(cfg.folder_pickle +  'k_means_methods_tfidfCls_{}.pkl'.format(k), 'wb') as fid:
+      with open(cfg.folder_pickle + 'k_means_methods_tfidfCls_{}.pkl'.format(k), 'wb') as fid:
         pkl.dump(km, fid)
       original_space_centroids = svd.inverse_transform(km.cluster_centers_)
       order_centroids = original_space_centroids.argsort()[:, ::-1]
