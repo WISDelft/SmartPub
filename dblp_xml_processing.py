@@ -255,6 +255,7 @@ class XmlProcessing:
             last_access = result['lastaccessed']
             current_Date = downloadinfo['lastaccessed']
             days_previous_check = (current_Date - last_access).days
+            skip = True
             if days_previous_check > 30:
               skip = False
               print()
