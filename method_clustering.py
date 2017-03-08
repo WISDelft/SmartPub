@@ -137,6 +137,8 @@ def main():
   Xc = (X.T * X)
   len(vectorizer.get_feature_names())
 
+
+
   print()
   print("Create SVD pipeline with {} components and normalization".format(900))
   svd = decomposition.TruncatedSVD(n_components=900, n_iter=5)
@@ -146,6 +148,9 @@ def main():
   print()
   print("Fit SVD+Normalization")
   X = lsa.fit_transform(Xc)
+
+  with open(cfg.folder_pickle + 'PCA_fitted_Data.pkl', 'wb') as data:
+    pkl.dump(X, data)
 
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
