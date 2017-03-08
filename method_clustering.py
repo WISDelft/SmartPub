@@ -129,7 +129,7 @@ def main():
   documents = facet_embedding(db)
   print()
   print("Create tfidfVectorizer")
-  vectorizer = TfidfVectorizer(ngram_range=(1, 1),lowercase= False)
+  vectorizer = TfidfVectorizer(ngram_range=(1, 1),lowercase=False)
 
   print()
   print("Fit documents tfidfVectorixaer")
@@ -138,7 +138,7 @@ def main():
   len(vectorizer.get_feature_names())
 
   print()
-  print("Create SVD pipeline with {} components and normalization".format(1300))
+  print("Create SVD pipeline with {} components and normalization".format(900))
   svd = decomposition.TruncatedSVD(n_components=900, n_iter=5)
   normalizer = Normalizer(copy=False)
   lsa = make_pipeline(svd, normalizer)
@@ -150,8 +150,8 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  calculate_s_scores(X=X, min_k = 3 , max_k = 50)
-  write_clusters(X=X, k_values= [5,10,15,20,28,30,40,50], svd=svd, vectorizer=vectorizer)
+  calculate_s_scores(X=X, min_k= 3, max_k= 100)
+  write_clusters(X=X, k_values= range(3,100), svd=svd, vectorizer=vectorizer)
 
 
 
