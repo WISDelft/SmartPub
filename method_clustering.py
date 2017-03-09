@@ -94,21 +94,21 @@ def calculate_s_scores(X, min_k, max_k):
 
 def write_clusters(X,k_values,svd,vectorizer):
   print()
-  print("Write results in Methods_Clusters_ROBOTS.csv ")
-  with open(cfg.folder_culsters + "Methods_Clusters_ROBOTS_multilabel.csv", 'w', encoding="UTF-8") as f:
+  print("Write results in Methods_Clusters_DataPipelines.csv ")
+  with open(cfg.folder_culsters + "Methods_Clusters_DataPipelines_multilabel.csv", 'w', encoding="UTF-8") as f:
     for k in k_values:
       km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
       km.fit(X)
       # save the classifier
-      with open(cfg.folder_pickle + 'k_means_methods_multilabel_{}.pkl'.format(k), 'wb') as fid:
+      with open(cfg.folder_pickle + 'k_means_methods_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as fid:
         pkl.dump(km, fid)
       original_space_centroids = svd.inverse_transform(km.cluster_centers_)
       order_centroids = original_space_centroids.argsort()[:, ::-1]
 
-      with open(cfg.folder_pickle + 'svd_multilabel_{}.pkl'.format(k), 'wb') as decom:
+      with open(cfg.folder_pickle + 'svd_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as decom:
         pkl.dump(svd,decom)
 
-      with open(cfg.folder_pickle + 'vectorizer_multilabel_{}.pkl'.format(k), 'wb') as vec:
+      with open(cfg.folder_pickle + 'vectorizer_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as vec:
         pkl.dump(vectorizer,vec)
 
       terms = vectorizer.get_feature_names()
@@ -129,34 +129,54 @@ def main():
   documents = facet_embedding(db)
   print()
   print("Create tfidfVectorizer")
-  vectorizer = TfidfVectorizer(ngram_range=(1, 1),lowercase=False)
+  vectorizer = TfidfVectorizer(use_idf=True)
 
   print()
   print("Fit documents tfidfVectorixaer")
   X = vectorizer.fit_transform(documents)
-  Xc = (X.T * X)
-  len(vectorizer.get_feature_names())
+  #Xc = (X.T * X)
+  #len(vectorizer.get_feature_names())
 
 
 
   print()
   print("Create SVD pipeline with {} components and normalization".format(900))
-  svd = decomposition.TruncatedSVD(n_components=900, n_iter=5)
-  normalizer = Normalizer(copy=False)
-  lsa = make_pipeline(svd, normalizer)
+  #svd = decomposition.TruncatedSVD(n_components=900, n_iter=5)
+  #normalizer = Normalizer(copy=False)
+  #lsa = make_pipeline(svd, normalizer)
 
   print()
   print("Fit SVD+Normalization")
-  X = lsa.fit_transform(Xc)
+  #X = lsa.fit_transform(Xc)
 
-  with open(cfg.folder_pickle + 'PCA_fitted_Data.pkl', 'wb') as data:
+  with open(cfg.folder_pickle + 'PCA_fitted_Data_DataPipeline.pkl', 'wb') as data:
     pkl.dump(X, data)
 
-  explained_variance = svd.explained_variance_ratio_.sum()
-  print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
+    with open(cfg.folder_culsters + "Methods_Clusters_DataPipelines_multilabel.csv", 'w', encoding="UTF-8") as f:
+      for k in range(28,28):
+        km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
+        km.fit(X)
+        # save the classifier
+        with open(cfg.folder_pickle + 'k_means_methods_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as fid:
+          pkl.dump(km, fid)
+        #original_space_centroids = svd.inverse_transform(km.cluster_centers_)
+        #order_centroids = original_space_centroids.argsort()[:, ::-1]
+        order_centroids = km.cluster_centers_.argsort()[:, ::-1]
 
-  calculate_s_scores(X=X, min_k= 3, max_k= 100)
-  write_clusters(X=X, k_values= range(3,100), svd=svd, vectorizer=vectorizer)
+        terms = vectorizer.get_feature_names()
+        f.write("Top terms with {} clusters".format(k))
+        f.write("\n")
+        for i in range(len(order_centroids)):
+          f.write("Annotate Here,Cluster {}:".format(i))
+          for ind in order_centroids[i, :40]:
+            f.write(',{}'.format(terms[ind]))
+          f.write("\n")
+        f.write("\n")
+  #explained_variance = svd.explained_variance_ratio_.sum()
+  #print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
+
+  #calculate_s_scores(X=X, min_k= 3, max_k= 100)
+  #write_clusters(X=X, k_values= range(28,29), svd=svd vectorizer=vectorizer)
 
 
 
