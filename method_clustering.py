@@ -129,7 +129,7 @@ def main():
   documents = facet_embedding(db)
   print()
   print("Create tfidfVectorizer")
-  vectorizer = TfidfVectorizer()
+  vectorizer = TfidfVectorizer(ngram_range=(1,1),min_df= 1, use_idf=True, lowercase= False)
 
   print()
   print("Fit documents tfidfVectorixaer")
