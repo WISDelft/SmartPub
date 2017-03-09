@@ -152,26 +152,27 @@ def main():
   with open(cfg.folder_pickle + 'PCA_fitted_Data_DataPipeline.pkl', 'wb') as data:
     pkl.dump(X, data)
 
-    with open(cfg.folder_culsters + "Methods_Clusters_DataPipelines_multilabel.csv", 'w', encoding="UTF-8") as f:
-      for k in range(28,28):
-        km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
-        km.fit(X)
-        # save the classifier
-        with open(cfg.folder_pickle + 'k_means_methods_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as fid:
-          pkl.dump(km, fid)
+  with open(cfg.folder_culsters + "Methods_Clusters_DataPipelines_multilabel.csv", 'w', encoding="UTF-8") as f:
+    for k in range(28,29):
+      print("K-means: {}".format(k))
+      km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
+      km.fit(X)
+      # save the classifier
+      with open(cfg.folder_pickle + 'k_means_methods_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as fid:
+        pkl.dump(km, fid)
         #original_space_centroids = svd.inverse_transform(km.cluster_centers_)
         #order_centroids = original_space_centroids.argsort()[:, ::-1]
-        order_centroids = km.cluster_centers_.argsort()[:, ::-1]
+      order_centroids = km.cluster_centers_.argsort()[:, ::-1]
 
-        terms = vectorizer.get_feature_names()
-        f.write("Top terms with {} clusters".format(k))
+      terms = vectorizer.get_feature_names()
+      f.write("Top terms with {} clusters".format(k))
+      f.write("\n")
+      for i in range(len(order_centroids)):
+        f.write("Annotate Here,Cluster {}:".format(i))
+        for ind in order_centroids[i, :40]:
+          f.write(',{}'.format(terms[ind]))
         f.write("\n")
-        for i in range(len(order_centroids)):
-          f.write("Annotate Here,Cluster {}:".format(i))
-          for ind in order_centroids[i, :40]:
-            f.write(',{}'.format(terms[ind]))
-          f.write("\n")
-        f.write("\n")
+      f.write("\n")
   #explained_variance = svd.explained_variance_ratio_.sum()
   #print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
