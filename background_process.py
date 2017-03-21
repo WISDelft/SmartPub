@@ -108,9 +108,17 @@ def main():
     if args.journal is not None:
       journals = [str(args.journal)]
 
-    XmlProcessing(booktitles=booktitles, journals=journals)
-    TextExtraction(booktitles=booktitles, journals=journals)
-    classify_and_NEEextraction(booktitles=booktitles, journals=journals)
+    if cfg.only_pdf_download:
+      print("Perform XML processing!")
+      XmlProcessing(booktitles=booktitles, journals=journals)
+
+    if cfg.only_text_extraction:
+      print("Perform Text Extraction processing!")
+      TextExtraction(booktitles=booktitles, journals=journals)
+
+    if cfg.only_classify_nee:
+      print("Perform Rhetorical/Name entity extraction and classify!")
+      classify_and_NEEextraction(booktitles=booktitles, journals=journals)
 
 
 
