@@ -117,6 +117,16 @@ def main(filter:("filter","option")=None):
                 result = db.publications.count({'$and' : [{'booktitle' :'VLDB'} , {'content.chapters':{'$exists':True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions VLDB papers", result))
 
+                # print the papers from VLDB
+                result = db.publications.count({"journal": "PVLDB"})
+                print('{:>25} {:>8d}'.format("PVLDB papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'journal': 'PVLDB'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions PVLDB papers", result))
+
+
+
                 # print the papers from SOCROB
                 result = db.publications.count({'$and' : [{"booktitle": "ICSR"}, {'_id' : {'$regex':'socrob'}}]})
                 print('{:>25} {:>8d}'.format("ICSR (Social Robotis) papers", result))
