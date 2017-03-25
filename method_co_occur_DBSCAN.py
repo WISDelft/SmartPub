@@ -160,7 +160,7 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  db = DBSCAN(eps=0.3, min_samples=10).fit(X)
+  db = DBSCAN(eps=0.3, min_samples=50).fit(X)
   core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
   core_samples_mask[db.core_sample_indices_] = True
   labels = db.labels_
@@ -176,8 +176,8 @@ def main():
   #      % metrics.adjusted_rand_score(labels_true, labels))
   # print("Adjusted Mutual Information: %0.3f"
   #      % metrics.adjusted_mutual_info_score(labels_true, labels))
-  print("Silhouette Coefficient: %0.3f"
-        % metrics.silhouette_score(X, labels))
+  #print("Silhouette Coefficient: %0.3f"
+  #      % metrics.silhouette_score(X, labels))
   #calculate_s_scores(X=X, min_k= 3, max_k= 100)
   #write_clusters(X=X, k_values= range(28,29), svd=svd vectorizer=vectorizer)
   with open(cfg.folder_pickle + 'dbscan_methods_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as fid:
