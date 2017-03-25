@@ -1,15 +1,25 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer, CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
+from sklearn import metrics
 from sklearn import decomposition
-from sklearn.metrics import silhouette_samples, silhouette_score
-from sklearn.cluster import KMeans
 
 from pyhelpers import tools
+from sklearn.metrics import silhouette_samples, silhouette_score
 
-#import matplotlib.pyplot as plt
+from sklearn.cluster import DBSCAN
+
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import numpy as np
 import _pickle as pkl
+from gensim.models import Word2Vec
+
+from sklearn.cluster import KMeans, MiniBatchKMeans
+
 import config as cfg
 
 
@@ -149,33 +159,38 @@ def main():
   print("Fit SVD+Normalization")
   X = lsa.fit_transform(Xc)
 
-  with open(cfg.folder_pickle + 'PCA_fitted_Data_DataPipeline.pkl', 'wb') as data:
-    pkl.dump(X, data)
 
-  with open(cfg.folder_culsters + "Methods_Clusters_DataPipelines_multilabel.csv", 'w', encoding="UTF-8") as f:
-    for k in range(28,29):
-      print("K-means: {}".format(k))
-      km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
-      km.fit(X)
-      # save the classifier
-      with open(cfg.folder_pickle + 'k_means_methods_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as fid:
-        pkl.dump(km, fid)
-        #original_space_centroids = svd.inverse_transform(km.cluster_centers_)
-        #order_centroids = original_space_centroids.argsort()[:, ::-1]
-      order_centroids = km.cluster_centers_.argsort()[:, ::-1]
+  explained_variance = svd.explained_variance_ratio_.sum()
+  print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-      terms = vectorizer.get_feature_names()
-      f.write("Top terms with {} clusters".format(k))
-      f.write("\n")
-      for i in range(len(order_centroids)):
-        f.write("Annotate Here,Cluster {}:".format(i))
-        for ind in order_centroids[i, :40]:
-          f.write(',{}'.format(terms[ind]))
-        f.write("\n")
-      f.write("\n")
-  #explained_variance = svd.explained_variance_ratio_.sum()
-  #print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
+  db = DBSCAN(eps=0.3, min_samples=10).fit(X)
+  core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+  core_samples_mask[db.core_sample_indices_] = True
+  labels = db.labels_
 
+  # Number of clusters in labels, ignoring noise if present.
+  n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+
+  print('Estimated number of clusters: %d' % n_clusters_)
+  # print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
+  # print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
+  # print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
+  # print("Adjusted Rand Index: %0.3f"
+  #      % metrics.adjusted_rand_score(labels_true, labels))
+  # print("Adjusted Mutual Information: %0.3f"
+  #      % metrics.adjusted_mutual_info_score(labels_true, labels))
+  print("Silhouette Coefficient: %0.3f"
+        % metrics.silhouette_score(X, labels))
+  #calculate_s_scores(X=X, min_k= 3, max_k= 100)
+  #write_clusters(X=X, k_values= range(28,29), svd=svd vectorizer=vectorizer)
+  with open(cfg.folder_pickle + 'dbscan_methods_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as fid:
+    pkl.dump(db, fid)
+
+  with open(cfg.folder_pickle + 'vectorizer_dbscan_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
+    pkl.dump(vectorizer, vec)
+
+  with open(cfg.folder_pickle + 'svd_dbscan_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
+    pkl.dump(svd, vec)
 
 
 if __name__ == '__main__':
