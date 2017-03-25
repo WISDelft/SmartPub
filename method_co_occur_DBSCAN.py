@@ -11,9 +11,6 @@ from sklearn.metrics import silhouette_samples, silhouette_score
 
 from sklearn.cluster import DBSCAN
 
-
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import numpy as np
 import _pickle as pkl
 from gensim.models import Word2Vec
