@@ -162,7 +162,7 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  db = DBSCAN(eps=0.1, min_samples=25).fit(X)
+  db = DBSCAN(eps=0.1, min_samples=20).fit(X)
   core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
   core_samples_mask[db.core_sample_indices_] = True
   labels = db.labels_
