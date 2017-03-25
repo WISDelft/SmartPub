@@ -156,7 +156,7 @@ def main():
   print("Fit SVD+Normalization")
   X = lsa.fit_transform(Xc)
 
-  with open(cfg.folder_pickle + 'X_dbscan_multilabel_DataPipelines_{}.pkl'.format(2), 'wb') as vec:
+  with open(cfg.folder_pickle + 'X_dbscan_multilabel_DataPipelines_{}.pkl'.format(3), 'wb') as vec:
     pkl.dump(X, vec)
 
   explained_variance = svd.explained_variance_ratio_.sum()
