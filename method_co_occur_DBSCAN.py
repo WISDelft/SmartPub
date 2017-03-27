@@ -54,10 +54,13 @@ def facet_embedding(db):
       for ne in ners:
         isint = is_int_or_float(ne)
 
-        if not hasNumbers(ne):
+        if isint == -1:
           ne = ne.replace(' ', '')
-          # ne= ne.replace('_','')
           methodsString = methodsString + str(ne) + ' '
+        #if not hasNumbers(ne):
+        #  ne = ne.replace(' ', '')
+          # ne= ne.replace('_','')
+        #  methodsString = methodsString + str(ne) + ' '
 
       docs.append(methodsString)
     conf_flag = False
@@ -156,13 +159,13 @@ def main():
   print("Fit SVD+Normalization")
   X = lsa.fit_transform(Xc)
 
-  with open(cfg.folder_pickle + 'X_dbscan_multilabel_DataPipelines_{}.pkl'.format(3), 'wb') as vec:
-    pkl.dump(X, vec)
+  #with open(cfg.folder_pickle + 'X_dbscan_multilabel_DataPipelines_{}.pkl'.format(3), 'wb') as vec:
+  # pkl.dump(X, vec)
 
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  db = DBSCAN(eps=0.3, min_samples=10).fit(X)
+  db = DBSCAN(eps=0.5, min_samples=5).fit(X)
   core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
   core_samples_mask[db.core_sample_indices_] = True
   labels = db.labels_
