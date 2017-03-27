@@ -139,11 +139,15 @@ def main():
   documents = facet_embedding(db)
   print()
   print("Create tfidfVectorizer")
-  vectorizer = TfidfVectorizer(ngram_range=(1,1), lowercase= False)
+
+  count_model = CountVectorizer(
+    ngram_range=(1, 1))  # Convert a collection of text documents to a matrix of token counts- default unigram model
+
+  #vectorizer = TfidfVectorizer(ngram_range=(1,1), lowercase= False)
 
   print()
   print("Fit documents tfidfVectorixaer")
-  X = vectorizer.fit_transform(documents)
+  X = count_model.fit_transform(documents)
   Xc = (X.T * X)
   #len(vectorizer.get_feature_names())
 
@@ -165,7 +169,7 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
-  db = DBSCAN(eps=0.5, min_samples=5).fit(X)
+  db = DBSCAN(eps=0.3, min_samples=20).fit(X)
   core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
   core_samples_mask[db.core_sample_indices_] = True
   labels = db.labels_
@@ -189,7 +193,7 @@ def main():
     pkl.dump(db, fid)
 
   with open(cfg.folder_pickle + 'vectorizer_dbscan_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
-    pkl.dump(vectorizer, vec)
+    pkl.dump(count_model, vec)
 
   with open(cfg.folder_pickle + 'svd_dbscan_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
     pkl.dump(svd, vec)
