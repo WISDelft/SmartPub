@@ -121,6 +121,8 @@ def write_clusters(X,k_values,svd,vectorizer):
       with open(cfg.folder_pickle + 'vectorizer_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as vec:
         pkl.dump(vectorizer,vec)
 
+
+
       terms = vectorizer.get_feature_names()
       f.write("Top terms with {} clusters".format(k))
       f.write("\n")
@@ -169,6 +171,7 @@ def main():
   explained_variance = svd.explained_variance_ratio_.sum()
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
+
   db = DBSCAN(eps=0.3, min_samples=20).fit(X)
   core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
   core_samples_mask[db.core_sample_indices_] = True
@@ -198,6 +201,8 @@ def main():
   with open(cfg.folder_pickle + 'svd_dbscan_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
     pkl.dump(svd, vec)
 
+  with open(cfg.folder_pickle + 'Methodterms_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
+    pkl.dump(documents, vec)
 
 if __name__ == '__main__':
   main()
