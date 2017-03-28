@@ -54,13 +54,13 @@ def facet_embedding(db):
       for ne in ners:
         isint = is_int_or_float(ne)
 
-        if isint == -1:
-          ne = ne.replace(' ', '')
-          methodsString = methodsString + str(ne) + ' '
-        #if not hasNumbers(ne):
+        #if isint == -1:
         #  ne = ne.replace(' ', '')
-          # ne= ne.replace('_','')
         #  methodsString = methodsString + str(ne) + ' '
+        if not hasNumbers(ne):
+          ne = ne.replace(' ', '')
+          # ne= ne.replace('_','')
+          methodsString = methodsString + str(ne) + ' '
 
       docs.append(methodsString)
     conf_flag = False
@@ -135,7 +135,7 @@ def write_clusters(X,k_values,svd,vectorizer):
 
 
 def main():
-
+  print("co-occur + DBSCAN")
   db = tools.connect_to_mongo()
   print("Collect list of NEE per publication")
   documents = facet_embedding(db)
@@ -172,7 +172,7 @@ def main():
   print("Explained variance of the SVD step: {}%".format(int(explained_variance * 100)))
 
 
-  db = DBSCAN(eps=0.3, min_samples=20).fit(X)
+  db = DBSCAN(eps=0.4, min_samples=20).fit(X)
   core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
   core_samples_mask[db.core_sample_indices_] = True
   labels = db.labels_
@@ -201,8 +201,8 @@ def main():
   with open(cfg.folder_pickle + 'svd_dbscan_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
     pkl.dump(svd, vec)
 
-  with open(cfg.folder_pickle + 'Methodterms_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
-    pkl.dump(documents, vec)
+  #with open(cfg.folder_pickle + 'Methodterms_multilabel_DataPipelines_{}.pkl'.format(1), 'wb') as vec:
+  #  pkl.dump(documents, vec)
 
 if __name__ == '__main__':
   main()
