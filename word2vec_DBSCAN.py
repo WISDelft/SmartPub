@@ -10,7 +10,7 @@ from sklearn.cluster import KMeans, MiniBatchKMeans, DBSCAN
 
 def main():
   print("Proces word2vec + DBSCAN")
-  with open(cfg.folder_pickle +"method_terms.pkl", 'rb') as pickle_file:
+  with open(cfg.folder_pickle +"Method_terms.pkl", 'rb') as pickle_file:
     Method_terms = list(pkl.load(pickle_file))
 
   normalizer = Normalizer(copy=False)
