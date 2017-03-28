@@ -128,7 +128,7 @@ def main():
   print("Collect list of NEE per publication")
   documents = facet_embedding(db)
   print()
-  print("Create tfidfVectorizer")
+  print("Create Count Vectorizer")
   vectorizer = CountVectorizer(ngram_range=(1,1))
 
   print()
@@ -152,13 +152,13 @@ def main():
   with open(cfg.folder_pickle + 'PCA_fitted_Data_Robots.pkl', 'wb') as data:
     pkl.dump(X, data)
 
-  with open(cfg.folder_culsters + "Methods_Clusters_Robots_multilabel.csv", 'w', encoding="UTF-8") as f:
-    for k in range(28,31):
+  with open(cfg.folder_culsters + "Methods_Clusters_Data_multilabel.csv", 'w', encoding="UTF-8") as f:
+    for k in range(28,29):
       print("K-means: {}".format(k))
       km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
       km.fit(X)
       # save the classifier
-      with open(cfg.folder_pickle + 'k_means_methods_multilabel_Robots_{}.pkl'.format(k), 'wb') as fid:
+      with open(cfg.folder_pickle + 'k_means_methods_multilabel_Data_{}.pkl'.format(k), 'wb') as fid:
         pkl.dump(km, fid)
       original_space_centroids = svd.inverse_transform(km.cluster_centers_)
       order_centroids = original_space_centroids.argsort()[:, ::-1]
