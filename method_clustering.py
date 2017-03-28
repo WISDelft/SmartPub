@@ -1,4 +1,4 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 from sklearn import decomposition
@@ -129,7 +129,7 @@ def main():
   documents = facet_embedding(db)
   print()
   print("Create tfidfVectorizer")
-  vectorizer = TfidfVectorizer(ngram_range=(1,1), lowercase= False)
+  vectorizer = CountVectorizer(ngram_range=(1,1))
 
   print()
   print("Fit documents tfidfVectorixaer")
@@ -149,20 +149,20 @@ def main():
   print("Fit SVD+Normalization")
   X = lsa.fit_transform(Xc)
 
-  with open(cfg.folder_pickle + 'PCA_fitted_Data_DataPipeline.pkl', 'wb') as data:
+  with open(cfg.folder_pickle + 'PCA_fitted_Data_Robots.pkl', 'wb') as data:
     pkl.dump(X, data)
 
-  with open(cfg.folder_culsters + "Methods_Clusters_DataPipelines_multilabel.csv", 'w', encoding="UTF-8") as f:
-    for k in range(28,29):
+  with open(cfg.folder_culsters + "Methods_Clusters_Robots_multilabel.csv", 'w', encoding="UTF-8") as f:
+    for k in range(28,31):
       print("K-means: {}".format(k))
       km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1, verbose=False)
       km.fit(X)
       # save the classifier
-      with open(cfg.folder_pickle + 'k_means_methods_multilabel_DataPipelines_{}.pkl'.format(k), 'wb') as fid:
+      with open(cfg.folder_pickle + 'k_means_methods_multilabel_Robots_{}.pkl'.format(k), 'wb') as fid:
         pkl.dump(km, fid)
-        #original_space_centroids = svd.inverse_transform(km.cluster_centers_)
-        #order_centroids = original_space_centroids.argsort()[:, ::-1]
-      order_centroids = km.cluster_centers_.argsort()[:, ::-1]
+      original_space_centroids = svd.inverse_transform(km.cluster_centers_)
+      order_centroids = original_space_centroids.argsort()[:, ::-1]
+      #order_centroids = km.cluster_centers_.argsort()[:, ::-1]
 
       terms = vectorizer.get_feature_names()
       f.write("Top terms with {} clusters".format(k))
