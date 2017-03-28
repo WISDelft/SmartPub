@@ -1,22 +1,21 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import HashingVectorizer, CountVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
+
+from sklearn.feature_extraction.text import  CountVectorizer
+
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
-from sklearn import metrics
+
 from sklearn import decomposition
 
 from pyhelpers import tools
-from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.metrics import  silhouette_score
 
 from sklearn.cluster import DBSCAN
 
 import numpy as np
 import _pickle as pkl
-from gensim.models import Word2Vec
 
-from sklearn.cluster import KMeans, MiniBatchKMeans
 
+from sklearn.cluster import KMeans
 import config as cfg
 
 
@@ -148,7 +147,7 @@ def main():
   #vectorizer = TfidfVectorizer(ngram_range=(1,1), lowercase= False)
 
   print()
-  print("Fit documents tfidfVectorixaer")
+  print("Fit documents count vectorizer")
   X = count_model.fit_transform(documents)
   Xc = (X.T * X)
   #len(vectorizer.get_feature_names())
