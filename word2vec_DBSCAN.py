@@ -16,10 +16,10 @@ def main():
   normalizer = Normalizer(copy=False)
 
   w2v_models = list()
-  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_5_rh_coll_V2.pkl'))
-  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_25_rh_coll_V2.pkl'))
-  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_50_rh_coll_v2.pkl'))
-  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_200_rh_coll_v2.pkl'))
+  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_5_rh_coll_v2'))
+  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_25_rh_coll_v2'))
+  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_50_rh_coll_v2'))
+  w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_200_rh_coll_v2'))
 
   for num, model in enumerate(w2v_models):
     my_list = get_w2vArray(model,Method_terms)
