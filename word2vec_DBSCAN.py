@@ -66,40 +66,41 @@ def main():
 
 
 def get_w2vArray(w2v_model, Method_terms):
-    stopset = list(set(stopwords.words('english')))
-    my_list = list()
-    count = 0
+  stopset = list(set(stopwords.words('english')))
+  my_list = list()
+  count = 0
+  length = 0
+  term_list = list()
+  for term in Method_terms:
+    tmp = np.zeros(200)  # do not forget to change it if you use different window size
+    in_terms = word_tokenize(term)
+    ner_no_stopwords = ""
+    for i, t in enumerate(in_terms):
+      try:
+        # print(t)
+
+        if t.lower() not in stopset:
+          length += 1
+          ner_no_stopwords += t + " "
+          tmp += w2v_model.wv.word_vec(str(t))
+
+          # my_list.append(w2v_model.wv.word_vec(term))
+
+      except:
+        # tmp += np.zeros(100)
+        count += 1
+    term_list.append(ner_no_stopwords)
+    ner_no_stopwords = ""
+    if length == 0:
+      my_list.append(np.zeros(200))
+    else:
+      my_list.append(tmp / length)
+
     length = 0
-    term_list = list()
-    for term in Method_terms:
-      tmp = np.zeros(200)  # do not forget to change it if you use different window size
-      in_terms = word_tokenize(term)
-      ner_no_stopwords = ""
-      for i, t in enumerate(in_terms):
-        try:
-          # print(t)
-
-          if t.lower() not in stopset:
-            length += 1
-            ner_no_stopwords += t + " "
-            tmp += w2v_model.wv.word_vec(str(t))
-
-            # my_list.append(w2v_model.wv.word_vec(term))
-
-        except:
-          # tmp += np.zeros(100)
-          count += 1
-      if length == 0:
-        my_list.append(np.zeros(200))
-      else:
-        my_list.append(tmp / length)
-      term_list.append(ner_no_stopwords)
-      ner_no_stopwords = ""
-      length = 0
-      # print(term)
-      # my_list.append(np.zeros(200))
-      print("terms: {}, meth_terms: {}, terms not in voc: {}".format(len(my_list), len(Method_terms), count))
-      return (my_list, term_list)
+    # print(term)
+    # my_list.append(np.zeros(200))
+  print("terms: {}, meth_terms: {}, terms not in voc: {}".format(len(my_list), len(Method_terms), count))
+  return (my_list, term_list)
 
 if __name__ == '__main__':
   main()
