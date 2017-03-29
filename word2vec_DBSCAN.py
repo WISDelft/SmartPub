@@ -31,7 +31,7 @@ def main():
 
     # DBSCAN
     print("Start DBSCAN eps= 0.5 min_samples= 40")
-    db = DBSCAN(eps=0.5, min_samples=40).fit(w2v_array)
+    db = DBSCAN(eps=0.7, min_samples=40).fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
