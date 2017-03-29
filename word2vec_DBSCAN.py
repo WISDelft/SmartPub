@@ -1,20 +1,18 @@
-from networkx.linalg.algebraicconnectivity import algebraic_connectivity
+
 from sklearn.preprocessing import Normalizer
 from nltk.tokenize import word_tokenize
 import numpy as np
 import config as cfg
 import _pickle as pkl
 from gensim.models import Word2Vec
-from sklearn.cluster import KMeans, MiniBatchKMeans, DBSCAN
-
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
 
 
 def main():
   print("Proces word2vec + DBSCAN")
   with open(cfg.folder_pickle +"Method_terms.pkl", 'rb') as pickle_file:
     Method_terms = list(pkl.load(pickle_file))
-
-  normalizer = Normalizer(copy=False)
 
   w2v_models = list()
   w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_5_rh_coll_v2'))
@@ -28,10 +26,10 @@ def main():
     print(w2v_array.shape)
 
     # Normalize
-    # w2v_array = normalizer.transform(w2v_array)
+    w2v_array = StandardScaler().fit_transform(w2v_array)
 
     # DBSCAN
-    db = DBSCAN(eps=0.1, min_samples=5, metric='cosine', algorithm= 'ball_tree').fit(w2v_array)
+    db = DBSCAN(eps=0.1, min_samples=5, metric='euclidean', algorithm= 'ball_tree').fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
