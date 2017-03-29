@@ -30,7 +30,7 @@ def main():
     w2v_array = StandardScaler().fit_transform(w2v_array)
 
     # DBSCAN
-    db = DBSCAN(eps=0.5, min_samples=20).fit(w2v_array)
+    db = DBSCAN(eps=0.2, min_samples=40).fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
