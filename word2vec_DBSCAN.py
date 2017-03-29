@@ -13,7 +13,7 @@ def main():
   print("Proces word2vec + DBSCAN")
   with open(cfg.folder_pickle +"Method_terms.pkl", 'rb') as pickle_file:
     Method_terms = list(pkl.load(pickle_file))
-
+  print("Read method terms")
   w2v_models = list()
   w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_5_rh_coll_v2'))
   w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_25_rh_coll_v2'))
