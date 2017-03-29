@@ -1,3 +1,4 @@
+from networkx.linalg.algebraicconnectivity import algebraic_connectivity
 from sklearn.preprocessing import Normalizer
 from nltk.tokenize import word_tokenize
 import numpy as np
@@ -30,7 +31,7 @@ def main():
     # w2v_array = normalizer.transform(w2v_array)
 
     # DBSCAN
-    db = DBSCAN(eps=0.1, min_samples=5, metric='cosine').fit(w2v_array)
+    db = DBSCAN(eps=0.1, min_samples=5, metric='cosine', algorithm= 'ball_tree').fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
