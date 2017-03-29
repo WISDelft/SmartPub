@@ -7,7 +7,7 @@ import _pickle as pkl
 from gensim.models import Word2Vec
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
-
+from nltk.corpus import stopwords
 
 def main():
   print("Proces word2vec + DBSCAN")
@@ -22,14 +22,15 @@ def main():
 
   for num, model in enumerate(w2v_models):
     my_list = get_w2vArray(model,Method_terms)
-    w2v_array = np.asarray(my_list)
+    w2v_array = np.asarray(my_list[0])
+    term_list = my_list[1]
     print(w2v_array.shape)
 
     # Normalize
     w2v_array = StandardScaler().fit_transform(w2v_array)
 
     # DBSCAN
-    db = DBSCAN(eps=0.6, min_samples=5).fit(w2v_array)
+    db = DBSCAN(eps=0.5, min_samples=20).fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
@@ -43,7 +44,7 @@ def main():
         f.write("cluster {}:, Anotate Here,".format(i))
         for j, label in enumerate(labels):
           if label == i:
-            f.write("{},".format(Method_terms[j]))
+            f.write("{},".format(term_list[j]))
         f.write("\n")
     """
     for i in range(n_clusters_):
@@ -65,32 +66,40 @@ def main():
 
 
 def get_w2vArray(w2v_model, Method_terms):
+    stopset = list(set(stopwords.words('english')))
     my_list = list()
     count = 0
     length = 0
     term_list = list()
     for term in Method_terms:
-        tmp = np.zeros(200) # do not forget to change it if you use different window size
-        in_terms = word_tokenize(term)
-        for i,t in enumerate(in_terms):
-            try:
-                #print(t)
-                length+=1
-                tmp += w2v_model.wv.word_vec(str(t))
+      tmp = np.zeros(200)  # do not forget to change it if you use different window size
+      in_terms = word_tokenize(term)
+      ner_no_stopwords = ""
+      for i, t in enumerate(in_terms):
+        try:
+          # print(t)
 
-                #my_list.append(w2v_model.wv.word_vec(term))
+          if t.lower() not in stopset:
+            length += 1
+            ner_no_stopwords += t + " "
+            tmp += w2v_model.wv.word_vec(str(t))
 
-            except:
-                #tmp += np.zeros(100)
-                count +=1
+            # my_list.append(w2v_model.wv.word_vec(term))
 
+        except:
+          # tmp += np.zeros(100)
+          count += 1
+      if length == 0:
+        my_list.append(np.zeros(200))
+      else:
         my_list.append(tmp / length)
-        #term_list.append(term)
-        length = 0
-            #print(term)
-            #my_list.append(np.zeros(200))
-    print("terms: {}, meth_terms: {}, terms not in voc: {}".format(len(my_list), len(Method_terms),count))
-    return my_list
+      term_list.append(ner_no_stopwords)
+      ner_no_stopwords = ""
+      length = 0
+      # print(term)
+      # my_list.append(np.zeros(200))
+      print("terms: {}, meth_terms: {}, terms not in voc: {}".format(len(my_list), len(Method_terms), count))
+      return (my_list, term_list)
 
 if __name__ == '__main__':
   main()
