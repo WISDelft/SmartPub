@@ -56,7 +56,7 @@ def main():
     """
 
     print("Store DBSCAN")
-    with open("dbscan_cluster_{}.pkl".format(num), 'wb') as pickle_file:
+    with open(cfg.folder_pickle + "dbscan_cluster_{}.pkl".format(num), 'wb') as pickle_file:
       pkl.dump(obj=db, file=pickle_file)
     print("Next Model")
     # print("Outilers:".format(i), end= "")
