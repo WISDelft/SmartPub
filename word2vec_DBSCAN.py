@@ -19,7 +19,7 @@ def main():
   w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_25_rh_coll_v2'))
   w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_50_rh_coll_v2'))
   w2v_models.append(Word2Vec.load(cfg.folder_pickle + 'Word2VecModel_size_200_win_200_rh_coll_v2'))
-
+  print("Read word2vec models")
   for num, model in enumerate(w2v_models):
     my_list = get_w2vArray(model,Method_terms)
     w2v_array = np.asarray(my_list[0])
@@ -30,6 +30,7 @@ def main():
     w2v_array = StandardScaler().fit_transform(w2v_array)
 
     # DBSCAN
+    print("Start DBSCAN eps= 0.5 min_samples= 40")
     db = DBSCAN(eps=0.5, min_samples=40).fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
