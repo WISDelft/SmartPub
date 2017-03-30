@@ -72,6 +72,7 @@ def get_w2vArray(w2v_model, Method_terms):
   count = 0
   length = 0
   term_list = list()
+  no_stopwords_term_list = list()
   for term in Method_terms:
     tmp = np.zeros(200)  # do not forget to change it if you use different window size
     in_terms = word_tokenize(term)
@@ -90,7 +91,8 @@ def get_w2vArray(w2v_model, Method_terms):
       except:
         # tmp += np.zeros(100)
         count += 1
-    term_list.append(ner_no_stopwords)
+    no_stopwords_term_list.append(ner_no_stopwords)
+    term_list.append(term)
     ner_no_stopwords = ""
     if length == 0:
       my_list.append(np.zeros(200))
