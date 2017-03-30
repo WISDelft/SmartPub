@@ -30,7 +30,7 @@ def main():
     w2v_array = StandardScaler().fit_transform(w2v_array)
 
     # DBSCAN
-    print("Start DBSCAN eps= 0.3 min_samples= 5")
+    print("Start DBSCAN eps= 0.3 min_samples= 15")
     db = DBSCAN(eps=0.3, min_samples=5).fit(w2v_array)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
@@ -82,7 +82,7 @@ def get_w2vArray(w2v_model, Method_terms):
 
         if t.lower() not in stopset:
           length += 1
-          ner_no_stopwords += t + " "
+          ner_no_stopwords += t + ""
           tmp += w2v_model.wv.word_vec(str(t))
 
           # my_list.append(w2v_model.wv.word_vec(term))
