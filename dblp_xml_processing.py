@@ -539,7 +539,8 @@ class XmlProcessing:
     # select only the link tags
     for link in soup.find_all('a'):
       # the name of in the link tag is "FullTextPDF"
-      if str(link.get('name')).endswith('PDF'):
+      if str(link.get('name')).endswith('PDF') or str(link.get('name')).endswith('Pdf') \
+        or str(link.get('name')).endswith('pdf'):
         href_link = link.get('href')
         prefix = "http://dl.acm.org/"
         pdf_link = prefix + href_link
