@@ -256,7 +256,8 @@ class XmlProcessing:
             current_Date = downloadinfo['lastaccessed']
             days_previous_check = (current_Date - last_access).days
             skip = True
-            if days_previous_check > 30:
+            ####### change it later!!!!!!
+            if days_previous_check >= 0:
               skip = False
               print()
               print("Paper: {}, Last Check: {} days ago!".format(paper['dblpkey'], days_previous_check))
@@ -468,7 +469,7 @@ class XmlProcessing:
       print("Access in " + pdf_link)
       return tools.downloadFile(url=pdf_link, folder=cfg.folder_pdf, overwrite=False,
                                 localfilename=filename, printOutput=False)
-    raise BaseException(req.geturl() + ' does not contain a valid AAAI download link.')
+    raise BaseException(paper_url + ' does not contain a valid AAAI download link.')
 
 
   # python3 dblp_xml_processing.py -filter="{'booktitle' : 'ICSE', 'scraper' : 'acm'}"
