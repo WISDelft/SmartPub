@@ -202,12 +202,12 @@ def main(filter:("filter","option")=None):
                   {'$and': [{'booktitle': 'KDD'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions KDD papers", result))
 
-                # print the papers from ICMD
-                result = db.publications.count({"booktitle": "ICMD"})
-                print('{:>25} {:>8d}'.format("ICMD papers", result))
+                # print the papers from ICDM
+                result = db.publications.count({"booktitle": "ICDM"})
+                print('{:>25} {:>8d}'.format("ICDM papers", result))
 
                 result = db.publications.count(
-                  {'$and': [{'booktitle': 'ICMD'}, {'content.chapters': {'$exists': True}}]})
+                  {'$and': [{'booktitle': 'ICDM'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions ICMD papers", result))
 
 
