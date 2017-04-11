@@ -193,6 +193,32 @@ def main(filter:("filter","option")=None):
                 print('{:>25} {:>8d}'.format("Successful extractions IEEE J. Robotics and Automation papers", result))
 
 
+
+                # print the papers from KDD
+                result = db.publications.count({"booktitle": "KDD"})
+                print('{:>25} {:>8d}'.format("KDD papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'KDD'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions KDD papers", result))
+
+                # print the papers from ICMD
+                result = db.publications.count({"booktitle": "ICMD"})
+                print('{:>25} {:>8d}'.format("ICMD papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'booktitle': 'ICMD'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ICMD papers", result))
+
+
+                # print the papers from JMLR
+                result = db.publications.count({"journal": "JMLR"})
+                print('{:>25} {:>8d}'.format("JMLR papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'journal': 'JMLR'}, {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions JMLR papers", result))
+
             if k == "printColl" and v == "yes":
                 print("Collections in MongoDB")
                 collections = db.collection_names()
