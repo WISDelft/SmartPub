@@ -257,7 +257,7 @@ class XmlProcessing:
             days_previous_check = (current_Date - last_access).days
             skip = True
             ####### change it later!!!!!!
-            if days_previous_check >= 0:
+            if days_previous_check >= 30:
               skip = False
               print()
               print("Paper: {}, Last Check: {} days ago!".format(paper['dblpkey'], days_previous_check))

@@ -212,12 +212,21 @@ def main(filter:("filter","option")=None):
 
 
                 # print the papers from JMLR
-                result = db.publications.count({"journal": "JMLR"})
+                result = db.publications.count({"journal": "Journal of Machine Learning Research"})
                 print('{:>25} {:>8d}'.format("JMLR papers", result))
 
                 result = db.publications.count(
-                  {'$and': [{'journal': 'JMLR'}, {'content.chapters': {'$exists': True}}]})
+                  {'$and': [{'journal': 'Journal of Machine Learning Research'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions JMLR papers", result))
+
+                # print the papers from ML
+                result = db.publications.count({"journal": "Machine Learning"})
+                print('{:>25} {:>8d}'.format("ML papers", result))
+
+                result = db.publications.count(
+                  {'$and': [{'journal': 'Machine Learning'},
+                            {'content.chapters': {'$exists': True}}]})
+                print('{:>25} {:>8d}'.format("Successful extractions ML papers", result))
 
             if k == "printColl" and v == "yes":
                 print("Collections in MongoDB")
