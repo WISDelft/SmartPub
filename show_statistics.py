@@ -75,10 +75,16 @@ def main(filter:("filter","option")=None):
 
                 # Print ICSE papers
                 result = db.publications.count({"booktitle": "ICSE"})
+                result += db.publications.count({"booktitle": "ICSE (1)"})
+                result += db.publications.count({"booktitle": "ICSE (2)"})
                 print('{:>25} {:>8d}'.format("ICSE papers", result))
 
                 result = db.publications.count(
                     {'$and': [{'booktitle': 'ICSE'}, {'content.chapters': {'$exists': True}}]})
+                result += db.publications.count(
+                  {'$and': [{'booktitle': 'ICSE (1)'}, {'content.chapters': {'$exists': True}}]})
+                result += db.publications.count(
+                  {'$and': [{'booktitle': 'ICSE (2)'}, {'content.chapters': {'$exists': True}}]})
                 print('{:>25} {:>8d}'.format("Successful extractions ICSE papers", result))
 
                 #print the papers from SIGIR
@@ -91,6 +97,9 @@ def main(filter:("filter","option")=None):
 
                 #print the papers from ESWC
                 result = db.publications.count({"booktitle": "ESWC"})
+                result += db.publications.count({"booktitle": "ESWS"})
+                result += db.publications.count({"booktitle": "ESWC (1)"})
+                result += db.publications.count({"booktitle": "ESWC (2)"})
                 print('{:>25} {:>8d}'.format("ESWC papers", result))
 
                 #result = db.publications.find_one({"dblpkey":"conf_esws_BruggemannBXK16"})
@@ -99,7 +108,16 @@ def main(filter:("filter","option")=None):
                 #    print("No entry")
 
 
-                result = db.publications.count({'$and' : [{'booktitle' :'ESWC'} , {'content.chapters':{'$exists':True}}]})
+                result = db.publications.count(
+                  {'$and' : [{'booktitle' :'ESWC'} , {'content.chapters':{'$exists':True}}]})
+                result += db.publications.count(
+                  {'$and': [{'booktitle': 'ESWC (1)'}, {'content.chapters': {'$exists': True}}]})
+                result += db.publications.count(
+                  {'$and': [{'booktitle': 'ESWC (2)'}, {'content.chapters': {'$exists': True}}]})
+                result += db.publications.count(
+                  {'$and': [{'booktitle': 'ESWS'}, {'content.chapters': {'$exists': True}}]})
+
+
                 print('{:>25} {:>8d}'.format("Successful extractions ESWC papers", result))
 
                 #print the papers from ICWSM
@@ -133,6 +151,7 @@ def main(filter:("filter","option")=None):
 
                 result = db.publications.count(
                   {'$and': [{'booktitle': 'ICSR'}, {'content.chapters': {'$exists': True}},{'_id' : {'$regex':'socrob'}}]})
+
                 print('{:>25} {:>8d}'.format("Successful extractions ICSR papers", result))
 
                 # print the papers from icsr SOFTWARE REUSE
