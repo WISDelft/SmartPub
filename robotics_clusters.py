@@ -1,40 +1,21 @@
-import numpy as np
-from sklearn.cluster import DBSCAN
-from sklearn import metrics
-from sklearn.datasets.samples_generator import make_blobs
-from sklearn.preprocessing import StandardScaler
+from sklearn.feature_extraction.text import  CountVectorizer
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import HashingVectorizer, CountVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
-from sklearn import metrics
+
 from sklearn import decomposition
 from nltk.corpus import stopwords
 from pyhelpers import tools
-from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.metrics import  silhouette_score
 import config as cfg
-import seaborn as sns
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.neighbors import kneighbors_graph
 
-from scipy.spatial.distance import cdist, pdist
-import scipy as sp
-from nltk.tokenize import word_tokenize, wordpunct_tokenize
-from gensim.models import Word2Vec
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import numpy as np
 import _pickle as pkl
-from gensim.models import Word2Vec
 
-from sklearn.cluster import KMeans, MiniBatchKMeans, DBSCAN
-from pymongo import MongoClient
-from pymongo.errors import ServerSelectionTimeoutError
 
-import hdbscan
+from sklearn.cluster import KMeans
+
+
+
 
 
 def is_number(s):
