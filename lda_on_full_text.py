@@ -20,6 +20,7 @@ def print_top_words(model, feature_names, n_top_words):
 
 
 def main():
+  """
   new_pipe = [
     {
       "$match": {
@@ -48,23 +49,19 @@ def main():
       }
     }
   ]
-  db = tools.connect_to_mongo()
+  
   unique_sentences = db.publications.aggregate(new_pipe, allowDiskUse=True)
-
-  uniqu_sent = list()
-  for sent in unique_sentences:
-    uniqu_sent.append(sent['_id']['rhetorical'])
+  """
+  db = tools.connect_to_mongo()
+  sentences = db.rhetorical_sentences.find({'multiLabel_cls': {"$in": ['method']}})
+  sent_list = set()
+  for sent in sentences:
+    sent_list.add(sent['rhetorical'])
 
   tf_vectorizer = CountVectorizer(stop_words='english')
-  tf = tf_vectorizer.fit_transform(uniqu_sent)
-
-  #svd = decomposition.TruncatedSVD(n_components=100, n_iter=5)
-  # normalizer = Normalizer(copy=False)
-  #min_max_scaler = preprocessing.MinMaxScaler()
-  #lsa = make_pipeline(svd, min_max_scaler)
-
-  print()
-  print("Fit SVD+Normalization")
+  tf = tf_vectorizer.fit_transform(sent_list)
+  #print()
+  #print("Fit SVD+Normalization")
   #X = lsa.fit_transform(tf)
 
   lda = LatentDirichletAllocation(n_topics=45, max_iter=5,
