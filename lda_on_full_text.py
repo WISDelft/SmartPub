@@ -58,7 +58,7 @@ def main():
   for sent in sentences:
     sent_list.add(sent['rhetorical'])
 
-  tf_vectorizer = CountVectorizer(stop_words='english')
+  tf_vectorizer = CountVectorizer(stop_words='english', max_features= 1000)
   tf = tf_vectorizer.fit_transform(sent_list)
   #print()
   #print("Fit SVD+Normalization")
