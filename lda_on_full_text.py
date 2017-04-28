@@ -15,6 +15,7 @@ def print_top_words(model, feature_names, n_top_words):
                         for i in topic.argsort()[:-n_top_words - 1:-1]]))
       f.write(",".join([feature_names[i]
                       for i in topic.argsort()[:-n_top_words - 1:-1]]))
+      f.write("\n")
     print()
     f.write("\n")
 
@@ -53,7 +54,7 @@ def main():
   unique_sentences = db.publications.aggregate(new_pipe, allowDiskUse=True)
   """
   db = tools.connect_to_mongo()
-  sentences = db.rhetorical_sentences.find({'multiLabel_cls': {"$in": ['method']}})
+  sentences = db.rhetorical_sentences.find({})
   sent_list = set()
   for sent in sentences:
     sent_list.add(sent['rhetorical'])
