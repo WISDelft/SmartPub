@@ -30,7 +30,7 @@ def calculate_s_scores(X, min_k, max_k, facet):
   s = []
   max_val = 0
   maximum_k = 0
-  with open(cfg.folder_pickle+"silhouette_scores_between_multilabel_{}_{}_{}.csv".format(facet, min_k, max_k), 'w',
+  with open(cfg.folder_pickle+"silhouette_scores_between_multilabel_robots_{}_{}_{}.csv".format(facet, min_k, max_k), 'w',
             encoding="UTF-8") as f:
     for n_clusters in range(min_k, max_k):
       kmeans = KMeans(n_clusters=n_clusters, init='k-means++', max_iter=100, n_init=1)
@@ -105,13 +105,13 @@ def cluster_facet_topics(X,num_clusters, facet,count_model,svd):
     km = KMeans(n_clusters=num_clusters, init='k-means++', max_iter=100, n_init=1, verbose=False)
     km.fit(X)
     # save the classifier
-    with open(cfg.folder_pickle+'co_occur_K_means_{}_{}_robots_lowercase.pkl'.format(num_clusters,facet), 'wb') as fid:
+    with open(cfg.folder_pickle+'co_occur_K_means_{}_{}_robots_2_lowercase.pkl'.format(num_clusters,facet), 'wb') as fid:
         pkl.dump(km, fid)
 
-    with open(cfg.folder_pickle+'co_occur_K_means_{}_vectorizer_{}_robots_lowercase.pkl'.format(num_clusters,facet), 'wb') as fid:
+    with open(cfg.folder_pickle+'co_occur_K_means_{}_vectorizer_{}_robots_2_lowercase.pkl'.format(num_clusters,facet), 'wb') as fid:
         pkl.dump(count_model, fid)
 
-    with open(cfg.folder_pickle+'co_occur_K_means_{}_svd_{}_robots_lowercase.pkl'.format(num_clusters,facet), 'wb') as fid:
+    with open(cfg.folder_pickle+'co_occur_K_means_{}_svd_{}_robots_2_lowercase.pkl'.format(num_clusters,facet), 'wb') as fid:
         pkl.dump(svd, fid)
 
     original_space_centroids = svd.inverse_transform(km.cluster_centers_)
@@ -119,7 +119,7 @@ def cluster_facet_topics(X,num_clusters, facet,count_model,svd):
     #order_centroids = km.cluster_centers_.argsort()[:, ::-1]
 
 
-    with open(cfg.folder_pickle+'co_occur_K_means_{}_{}_robots_lowercase.csv'.format(num_clusters,facet), 'w', encoding= 'UTF-8') as f:
+    with open(cfg.folder_pickle+'co_occur_K_means_{}_{}_robots_2_lowercase.csv'.format(num_clusters,facet), 'w', encoding= 'UTF-8') as f:
 
         term_list = count_model.get_feature_names()
         f.write("Top terms with {} clusters".format(num_clusters))
