@@ -85,6 +85,7 @@ def find_word_clusters(labels_array, cluster_labels):
     return cluster_to_words
 
 def clustering(numberOfSeeds):
+     '''Cluster the word vectors using different number of clusters and measure the silhoute score'''
     tokenizer = SpaceTokenizer()
     sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
     stop_words = set(stopwords.words('english'))
