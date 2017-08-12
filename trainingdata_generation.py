@@ -1,3 +1,6 @@
+"""
+In this code we will annotated the sentences which where extracted by trainingdata_extraction.py using the seed files.
+"""
 from itertools import repeat
 import csv
 from nltk.corpus import stopwords
@@ -16,34 +19,31 @@ import numpy as np
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.lancaster import LancasterStemmer
 
+
+
+
 def generate_training(numberOfSeeds):
     tokenizer = SpaceTokenizer()
     sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
     for iteration in range(0,10):
         dsnames=[]
-        #corpuspath = '/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/dataset-names-train.txt'
+       
+    #get the seed names and lowercase them
         corpuspath='/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation_files/X_Seeds_' + str(numberOfSeeds) + '_' + str(iteration) + '.txt'
         with open(corpuspath, "r") as file:
             for row in file.readlines():
                 dsnames.append(row.strip())
-        # corpuspath = "/Users/sepidehmesbah/Downloads/ner-crf-master/preprocessing/temp-dataset-names-shrinkseed.txt"
-        #
-        # with open(corpuspath, "r") as file:
-        #     for row in file.readlines():
-        #         dsnames.append(row.strip())
-
+   
         dsnames=[x.lower() for x in dsnames]
         dsnames = list(set(dsnames))
 
-
+         
         fileUnlabelled=open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation_files/X_testAp_' + str(numberOfSeeds) + '_' + str(iteration) + '.txt','r')
 
         text=fileUnlabelled.read()
         text=text.replace('\\','')
         text=text.replace('/','')
         text = text.replace('"', '')
-
-
         text = text.replace('(', '')
         text = text.replace(')', '')
         text = text.replace('[', '')
@@ -52,13 +52,14 @@ def generate_training(numberOfSeeds):
         text = text.replace('?', ' ?')
         text = text.replace('..', '.')
 
-
+        #Split the text into sentences
         lines = (tokenize.sent_tokenize(text.strip()))
         labelledtext=list()
 
         print(len(lines))
 
         lines=list(set(lines))
+        #in each line check if there exists a match word to the seed names, if yes add the /DATA label to the word
         for line in lines:
 
            index = [i for i, x in enumerate(dsnames) if dsnames[i] in line.lower()]
@@ -78,9 +79,7 @@ def generate_training(numberOfSeeds):
                 flag = False
                 for idx, word in enumerate(words):
                     #word=word.translate(str.maketrans('', '', string.punctuation))
-
-
-
+                    
                     if flag==True:
 
                         flag=False
@@ -183,22 +182,25 @@ def generate_training(numberOfSeeds):
                            else:
                                sentence = sentence + ' ' + worddict[word]
                labelledtext.append(sentence)
-                    #except:
-                    #    sentence = sentence + ' ' + word
-                       #labelledtext.append(sentence)
-
-
-
-
-
-
-               #print(sentence)
-
-
+                
            else:
                labelledtext.append(line)
-       # print(labelledtext)
+                
         inputs = []
+        #generate the tab seperated file  for each word an it's label like the example below:
+        '''
+        Two	O
+        well	O
+        known	O
+        public	O
+        image	O
+        datasets	O
+        ,	O
+        NUS-WIDE	DATA
+        25	O
+        and	O
+        ImageNet	DATA
+        '''
         for ll in labelledtext:
                words = word_tokenize(ll)
 
@@ -224,12 +226,11 @@ def generate_training(numberOfSeeds):
                    if '###' in row[0]:
                        continue
                    elif row[0] == '.':
-                       # rows = str(row[0]) + '\t' + str(row[1]) + '\t' + str(row[2]) + "\n"
+        
                        rows = str(row[0]) + '\t' + str(row[1]) + "\n"
                        file.write(rows)
                        file.write("\n")
                    else:
-                       # rows = str(row[0]) + '\t' + str(row[1]) + '\t' + str(row[2]) + "\n"
                        rows = str(row[0]) + '\t' + str(row[1]) + "\n"
                        file.write(rows)
 
