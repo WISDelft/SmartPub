@@ -1,8 +1,12 @@
+"""
+This Script, creates the property file for different training data files, then trains a CRF and tests it on 2 different test sets testA, testB.
+"""
 import subprocess
 import re
 
 
-def run_command(numberOfSeeds):
+def test_on_testB(numberOfSeeds):
+    ''' Testing the trained crf on testB '''
     outputfile = open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/aaaembedingclustering_testBoutputs.txt', 'a')
     for iteration in range(0, 10):
         command='java -cp /Users/sepidehmesbah/Downloads/stanford-ner-2016-10-31/stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -loadClassifier /Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/embedingclustering_splitted'+ str(numberOfSeeds) + '_' + str(iteration) +'.ser.gz -testFile /Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/X_testB_50_manually_splitted3.tsv'
@@ -17,6 +21,7 @@ def run_command(numberOfSeeds):
 ###############
 
 def training_austenprop(numberOfSeeds):
+    ''' Training the CRF and testing on TestA '''
     outputfile=open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/aaaembedingclustering__testAoutputs.txt','a')
     for iteration in range(0, 10):
 
@@ -30,8 +35,7 @@ def training_austenprop(numberOfSeeds):
 
 
 def create_austenprop(numberOfSeeds):
-
-
+    ''' Generating the property files'''
     outputfile = open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/austen.prop', 'r')
     text=outputfile.read()
     print(text)
@@ -59,17 +63,10 @@ def create_austenprop(numberOfSeeds):
 # training_austenprop(25)
 # training_austenprop(50)
 # training_austenprop(100)
-run_command(2)
-run_command(5)
-run_command(10)
-run_command(25)
-run_command(50)
-run_command(100)
+test_on_testB(2)
+test_on_testB(5)
+test_on_testB(10)
+test_on_testB(25)
+test_on_testB(50)
+test_on_testB(100)
 
-# outputfile = open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/simplerule+embedding2_4.txt', 'a')
-#
-# command='java -cp /Users/sepidehmesbah/Downloads/stanford-ner-2016-10-31/stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -loadClassifier /Users/sepidehmesbah/Downloads/stanford-ner-2016-10-31/simplerule+embedding2_4.ser.gz -testFile /Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/X_testB_50_manually_splitted.tsv'
-# p = subprocess.call(command,
-#                          stdout=outputfile,
-#                          stderr=subprocess.STDOUT, shell=True)
-# outputfile.close()
