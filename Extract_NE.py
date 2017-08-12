@@ -1,10 +1,15 @@
+"""
+This script is used to extract all the NEs from the text
+"""
 import nltk
 
 def preprocess_NE(filepath):
 
     fileUnlabelled=open(filepath,'r')
     text = fileUnlabelled.read()
+    
     print('started to extract general NE from paragraphs....')
+    
     sentences = nltk.sent_tokenize(text)
     tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
     tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
