@@ -1,3 +1,7 @@
+"""
+Here we will extract a number of sentences for the training data using different number of dataset name seeds (e.g  2,5,10,...) 
+"""
+
 import numpy as np
 from sklearn.model_selection import train_test_split
 import random
@@ -18,78 +22,54 @@ def extract(numberOfSeeds):
     papernames=[]
     dsnames=[]
     X_testB=[]
-    # with open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/X_testB_50_manually_splitted.tsv', 'r') as tsvin:
-    #     tsvin = csv.reader(tsvin, delimiter='\t')
-    #
-    #     for row in tsvin:
-    #         # print(row)
-    #         try:
-    #           if row[1]=='DATA':
-    #            # print(row[0])
-    #            X_testB.append(row[0])
-    #         except:
-    #             continue
-    # X_testB =list(set(X_testB))
-    # #print(dsnames)
-    # # print(len(dsnames))
+    
+    #First we get the dataset names which have been used in the testing set (TestB) to exclude them from the training sentences
     with open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/dataset-names-testb.txt', 'r') as file:
         for row in file.readlines():
             X_testB.append(row.strip())
+    #lowercase the names
     X_testB=[ds.lower() for ds in X_testB]
-    print(X_testB)
 
 
 
+    #Getting the list of papers which can be used for as the developement data
     corpuspath = "/Users/sepidehmesbah/SmartPub/DataProfiling/test_papers.txt"
-
     with open(corpuspath, "r") as file:
                 for row in file.readlines():
                     papernames.append(row.strip())
+                    
+    #Initialize the elastic search                
     es = Elasticsearch(
         [{'host': 'localhost', 'port': 9200}]
     )
     dsnames=[]
+    
+    #List of seed names
     corpuspath = "/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation/dataset-names-trainfinal.txt"
     with open(corpuspath,"r") as file:
         for row in file.readlines():
             dsnames.append(row.strip())
 
+    
+    #10 times randomly pick i number of seeds
     for i in range(0,10):
         dsnames = [x.lower() for x in dsnames]
-        #random.shuffle(dsnames)
 
         dsnames=list(set(dsnames))
-        print(len(dsnames))
-        print(dsnames)
+
+        #shuffle the list
         X_train=random.sample(dsnames, numberOfSeeds)
-        #X_train=dsnames[0:numberOfSeeds]
+
 
         paragraph=[]
+        
+        #using the seeds,extract the sentences from the publications using the query in elastic search
         for dataset in X_train:
             datasetname = re.sub(r'\([^)]*\)', '', dataset)
 
             print(datasetname)
 
-            # Exact Matching
-            # query = {"query": {
-            #     "bool": {
-            #         "must": {
-            #             "term":{
-            #                 "text": datasetname
-            #             }
-            #         }
-            #     }
-            # }}
-            # query = {"query":
-            #     {"match": {
-            #         "text": {
-            #             "query": datasetname,
-            #             "operator": "and"
-            #         }
-            #     }
-            #     }
-            # }
-
+            #Matching
             query = {"query":
                 {"match": {
                     "content.chapter.sentpositive": {
@@ -100,32 +80,22 @@ def extract(numberOfSeeds):
                 }
             }
 
-            # res = es.search(index="ind", doc_type="allsentnum",
-            #                 body=query, size=15)
-            # print(len(res['hits']['hits']))
             res = es.search(index="twosent", doc_type="twosentnorules",
                             body=query, size=10000)
             print(len(res['hits']['hits']))
 
 
+            #clean up the sentences and if they dont contain the names of the testB then add them as the training data
             for doc in res['hits']['hits']:
 
-                    #sentence = doc["_source"]["text"].replace(',', ' ')
                     sentence = doc["_source"]["content.chapter.sentpositive"]
-                    #print(sentence)
-                    #sentence = sentence.replace('\'', "")
-                    # mynames =''
+                  
                     words = nltk.word_tokenize(doc["_source"]["content.chapter.sentpositive"])
                     lengths = [len(x) for x in words]
                     average = sum(lengths) / len(lengths)
                     if average < 3:
                      continue
-                    # if any(ext in sentence for ext in corpus):
-                    #         score=1
-                    # else:
-                    #         score=0
-
-
+                  
                     sentence = sentence.replace("@ BULLET", "")
                     sentence = sentence.replace("@BULLET", "")
                     sentence = sentence.replace(", ", " , ")
@@ -136,20 +106,21 @@ def extract(numberOfSeeds):
                     sentence = sentence.replace(',', ' ,')
                     sentence = sentence.replace('?', ' ?')
                     sentence = sentence.replace('..', '.')
-                    #sentence = "".join(c for c in sentence if c not in ('!', "'", '"', ';', '?', '\(', '\)', '\[', '\]'))
+                    
+                    
                     if any(ext in sentence.lower() for ext in X_testB):
-                    # for bb in X_testB:
-                    #     if bb not in sentence:
-                    #         paragraph.append(sentence)
+           
                       continue
-                    #
-                    #
+                  
                     else:
                         sentences=tokenize.sent_tokenize(sentence)
                         for sent in sentences:
                             if sent not in paragraph:
                                 paragraph.append(sent)
+        
         paragraph=list(set(paragraph))
+        
+        #Split the data into training and testing and keep the sentences and also the seed names for annotation that will be used later
         X_traintext, X_testA= train_test_split(
         paragraph,  test_size=0.3, random_state=100)
         f1 = open('/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation_files/X_train_'+str(numberOfSeeds)+'_'+str(i)+'.txt', 'w')
