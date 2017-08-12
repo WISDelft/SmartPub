@@ -1,15 +1,11 @@
-# import gensim
-# from sklearn.cluster import KMeans
-# import numpy as np
-# from sklearn.externals import joblib
+"""
+This script will be used to find similar dataset names based on the existing seed using embedging clustering or embedding similarity.
+
+"""
 from __future__ import division
 import matplotlib.pyplot as plt
 from gensim.models.word2vec import Word2Vec
 from sklearn.externals import joblib
-# from sklearn.preprocessing import Imputer
-# from sklearn import decomposition
-# from sklearn.preprocessing import Normalizer
-# from sklearn.pipeline import make_pipeline
 from sklearn import decomposition
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
@@ -78,8 +74,6 @@ def build_word_vector_matrix(vector_file,propernouns):
             except:
                 continue
 
-
-
     return numpy.array(numpy_arrays), labels_array
 
 
@@ -89,7 +83,7 @@ def find_word_clusters(labels_array, cluster_labels):
     for c, i in enumerate(cluster_labels):
         cluster_to_words[i].append(labels_array[c])
     return cluster_to_words
-#propernouns=['organizational','hashing','underwater','initialized','keeps','respondents','Road', 'OpenStreetMap', 'Beijing', 'Aalborg', 'Beijing', 'Analyze', 'User', 'U', 'BELIEF', 'BDMS', 'Bob', 'Lake Forest', 'facebook', 'twitter', 'imdb', 'instagram']
+
 def clustering(numberOfSeeds):
     tokenizer = SpaceTokenizer()
     sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -99,12 +93,7 @@ def clustering(numberOfSeeds):
         propernouns=preprocess_NE(path)
         dsnames = []
         dsnamestemp = []
-        # corpuspath='/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation_files/X_SeedsEC2_' + str(numberOfSeeds) + '_' + str(iteration) + '.txt'
-        #
-        #
-        # with open(corpuspath, "r") as file:
-        #     for row in file.readlines():
-        #         dsnames.append(row.strip())
+       
         corpuspath = '/Users/sepidehmesbah/Downloads/ner-crf-master/evaluation_files/X_Seeds_' + str(
             numberOfSeeds) + '_' + str(iteration) + '.txt'
 
@@ -114,17 +103,14 @@ def clustering(numberOfSeeds):
                 propernouns.append(row.strip())
 
         dsnames = [x.lower() for x in dsnames]
-        # with open('used_names.csv','r') as tsv:
-        #
-        #     for line in csv.reader(tsv, delimiter=','):
-        #         dsnames.append(line[0])
+     
+        #load the trained word2vec model
         model = gensim.models.KeyedVectors.load_word2vec_format('/Users/sepidehmesbah/Downloads/ner-crf-master/preprocessing/modelFasttext.vec')
+        
         sentences_split = [s.lower() for s in propernouns]
-       # print(sentences_split)
+
         df, labels_array  = build_word_vector_matrix("/Users/sepidehmesbah/Downloads/ner-crf-master/model/modelFasttext.txt",sentences_split)
-        #print('labels_arraaaaayyy')
-       # print(labels_array)
-        #print(df)
+
         sse = {}
         maxcluster=0
         if len(df) >= 9:
