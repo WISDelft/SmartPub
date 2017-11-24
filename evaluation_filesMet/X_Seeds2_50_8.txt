@@ -1,0 +1,50 @@
+mcmc
+q-learning
+best-first search
+k-means++
+dynamic programming
+jump search
+exponential search
+tsa algorithm
+space mapping
+yield optimization
+random search
+lib+lif
+dbscan
+imputation
+bmecat
+ridge regularization
+clir
+viterbi
+simulated annealing
+clarke-tax
+convolutional neural network
+block sort
+genetic programming
+pairwise algorithm
+radial basis function network
+shannon entropy
+predictive modeling
+optics algorithm
+self-organizing map
+semantictyper
+deep learning
+scoring engine
+klsh
+adaptive filter
+hierarchical clustering
+greedy algorithm
+probabilistic retrieval model
+fourier analysis
+folding-in
+bayesian nonparametric
+statistical relational
+random forest
+dmp method
+graph-based propagation
+hidden markov models
+kolmogorov-smirnov ks
+adarank
+lstm
+bcdrw
+latent semantic analysis

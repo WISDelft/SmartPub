@@ -1,0 +1,50 @@
+model fitting
+hidden markov models
+spectral clustering
+kolmogorov-smirnov ks
+greedy algorithm
+global collaborative ranking
+similarity search
+stochastic gradient descent
+genetic algorithm
+semantic relevance
+recurrent neural network
+tagassist
+graph-based propagation
+skipgram
+fourier analysis
+yield optimization
+q-learning
+lib
+latent semantic analysis
+stack search
+predictive modeling
+breadth-first search
+imrank
+adaptive filter
+jump search
+word embedding
+fuzzy clustering
+probabilistic retrieval model
+linear search
+merge sort
+pattern matching
+basic load control method
+downhill simplex
+qald
+radial basis function network
+autoencoder
+latent dirichlet allocation
+signal processing
+optics algorithm
+lib+lif
+transfer function
+query expansion
+semantictyper
+mcmc
+convolutional dnn
+lsh method
+tree sort
+adarank
+block sort
+pearson correlation

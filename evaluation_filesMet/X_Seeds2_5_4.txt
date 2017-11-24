@@ -1,0 +1,5 @@
+recurrent neural network
+bayesian nonparametric
+pairwise algorithm
+linear regression
+global collaborative ranking

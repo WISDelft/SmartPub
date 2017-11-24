@@ -1,0 +1,100 @@
+optics algorithm
+random search
+cyclades
+ndcg-annealing
+pairwise personalized ranking
+q-learning
+space mapping
+greedy algorithm
+lsh method
+simulated annealing
+jump search
+evolution strategy
+semantictyper
+lib+lif
+qald
+tdcm
+transfer function
+imputation
+linear regression
+global collaborative ranking
+lib*lif
+spectral clustering
+linear search
+tsa algorithm
+pairwise algorithm
+clarke-tax
+hierarchical clustering
+graph-based propagation
+downhill simplex
+support vector machine
+viterbi
+bcdrw
+deep learning
+fourier analysis
+shannon entropy
+genetic algorithm
+general interest model
+stack search
+predictive modeling
+k-nearest neighbor
+adaptive filter
+random indexing
+gpbased
+fuzzy clustering
+dijkstra
+regular expression
+reinforcement learning
+best-first search
+variational bayesian inference
+hierarchical agglomerative
+probabilistic retrieval model
+k-means++
+query expansion
+block sort
+scoring engine
+hill climbing
+statistical relational
+selection algorithm
+lstm
+semantic relevance
+exponential search
+similarity search
+model fitting
+likelihood function
+dbscan
+pearson correlation
+genetic programming
+linkage analysis
+variational em
+rapid7
+convolutional dnn
+folding-in
+radial basis function network
+latent dirichlet allocation
+game theory
+kernel density estimation
+a* search
+autoencoder
+clir
+ridge regularization
+signal processing
+latent semantic analysis
+quicksort
+basic load control method
+simple random algorithm
+skipgram
+bayesian nonparametric
+query optimization
+mcmc
+recurrent neural network
+bmecat
+fast fourier
+kolmogorov-smirnov ks
+klsh
+plsa
+softmax
+breadth-first search
+random forest
+convolutional neural network
+pattern matching

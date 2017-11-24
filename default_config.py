@@ -18,6 +18,10 @@ grobid_url = '127.0.0.1:8080'
 ## conferences we like
 booktitles = ['JCDL','SIGIR','ECDL','TPDL','TREC', 'ICWSM', 'ESWC', 'ICSR','WWW', 'ICSE', 'HRI', 'VLDB', 'ICRA', 'ICARCV']
 
+#root to the project
+ROOTHPATH='/Users/sepidehmesbah/PycharmProjects/SmartPub'
+STANFORD_NER_PATH='/Users/sepidehmesbah/PycharmProjects/SmartPub/stanford_files/stanford-ner.jar'
+
 
 ## journals we like
 journals = ['IEEE Trans. Robotics' , 'IEEE Trans. Robotics and Automation', 'IEEE J. Robotics and Automation']

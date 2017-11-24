@@ -1,0 +1,5 @@
+fuzzy clustering
+pattern matching
+imputation
+linear search
+k-nearest neighbor

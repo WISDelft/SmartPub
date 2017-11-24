@@ -1,0 +1,10 @@
+latent semantic analysis
+fuzzy clustering
+tagassist
+semantictyper
+folding-in
+selection algorithm
+hierarchical clustering
+tdcm
+quicksort
+word embedding

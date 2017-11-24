@@ -1,0 +1,100 @@
+pearson correlation
+adaptive filter
+best-first search
+folding-in
+qald
+self-organizing map
+query expansion
+pairwise algorithm
+downhill simplex
+ndcg-annealing
+shannon entropy
+deep learning
+rapid7
+kolmogorov-smirnov ks
+convolutional neural network
+traditional materialized view
+yield optimization
+word embedding
+latent dirichlet allocation
+cyclades
+simulated annealing
+q-learning
+dbscan
+variational bayesian inference
+game theory
+lsh method
+dmp method
+clarke-tax
+hierarchical clustering
+breadth-first search
+plsa
+a* search
+regular expression
+quicksort
+fast fourier
+reinforcement learning
+evolution strategy
+hierarchical agglomerative
+recurrent neural network
+basic load control method
+support vector machine
+imrank
+greedy algorithm
+softmax
+clir
+lib
+tsa algorithm
+probabilistic retrieval model
+semantic relevance
+dynamic programming
+pattern matching
+space mapping
+radial basis function network
+kernel density estimation
+k-nearest neighbor
+genetic algorithm
+fourier analysis
+selection algorithm
+lib+lif
+viterbi
+k-means++
+convolutional dnn
+linear regression
+lib*lif
+dijkstra
+latent semantic analysis
+general interest model
+stochastic gradient descent
+semantictyper
+genetic programming
+tagassist
+random indexing
+graph-based propagation
+predictive modeling
+transfer function
+optics algorithm
+klsh
+hill climbing
+signal processing
+adarank
+imputation
+jump search
+merge sort
+pairwise personalized ranking
+bayesian nonparametric
+random forest
+exponential search
+query optimization
+similarity search
+restricted boltzmann machine
+ridge regularization
+autoencoder
+scoring engine
+hidden markov models
+likelihood function
+tdcm
+gpbased
+model fitting
+linear search
+bcdrw

@@ -1,0 +1,10 @@
+basic load control method
+statistical relational
+semantictyper
+recurrent neural network
+bayesian nonparametric
+pairwise personalized ranking
+genetic programming
+bsbm
+lsh method
+global collaborative ranking

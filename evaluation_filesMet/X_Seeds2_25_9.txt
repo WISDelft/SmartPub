@@ -1,0 +1,25 @@
+k-means++
+self-organizing map
+lib+lif
+recurrent neural network
+convolutional dnn
+plsa
+dmp method
+space mapping
+ndcg-annealing
+hidden markov models
+dynamic programming
+simulated annealing
+pairwise personalized ranking
+similarity search
+random forest
+hierarchical clustering
+query expansion
+kolmogorov-smirnov ks
+likelihood function
+query optimization
+q-learning
+statistical relational
+lsh method
+stochastic gradient descent
+fuzzy clustering

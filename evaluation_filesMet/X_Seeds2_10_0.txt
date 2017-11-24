@@ -1,0 +1,10 @@
+adaptive filter
+variational bayesian inference
+game theory
+quicksort
+ndcg-annealing
+pattern matching
+semantictyper
+similarity search
+k-means++
+reinforcement learning

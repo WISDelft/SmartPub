@@ -1,0 +1,10 @@
+adaptive filter
+likelihood function
+tsa algorithm
+simple random algorithm
+adarank
+autoencoder
+latent dirichlet allocation
+linear regression
+bayesian nonparametric
+kolmogorov-smirnov ks

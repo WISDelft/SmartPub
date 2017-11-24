@@ -1,0 +1,25 @@
+signal processing
+pattern matching
+fuzzy clustering
+convolutional neural network
+imputation
+graph-based propagation
+exponential search
+semantic relevance
+linkage analysis
+game theory
+query expansion
+hidden markov models
+bmecat
+kernel density estimation
+dijkstra
+block sort
+mcmc
+random indexing
+basic load control method
+skipgram
+autoencoder
+transfer function
+support vector machine
+general interest model
+qald

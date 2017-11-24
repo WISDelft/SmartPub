@@ -1,0 +1,5 @@
+quicksort
+semantictyper
+yield optimization
+kernel density estimation
+linear regression

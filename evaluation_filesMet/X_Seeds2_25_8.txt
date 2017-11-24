@@ -1,0 +1,25 @@
+hierarchical agglomerative
+genetic programming
+reinforcement learning
+dmp method
+predictive modeling
+query expansion
+likelihood function
+stochastic gradient descent
+pattern matching
+cyclades
+random search
+breadth-first search
+latent dirichlet allocation
+ridge regularization
+hierarchical clustering
+linkage analysis
+random indexing
+pairwise personalized ranking
+tagassist
+recursive function
+word embedding
+signal processing
+hidden markov models
+scoring engine
+self-organizing map

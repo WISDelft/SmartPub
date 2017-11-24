@@ -1,0 +1,25 @@
+linear regression
+general interest model
+adarank
+tree sort
+similarity search
+latent dirichlet allocation
+random search
+graph-based propagation
+lib*lif
+latent semantic analysis
+viterbi
+selection algorithm
+softmax
+scoring engine
+imputation
+rapid7
+dijkstra
+exponential search
+word embedding
+clir
+linear search
+optics algorithm
+semantictyper
+convolutional dnn
+lib

@@ -1,0 +1,5 @@
+recurrent neural network
+probabilistic retrieval model
+self-organizing map
+mcmc
+convolutional neural network

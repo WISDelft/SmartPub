@@ -1,0 +1,10 @@
+folding-in
+global collaborative ranking
+likelihood function
+transfer function
+bsbm
+simulated annealing
+support vector machine
+qald
+lib*lif
+linear search

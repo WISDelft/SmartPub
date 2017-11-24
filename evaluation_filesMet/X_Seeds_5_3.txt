@@ -1,0 +1,5 @@
+downhill simplex
+imrank
+spectral clustering
+reinforcement learning
+pattern matching

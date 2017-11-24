@@ -1,0 +1,5 @@
+linear search
+lsh method
+reinforcement learning
+selection algorithm
+deep learning

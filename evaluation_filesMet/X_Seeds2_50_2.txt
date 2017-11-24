@@ -1,0 +1,50 @@
+lib
+transfer function
+pairwise personalized ranking
+random indexing
+semantic relevance
+evolution strategy
+linkage analysis
+cyclades
+quicksort
+imrank
+global collaborative ranking
+block sort
+regular expression
+adaptive filter
+convolutional dnn
+model fitting
+folding-in
+scoring engine
+viterbi
+word embedding
+lib+lif
+softmax
+hierarchical agglomerative
+game theory
+autoencoder
+query optimization
+latent dirichlet allocation
+shannon entropy
+tsa algorithm
+breadth-first search
+plsa
+fuzzy clustering
+skipgram
+rapid7
+mcmc
+radial basis function network
+dmp method
+pairwise algorithm
+lsh method
+spectral clustering
+bmecat
+signal processing
+stochastic gradient descent
+variational bayesian inference
+recurrent neural network
+q-learning
+space mapping
+likelihood function
+simple random algorithm
+simulated annealing

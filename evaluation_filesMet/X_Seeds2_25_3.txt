@@ -1,0 +1,25 @@
+stack search
+bayesian nonparametric
+q-learning
+imputation
+latent semantic analysis
+jump search
+tree sort
+best-first search
+regular expression
+ndcg-annealing
+word embedding
+mcmc
+lib
+imrank
+selection algorithm
+variational em
+folding-in
+pairwise algorithm
+convolutional neural network
+skipgram
+query expansion
+scoring engine
+space mapping
+graph-based propagation
+simulated annealing

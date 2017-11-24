@@ -1,0 +1,50 @@
+greedy algorithm
+k-means++
+random indexing
+radial basis function network
+tagassist
+yield optimization
+support vector machine
+kolmogorov-smirnov ks
+shannon entropy
+skipgram
+semantictyper
+likelihood function
+transfer function
+lib+lif
+predictive modeling
+merge sort
+kernel density estimation
+general interest model
+plsa
+random search
+folding-in
+evolution strategy
+latent semantic analysis
+recurrent neural network
+best-first search
+simple random algorithm
+convolutional neural network
+graph-based propagation
+clir
+convolutional dnn
+pairwise algorithm
+dmp method
+fast fourier
+deep learning
+lib*lif
+fuzzy clustering
+dynamic programming
+signal processing
+lstm
+tdcm
+stack search
+k-nearest neighbor
+game theory
+lib
+bsbm
+tsa algorithm
+word embedding
+jump search
+rapid7
+autoencoder

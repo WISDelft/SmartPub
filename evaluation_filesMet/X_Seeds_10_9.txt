@@ -1,0 +1,10 @@
+lsh method
+linear search
+radial basis function network
+clarke-tax
+convolutional dnn
+selection algorithm
+transfer function
+pairwise personalized ranking
+mcmc
+lib+lif

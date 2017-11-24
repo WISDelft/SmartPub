@@ -1,0 +1,10 @@
+semantic relevance
+bmecat
+tagassist
+skipgram
+plsa
+quicksort
+statistical relational
+reinforcement learning
+pattern matching
+stochastic gradient descent

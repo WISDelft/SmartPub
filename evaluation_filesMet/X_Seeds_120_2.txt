@@ -1,0 +1,120 @@
+lib
+recurrent neural network
+graph-based propagation
+clarke-tax
+bcdrw
+breadth-first search
+tagassist
+ndcg-annealing
+traditional materialized view
+imrank
+boltzmann machine
+convolutional dnn
+cascade merge sort
+dpm model
+probabilistic retrieval model
+qald
+dijkstra
+pearson correlation
+variational em
+radial basis function network
+experimental design
+deep learning
+likelihood function
+jackknife resampling
+imputation
+mcmc
+transfer function matrix
+clir
+fractional programming
+globcausal
+logmap
+hierarchical agglomerative
+rssi
+optics algorithm
+multir
+bayesian bandits
+skipgram
+bayesian pmf
+cotype
+saupodoc
+preference propagation
+random indexing
+gpbased
+kolmogorov-smirnov ks
+lib+lif
+restricted boltzmann machine
+backpropagation
+k-nearest neighbor
+global collaborative ranking
+mapreduce leas
+kleinberg's method
+binary prioritization
+tfdp
+lstm
+bmecat
+asynchronous distributed optimization
+viterbi
+softmax
+game theory
+random forest
+support vector machine
+ltcm
+plsa
+semantic relevance
+least mean squares
+spectral density
+autoencoder
+predictive modeling
+dmp method
+htsm model
+fuzzy clustering
+latent dirichlet allocation
+hierarchical clustering
+semantictyper
+attribution modeling
+miakt
+basic load control method
+range minimum queries
+statistical relational learning
+rapid7
+general interest model
+yield optimization
+spectral clustering
+lsh method
+linear regression
+bsbm
+latent semantic analysis
+rprop
+manifold alignment
+scoring engine
+smatch
+variance adaptive quantization
+lib*lif
+dynamic programming
+convolutional neural network
+klsh
+alci
+simple random algorithm
+tdcm
+lift modeling
+stochastic gradient descent
+cbow
+spiking neural network
+shoq
+feedforward neural network
+minimax	probability machine
+fast fourier
+self-organizing map
+pairwise algorithm
+bootstrap aggregating
+powell's method
+pairwise personalized ranking
+usdl
+downhill simplex
+ltp-em
+fourier analysis
+robust discretization
+generec
+hopfield network
+dbscan

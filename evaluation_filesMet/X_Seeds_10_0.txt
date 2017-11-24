@@ -1,0 +1,10 @@
+variational bayesian inference
+latent dirichlet allocation
+kolmogorov-smirnov ks
+random forest
+latent semantic analysis
+clir
+fuzzy clustering
+q-learning
+traditional materialized view
+recurrent neural network

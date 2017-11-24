@@ -1,0 +1,50 @@
+random indexing
+jump search
+space mapping
+viterbi
+dmp method
+q-learning
+bayesian nonparametric
+statistical relational
+query expansion
+bcdrw
+kernel density estimation
+qald
+skipgram
+yield optimization
+kolmogorov-smirnov ks
+clarke-tax
+hill climbing
+stack search
+linkage analysis
+greedy algorithm
+graph-based propagation
+self-organizing map
+simulated annealing
+global collaborative ranking
+regular expression
+signal processing
+adarank
+breadth-first search
+latent semantic analysis
+traditional materialized view
+softmax
+recurrent neural network
+fourier analysis
+k-means++
+dynamic programming
+shannon entropy
+likelihood function
+best-first search
+merge sort
+predictive modeling
+query optimization
+quicksort
+spectral clustering
+hierarchical agglomerative
+selection algorithm
+ndcg-annealing
+random forest
+hierarchical clustering
+lib
+k-nearest neighbor

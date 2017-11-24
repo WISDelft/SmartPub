@@ -1,0 +1,10 @@
+convolutional neural network
+linear search
+semantic relevance
+regular expression
+simulated annealing
+recursive function
+self-organizing map
+bayesian nonparametric
+predictive modeling
+downhill simplex

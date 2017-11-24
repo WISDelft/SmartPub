@@ -1,0 +1,10 @@
+likelihood function
+genetic programming
+lsh method
+query optimization
+support vector machine
+bayesian nonparametric
+signal processing
+hidden markov models
+downhill simplex
+dbscan

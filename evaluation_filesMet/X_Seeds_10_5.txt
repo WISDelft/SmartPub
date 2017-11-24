@@ -1,0 +1,10 @@
+variational em
+best-first search
+bayesian nonparametric
+merge sort
+model fitting
+genetic programming
+evolution strategy
+dmp method
+genetic algorithm
+restricted boltzmann machine

@@ -1,0 +1,120 @@
+least mean squares
+mcmc
+semantictyper
+autoencoder
+clarke-tax
+cbow
+imputation
+skipgram
+rprop
+support vector machine
+multir
+dpm model
+convolutional neural network
+backpropagation
+predictive modeling
+bcdrw
+shoq
+breadth-first search
+powell's method
+logmap
+bayesian nonparametric
+bootstrap aggregating
+plsa
+jackknife resampling
+lift modeling
+random forest
+game theory
+imrank
+variance adaptive quantization
+small buckets heuristics
+bmecat
+kleinberg's method
+global collaborative ranking
+stochastic gradient descent
+self-organizing map
+radial basis function network
+dmp method
+probabilistic retrieval model
+convolutional dnn
+statistical relational learning
+downhill simplex
+manifold alignment
+preference propagation
+optics algorithm
+lsh method
+q-learning
+transfer function matrix
+gpbased
+leabra
+ltcm
+binary prioritization
+restricted boltzmann machine
+sequential importance sampling
+bayesian bandits
+semantic relevance
+mstp
+scoring engine
+htsm model
+lib
+experimental design
+smatch
+latent dirichlet allocation
+traditional materialized view
+cascade merge sort
+ltp-em
+k-nearest neighbor
+basic load control method
+tsa algorithm
+general interest model
+alci
+tdcm
+recurrent neural network
+simple random algorithm
+softmax
+lib+lif
+lstm
+viterbi
+variational bayesian inference
+latent semantic analysis
+globcausal
+random indexing
+dynamic programming
+boltzmann machine
+dbscan
+qald
+bsbm
+ridge regularization
+deep learning
+linkage analysis
+spectral density
+clir
+tagassist
+pairwise algorithm
+klsh
+cyclades
+kernel density estimation
+rssi
+likelihood function
+mapreduce leas
+yield optimization
+spiking neural network
+adarank
+lib*lif
+fast fourier
+pearson correlation
+ndcg-annealing
+minimax	probability machine
+rapid7
+usdl
+hierarchical clustering
+attribution modeling
+hierarchical agglomerative
+fuzzy clustering
+spectral clustering
+tfdp
+fractional programming
+lanczos resampling
+kolmogorov-smirnov ks
+fastica
+bernstein polynomial

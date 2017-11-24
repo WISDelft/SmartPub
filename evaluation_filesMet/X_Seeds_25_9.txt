@@ -1,0 +1,25 @@
+genetic algorithm
+random search
+semantic relevance
+recurrent neural network
+global collaborative ranking
+k-nearest neighbor
+pattern matching
+ridge regularization
+convolutional dnn
+self-organizing map
+gpbased
+genetic programming
+dbscan
+imputation
+a* search
+bcdrw
+clarke-tax
+ndcg-annealing
+autoencoder
+general interest model
+qald
+bayesian nonparametric
+deep learning
+radial basis function network
+kernel density estimation

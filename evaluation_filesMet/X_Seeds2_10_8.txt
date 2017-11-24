@@ -1,0 +1,10 @@
+breadth-first search
+k-nearest neighbor
+yield optimization
+greedy algorithm
+pairwise personalized ranking
+k-means++
+genetic algorithm
+linear search
+lstm
+query optimization

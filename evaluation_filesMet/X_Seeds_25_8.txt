@@ -1,0 +1,25 @@
+likelihood function
+ridge regularization
+mcmc
+evolution strategy
+semantictyper
+graph-based propagation
+genetic algorithm
+tagassist
+probabilistic retrieval model
+bayesian nonparametric
+k-means++
+pattern matching
+folding-in
+quicksort
+general interest model
+clir
+jump search
+k-nearest neighbor
+linear search
+recursive function
+dbscan
+tree sort
+bcdrw
+linkage analysis
+lib

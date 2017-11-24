@@ -1,0 +1,10 @@
+hill climbing
+model fitting
+skipgram
+game theory
+bayesian nonparametric
+likelihood function
+softmax
+lib+lif
+semantictyper
+lib*lif

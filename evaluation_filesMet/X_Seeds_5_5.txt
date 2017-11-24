@@ -1,0 +1,5 @@
+pairwise personalized ranking
+tagassist
+q-learning
+pearson correlation
+query optimization

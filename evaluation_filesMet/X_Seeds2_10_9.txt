@@ -1,0 +1,10 @@
+optics algorithm
+hidden markov models
+query expansion
+q-learning
+transfer function
+gpbased
+dbscan
+best-first search
+simulated annealing
+pearson correlation

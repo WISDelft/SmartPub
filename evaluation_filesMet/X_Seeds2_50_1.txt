@@ -1,0 +1,50 @@
+k-means++
+predictive modeling
+signal processing
+tree sort
+k-nearest neighbor
+traditional materialized view
+rapid7
+bmecat
+yield optimization
+linear regression
+deep learning
+softmax
+latent dirichlet allocation
+variational em
+restricted boltzmann machine
+semantictyper
+klsh
+breadth-first search
+viterbi
+query optimization
+global collaborative ranking
+convolutional neural network
+hill climbing
+reinforcement learning
+plsa
+exponential search
+space mapping
+pairwise personalized ranking
+downhill simplex
+fast fourier
+probabilistic retrieval model
+block sort
+bsbm
+graph-based propagation
+self-organizing map
+skipgram
+bayesian nonparametric
+adaptive filter
+pairwise algorithm
+clir
+quicksort
+fourier analysis
+adarank
+lib*lif
+lib+lif
+lsh method
+merge sort
+fuzzy clustering
+linear search
+bcdrw

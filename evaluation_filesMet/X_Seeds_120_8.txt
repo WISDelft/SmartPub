@@ -1,0 +1,120 @@
+imputation
+lib*lif
+minimax	probability machine
+cascade merge sort
+imrank
+hidden markov models
+variance adaptive quantization
+boltzmann machine
+radial basis function network
+qald
+linear regression
+fast fourier
+lanczos resampling
+mapreduce leas
+k-nearest neighbor
+mcmc
+dijkstra
+spectral density
+fractional programming
+bootstrap aggregating
+dpm model
+folding-in
+rapid7
+q-learning
+linkage analysis
+restricted boltzmann machine
+powell's method
+variational bayesian inference
+gpbased
+lib
+deep learning
+spectral clustering
+model fitting
+least mean squares
+likelihood function
+mstp
+dmp method
+rssi
+jackknife resampling
+logmap
+robust discretization
+convolutional dnn
+lstm
+bayesian pmf
+dbscan
+pearson correlation
+downhill simplex
+self-organizing map
+pairwise algorithm
+latent semantic analysis
+experimental design
+global collaborative ranking
+klsh
+pairwise personalized ranking
+htsm model
+preference propagation
+multir
+smatch
+stochastic gradient descent
+attribution modeling
+variational em
+kolmogorov-smirnov ks
+generec
+backpropagation
+binary prioritization
+skipgram
+cotype
+ridge regularization
+bayesian nonparametric
+convolutional neural network
+kleinberg's method
+lift modeling
+graph-based propagation
+latent dirichlet allocation
+scoring engine
+transfer function matrix
+semantic relevance
+game theory
+sequential importance sampling
+saupodoc
+tfdp
+optics algorithm
+hopfield network
+bsbm
+bmecat
+autoencoder
+shoq
+general interest model
+leabra
+basic load control method
+feedforward neural network
+bayesian bandits
+clir
+semantictyper
+statistical relational learning
+lsh method
+yield optimization
+fuzzy clustering
+softmax
+breadth-first search
+simple random algorithm
+random forest
+shannon entropy
+bcdrw
+cyclades
+rprop
+manifold alignment
+hierarchical agglomerative
+lib+lif
+tagassist
+ndcg-annealing
+ltcm
+bernstein polynomial
+predictive modeling
+alci
+cbow
+tsa algorithm
+support vector machine
+traditional materialized view
+fourier analysis

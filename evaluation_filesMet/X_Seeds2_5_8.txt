@@ -1,0 +1,5 @@
+hidden markov models
+exponential search
+fast fourier
+shannon entropy
+lib*lif

@@ -1,0 +1,120 @@
+scoring engine
+small buckets heuristics
+powell's method
+pairwise personalized ranking
+lanczos resampling
+model fitting
+globcausal
+shannon entropy
+sequential importance sampling
+klsh
+ndcg-annealing
+k-nearest neighbor
+ridge regularization
+recurrent neural network
+bcdrw
+linkage analysis
+cascade merge sort
+usdl
+bayesian pmf
+pearson correlation
+viterbi
+convolutional neural network
+lib*lif
+manifold alignment
+kernel density estimation
+htsm model
+robust discretization
+adarank
+random indexing
+attribution modeling
+jackknife resampling
+clarke-tax
+dpm model
+tsa algorithm
+asynchronous distributed optimization
+skipgram
+lib
+simple random algorithm
+folding-in
+range minimum queries
+fractional programming
+mcmc
+kolmogorov-smirnov ks
+backpropagation
+tagassist
+kleinberg's method
+autoencoder
+general interest model
+lstm
+binary prioritization
+semantic relevance
+tfdp
+random forest
+preference propagation
+smatch
+gpbased
+cyclades
+softmax
+hierarchical clustering
+shoq
+bmecat
+hopfield network
+linear regression
+bsbm
+hierarchical agglomerative
+semantictyper
+least mean squares
+yield optimization
+imputation
+fuzzy clustering
+rssi
+spectral density
+statistical relational learning
+q-learning
+leabra
+mstp
+boltzmann machine
+dmp method
+rapid7
+lsh method
+fast fourier
+dynamic programming
+tdcm
+basic load control method
+downhill simplex
+miakt
+mapreduce leas
+game theory
+saupodoc
+transfer function matrix
+lift modeling
+probabilistic retrieval model
+qald
+imrank
+dbscan
+traditional materialized view
+graph-based propagation
+cotype
+deep learning
+variational em
+pairwise algorithm
+feedforward neural network
+bernstein polynomial
+latent dirichlet allocation
+bayesian bandits
+spiking neural network
+lib+lif
+rprop
+support vector machine
+restricted boltzmann machine
+fastica
+self-organizing map
+radial basis function network
+spectral clustering
+experimental design
+dijkstra
+logmap
+multir
+hidden markov models
+ltp-em

@@ -1,0 +1,50 @@
+scoring engine
+variational em
+pattern matching
+dbscan
+gpbased
+query optimization
+adaptive filter
+genetic algorithm
+linear regression
+linear search
+exponential search
+simulated annealing
+hill climbing
+bcdrw
+signal processing
+viterbi
+variational bayesian inference
+fourier analysis
+bsbm
+lsh method
+statistical relational
+lib+lif
+latent dirichlet allocation
+bmecat
+greedy algorithm
+space mapping
+yield optimization
+deep learning
+downhill simplex
+dijkstra
+pairwise personalized ranking
+block sort
+hierarchical agglomerative
+rapid7
+genetic programming
+selection algorithm
+k-nearest neighbor
+graph-based propagation
+lib*lif
+ndcg-annealing
+general interest model
+kolmogorov-smirnov ks
+breadth-first search
+basic load control method
+folding-in
+semantic relevance
+predictive modeling
+optics algorithm
+latent semantic analysis
+transfer function

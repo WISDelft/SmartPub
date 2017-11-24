@@ -1,0 +1,25 @@
+folding-in
+stochastic gradient descent
+variational em
+regular expression
+imputation
+hill climbing
+skipgram
+general interest model
+k-nearest neighbor
+jump search
+kernel density estimation
+k-means++
+latent dirichlet allocation
+genetic programming
+restricted boltzmann machine
+lib
+genetic algorithm
+random forest
+hierarchical agglomerative
+global collaborative ranking
+hidden markov models
+word embedding
+plsa
+random indexing
+best-first search

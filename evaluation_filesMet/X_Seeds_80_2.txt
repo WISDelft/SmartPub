@@ -1,0 +1,80 @@
+stochastic gradient descent
+deep learning
+viterbi
+kolmogorov-smirnov ks
+self-organizing map
+linkage analysis
+tagassist
+tdcm
+clir
+shannon entropy
+variational bayesian inference
+dmp method
+bsbm
+lsh method
+kernel density estimation
+ndcg-annealing
+hierarchical agglomerative
+lstm
+tsa algorithm
+yield optimization
+convolutional neural network
+skipgram
+plsa
+hidden markov models
+downhill simplex
+klsh
+optics algorithm
+variational em
+pearson correlation
+ridge regularization
+radial basis function network
+gpbased
+q-learning
+predictive modeling
+softmax
+clarke-tax
+recurrent neural network
+lib
+folding-in
+mcmc
+fuzzy clustering
+query optimization
+lib+lif
+bcdrw
+fourier analysis
+general interest model
+hierarchical clustering
+dijkstra
+autoencoder
+semantic relevance
+cyclades
+random forest
+basic load control method
+global collaborative ranking
+likelihood function
+model fitting
+restricted boltzmann machine
+simple random algorithm
+bmecat
+semantictyper
+bayesian nonparametric
+game theory
+random indexing
+latent semantic analysis
+breadth-first search
+lib*lif
+latent dirichlet allocation
+fast fourier
+imputation
+probabilistic retrieval model
+k-nearest neighbor
+scoring engine
+traditional materialized view
+pairwise personalized ranking
+support vector machine
+qald
+dynamic programming
+linear regression
+spectral clustering
+adaptive filter

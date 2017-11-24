@@ -1,0 +1,25 @@
+traditional materialized view
+breadth-first search
+model fitting
+autoencoder
+genetic algorithm
+semantictyper
+k-nearest neighbor
+variational bayesian inference
+random forest
+viterbi
+bsbm
+random indexing
+signal processing
+support vector machine
+pattern matching
+rapid7
+hill climbing
+clir
+graph-based propagation
+genetic programming
+space mapping
+block sort
+query optimization
+kolmogorov-smirnov ks
+lib

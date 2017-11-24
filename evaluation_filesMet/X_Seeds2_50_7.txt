@@ -1,0 +1,50 @@
+yield optimization
+gpbased
+random indexing
+k-nearest neighbor
+downhill simplex
+recursive function
+pattern matching
+self-organizing map
+dbscan
+tdcm
+bcdrw
+merge sort
+statistical relational
+skipgram
+traditional materialized view
+general interest model
+genetic programming
+word embedding
+hierarchical agglomerative
+folding-in
+tsa algorithm
+fast fourier
+softmax
+query expansion
+breadth-first search
+linear search
+regular expression
+convolutional neural network
+imputation
+cyclades
+stack search
+mcmc
+fourier analysis
+semantictyper
+random search
+imrank
+clarke-tax
+global collaborative ranking
+support vector machine
+hierarchical clustering
+lib*lif
+lib
+signal processing
+fuzzy clustering
+autoencoder
+tree sort
+hill climbing
+spectral clustering
+deep learning
+dijkstra

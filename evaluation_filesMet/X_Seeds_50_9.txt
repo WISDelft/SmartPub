@@ -1,0 +1,50 @@
+best-first search
+graph-based propagation
+softmax
+lib+lif
+linear regression
+autoencoder
+support vector machine
+game theory
+latent dirichlet allocation
+hidden markov models
+self-organizing map
+gpbased
+latent semantic analysis
+skipgram
+genetic programming
+mcmc
+hill climbing
+downhill simplex
+pattern matching
+evolution strategy
+bcdrw
+ridge regularization
+pairwise algorithm
+jump search
+random forest
+klsh
+scoring engine
+qald
+viterbi
+semantic relevance
+imputation
+restricted boltzmann machine
+word embedding
+merge sort
+plsa
+dmp method
+block sort
+bayesian nonparametric
+kernel density estimation
+fourier analysis
+tsa algorithm
+statistical relational
+hierarchical agglomerative
+shannon entropy
+convolutional neural network
+random indexing
+cyclades
+spectral clustering
+bmecat
+dbscan

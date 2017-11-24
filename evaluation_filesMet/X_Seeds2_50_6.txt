@@ -1,0 +1,50 @@
+dmp method
+genetic programming
+mcmc
+scoring engine
+selection algorithm
+ndcg-annealing
+recursive function
+space mapping
+lib*lif
+fast fourier
+self-organizing map
+rapid7
+stochastic gradient descent
+word embedding
+hidden markov models
+fuzzy clustering
+tagassist
+kolmogorov-smirnov ks
+jump search
+query expansion
+probabilistic retrieval model
+semantic relevance
+dbscan
+variational bayesian inference
+transfer function
+clarke-tax
+deep learning
+clir
+kernel density estimation
+random forest
+softmax
+latent semantic analysis
+spectral clustering
+bcdrw
+klsh
+statistical relational
+model fitting
+latent dirichlet allocation
+dijkstra
+cyclades
+k-means++
+signal processing
+linear regression
+bayesian nonparametric
+adaptive filter
+linear search
+lsh method
+tsa algorithm
+restricted boltzmann machine
+game theory

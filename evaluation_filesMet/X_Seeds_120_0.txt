@@ -1,0 +1,120 @@
+bcdrw
+simple random algorithm
+cascade merge sort
+rapid7
+boltzmann machine
+mstp
+small buckets heuristics
+random indexing
+folding-in
+autoencoder
+stochastic gradient descent
+qald
+fourier analysis
+lib
+kleinberg's method
+hidden markov models
+convolutional neural network
+linkage analysis
+spectral clustering
+basic load control method
+globcausal
+logmap
+imputation
+klsh
+lib+lif
+lift modeling
+smatch
+latent dirichlet allocation
+dmp method
+global collaborative ranking
+viterbi
+cotype
+convolutional dnn
+powell's method
+feedforward neural network
+support vector machine
+shannon entropy
+linear regression
+restricted boltzmann machine
+variational em
+alci
+ltp-em
+lanczos resampling
+htsm model
+multir
+semantic relevance
+dijkstra
+adarank
+clarke-tax
+mapreduce leas
+general interest model
+shoq
+softmax
+gpbased
+plsa
+dynamic programming
+breadth-first search
+k-nearest neighbor
+deep learning
+fuzzy clustering
+self-organizing map
+rssi
+mcmc
+kolmogorov-smirnov ks
+sequential importance sampling
+variational bayesian inference
+spectral density
+bayesian bandits
+ltcm
+pearson correlation
+skipgram
+cyclades
+cbow
+hierarchical clustering
+dpm model
+yield optimization
+saupodoc
+tdcm
+binary prioritization
+robust discretization
+downhill simplex
+asynchronous distributed optimization
+pairwise algorithm
+probabilistic retrieval model
+radial basis function network
+bernstein polynomial
+tfdp
+minimax	probability machine
+scoring engine
+least mean squares
+transfer function matrix
+semantictyper
+graph-based propagation
+usdl
+dbscan
+game theory
+experimental design
+lstm
+likelihood function
+jackknife resampling
+recurrent neural network
+tagassist
+traditional materialized view
+bayesian pmf
+imrank
+rprop
+latent semantic analysis
+optics algorithm
+range minimum queries
+ndcg-annealing
+random forest
+variance adaptive quantization
+kernel density estimation
+leabra
+hopfield network
+lsh method
+tsa algorithm
+spiking neural network
+predictive modeling
+fractional programming

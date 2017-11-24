@@ -1,0 +1,10 @@
+shannon entropy
+bmecat
+greedy algorithm
+self-organizing map
+rapid7
+k-means++
+model fitting
+tdcm
+variational bayesian inference
+stack search

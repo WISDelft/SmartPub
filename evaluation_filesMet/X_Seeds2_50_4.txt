@@ -1,0 +1,50 @@
+optics algorithm
+radial basis function network
+restricted boltzmann machine
+kolmogorov-smirnov ks
+fast fourier
+autoencoder
+gpbased
+hill climbing
+dmp method
+shannon entropy
+lib+lif
+q-learning
+clir
+breadth-first search
+random indexing
+quicksort
+probabilistic retrieval model
+lstm
+latent dirichlet allocation
+tree sort
+space mapping
+hierarchical clustering
+random search
+tagassist
+similarity search
+recurrent neural network
+spectral clustering
+linear search
+word embedding
+recursive function
+simulated annealing
+dijkstra
+pearson correlation
+bcdrw
+adarank
+lsh method
+cyclades
+statistical relational
+qald
+ridge regularization
+semantic relevance
+model fitting
+clarke-tax
+rapid7
+exponential search
+folding-in
+variational bayesian inference
+yield optimization
+linear regression
+k-nearest neighbor

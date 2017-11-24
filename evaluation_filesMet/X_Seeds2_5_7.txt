@@ -1,0 +1,5 @@
+imrank
+statistical relational
+restricted boltzmann machine
+latent semantic analysis
+radial basis function network

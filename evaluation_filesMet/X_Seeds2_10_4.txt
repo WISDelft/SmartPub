@@ -1,0 +1,10 @@
+model fitting
+selection algorithm
+q-learning
+reinforcement learning
+lib*lif
+scoring engine
+game theory
+regular expression
+recurrent neural network
+probabilistic retrieval model

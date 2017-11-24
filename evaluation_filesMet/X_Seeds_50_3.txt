@@ -1,0 +1,50 @@
+shannon entropy
+mcmc
+likelihood function
+transfer function
+simulated annealing
+pattern matching
+spectral clustering
+evolution strategy
+ridge regularization
+variational bayesian inference
+quicksort
+simple random algorithm
+dijkstra
+jump search
+reinforcement learning
+recurrent neural network
+model fitting
+game theory
+regular expression
+predictive modeling
+variational em
+adarank
+pairwise algorithm
+query expansion
+lib+lif
+convolutional neural network
+basic load control method
+k-means++
+adaptive filter
+klsh
+recursive function
+rapid7
+bmecat
+hierarchical clustering
+global collaborative ranking
+optics algorithm
+statistical relational
+best-first search
+graph-based propagation
+lsh method
+restricted boltzmann machine
+latent dirichlet allocation
+k-nearest neighbor
+self-organizing map
+linear regression
+skipgram
+lib
+gpbased
+hill climbing
+latent semantic analysis

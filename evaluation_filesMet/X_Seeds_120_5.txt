@@ -1,0 +1,120 @@
+fastica
+autoencoder
+gpbased
+lib*lif
+minimax	probability machine
+kernel density estimation
+restricted boltzmann machine
+fourier analysis
+small buckets heuristics
+tfdp
+random forest
+smatch
+fractional programming
+dynamic programming
+cotype
+tsa algorithm
+ndcg-annealing
+fuzzy clustering
+cbow
+predictive modeling
+semantic relevance
+htsm model
+ridge regularization
+deep learning
+pearson correlation
+kleinberg's method
+graph-based propagation
+kolmogorov-smirnov ks
+mstp
+self-organizing map
+bayesian nonparametric
+statistical relational learning
+spectral clustering
+globcausal
+softmax
+recurrent neural network
+lib
+convolutional neural network
+imputation
+least mean squares
+sequential importance sampling
+cascade merge sort
+backpropagation
+alci
+dmp method
+leabra
+ltp-em
+rssi
+tagassist
+spectral density
+scoring engine
+transfer function matrix
+cyclades
+feedforward neural network
+folding-in
+robust discretization
+k-nearest neighbor
+jackknife resampling
+asynchronous distributed optimization
+multir
+general interest model
+latent dirichlet allocation
+manifold alignment
+bmecat
+basic load control method
+dbscan
+qald
+lstm
+attribution modeling
+convolutional dnn
+range minimum queries
+breadth-first search
+hopfield network
+mapreduce leas
+mcmc
+lift modeling
+downhill simplex
+hierarchical clustering
+yield optimization
+latent semantic analysis
+shannon entropy
+pairwise personalized ranking
+game theory
+adarank
+ltcm
+miakt
+bcdrw
+global collaborative ranking
+fast fourier
+bayesian bandits
+binary prioritization
+random indexing
+skipgram
+variational bayesian inference
+radial basis function network
+optics algorithm
+hidden markov models
+support vector machine
+imrank
+stochastic gradient descent
+klsh
+dijkstra
+shoq
+boltzmann machine
+viterbi
+plsa
+lib+lif
+likelihood function
+rapid7
+saupodoc
+variational em
+lsh method
+semantictyper
+clir
+clarke-tax
+traditional materialized view
+preference propagation
+experimental design
+rprop
+powell's method

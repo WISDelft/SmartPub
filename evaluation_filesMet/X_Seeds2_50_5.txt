@@ -1,0 +1,50 @@
+predictive modeling
+block sort
+pattern matching
+kernel density estimation
+adaptive filter
+hill climbing
+downhill simplex
+restricted boltzmann machine
+linear regression
+a* search
+query optimization
+latent semantic analysis
+bmecat
+space mapping
+reinforcement learning
+clarke-tax
+klsh
+convolutional dnn
+dijkstra
+hierarchical agglomerative
+imputation
+fast fourier
+variational em
+basic load control method
+genetic programming
+fuzzy clustering
+recurrent neural network
+viterbi
+fourier analysis
+tree sort
+pairwise personalized ranking
+global collaborative ranking
+bsbm
+convolutional neural network
+quicksort
+dmp method
+deep learning
+genetic algorithm
+adarank
+bayesian nonparametric
+simulated annealing
+game theory
+stack search
+radial basis function network
+ndcg-annealing
+statistical relational
+probabilistic retrieval model
+linkage analysis
+k-nearest neighbor
+best-first search

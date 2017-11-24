@@ -1,0 +1,120 @@
+ltcm
+leabra
+spectral density
+fuzzy clustering
+mcmc
+graph-based propagation
+spectral clustering
+softmax
+variance adaptive quantization
+backpropagation
+convolutional neural network
+attribution modeling
+plsa
+alci
+basic load control method
+general interest model
+downhill simplex
+dpm model
+hidden markov models
+pairwise personalized ranking
+saupodoc
+probabilistic retrieval model
+dbscan
+predictive modeling
+tdcm
+folding-in
+hierarchical clustering
+radial basis function network
+global collaborative ranking
+q-learning
+fractional programming
+preference propagation
+linkage analysis
+range minimum queries
+cotype
+game theory
+imputation
+self-organizing map
+lstm
+hierarchical agglomerative
+powell's method
+usdl
+optics algorithm
+logmap
+sequential importance sampling
+ridge regularization
+mapreduce leas
+clarke-tax
+yield optimization
+shannon entropy
+random forest
+lib
+latent semantic analysis
+rssi
+adarank
+klsh
+latent dirichlet allocation
+viterbi
+tsa algorithm
+gpbased
+stochastic gradient descent
+breadth-first search
+htsm model
+bayesian bandits
+shoq
+tagassist
+cascade merge sort
+dmp method
+pearson correlation
+bayesian pmf
+random indexing
+imrank
+experimental design
+hopfield network
+rapid7
+least mean squares
+semantictyper
+binary prioritization
+ltp-em
+scoring engine
+manifold alignment
+asynchronous distributed optimization
+fastica
+kleinberg's method
+k-nearest neighbor
+multir
+fast fourier
+variational em
+variational bayesian inference
+clir
+autoencoder
+deep learning
+likelihood function
+bmecat
+mstp
+restricted boltzmann machine
+dijkstra
+statistical relational learning
+ndcg-annealing
+jackknife resampling
+lanczos resampling
+bernstein polynomial
+simple random algorithm
+cyclades
+globcausal
+spiking neural network
+robust discretization
+transfer function matrix
+pairwise algorithm
+dynamic programming
+small buckets heuristics
+lsh method
+lift modeling
+boltzmann machine
+linear regression
+qald
+fourier analysis
+support vector machine
+kernel density estimation
+tfdp

@@ -1,0 +1,25 @@
+lib
+imrank
+similarity search
+adaptive filter
+selection algorithm
+yield optimization
+linear regression
+regular expression
+word embedding
+mcmc
+general interest model
+genetic programming
+block sort
+radial basis function network
+bmecat
+semantic relevance
+query expansion
+rapid7
+hierarchical clustering
+jump search
+variational bayesian inference
+latent dirichlet allocation
+gpbased
+clarke-tax
+lib*lif

@@ -1,0 +1,5 @@
+skipgram
+k-nearest neighbor
+downhill simplex
+lib+lif
+probabilistic retrieval model

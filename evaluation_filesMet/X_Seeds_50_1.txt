@@ -1,0 +1,50 @@
+convolutional neural network
+k-means++
+exponential search
+ridge regularization
+fourier analysis
+query optimization
+bcdrw
+transfer function
+global collaborative ranking
+semantic relevance
+variational em
+probabilistic retrieval model
+random forest
+linear search
+tree sort
+greedy algorithm
+self-organizing map
+softmax
+graph-based propagation
+basic load control method
+tagassist
+pearson correlation
+lib
+lstm
+deep learning
+random search
+kernel density estimation
+dbscan
+stack search
+viterbi
+random indexing
+genetic algorithm
+general interest model
+semantictyper
+recursive function
+similarity search
+adaptive filter
+imputation
+convolutional dnn
+cyclades
+qald
+bmecat
+ndcg-annealing
+block sort
+game theory
+reinforcement learning
+autoencoder
+optics algorithm
+hidden markov models
+simulated annealing

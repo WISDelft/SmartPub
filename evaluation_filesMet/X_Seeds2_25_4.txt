@@ -1,0 +1,25 @@
+shannon entropy
+dynamic programming
+genetic algorithm
+exponential search
+fast fourier
+clir
+bsbm
+yield optimization
+clarke-tax
+similarity search
+a* search
+klsh
+traditional materialized view
+lib*lif
+tagassist
+mcmc
+lib
+downhill simplex
+hierarchical agglomerative
+likelihood function
+pairwise algorithm
+hierarchical clustering
+gpbased
+linear search
+hidden markov models

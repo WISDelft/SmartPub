@@ -1,0 +1,1 @@
+Furthermore  , based on this index structure  , Tagster incorporates a tag-based user characterization that takes into account the global tag statistics for better navigation and ranking of resources.

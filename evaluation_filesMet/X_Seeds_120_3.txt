@@ -1,0 +1,120 @@
+k-nearest neighbor
+linear regression
+bsbm
+tfdp
+deep learning
+recurrent neural network
+alci
+generec
+shoq
+sequential importance sampling
+linkage analysis
+experimental design
+shannon entropy
+bmecat
+fast fourier
+binary prioritization
+dmp method
+global collaborative ranking
+gpbased
+variational em
+folding-in
+stochastic gradient descent
+tdcm
+saupodoc
+self-organizing map
+lsh method
+minimax	probability machine
+manifold alignment
+dbscan
+globcausal
+small buckets heuristics
+pearson correlation
+imputation
+spiking neural network
+yield optimization
+klsh
+support vector machine
+leabra
+latent semantic analysis
+fractional programming
+adarank
+radial basis function network
+semantic relevance
+scoring engine
+skipgram
+bayesian nonparametric
+dpm model
+random forest
+bernstein polynomial
+graph-based propagation
+hierarchical agglomerative
+variance adaptive quantization
+likelihood function
+game theory
+random indexing
+rapid7
+clarke-tax
+lanczos resampling
+backpropagation
+transfer function matrix
+kernel density estimation
+probabilistic retrieval model
+cyclades
+multir
+rprop
+kolmogorov-smirnov ks
+miakt
+convolutional neural network
+dijkstra
+lstm
+general interest model
+asynchronous distributed optimization
+tsa algorithm
+cotype
+mapreduce leas
+boltzmann machine
+semantictyper
+smatch
+rssi
+basic load control method
+optics algorithm
+viterbi
+lift modeling
+hierarchical clustering
+cascade merge sort
+lib
+pairwise personalized ranking
+mstp
+ltcm
+variational bayesian inference
+bcdrw
+ndcg-annealing
+kleinberg's method
+latent dirichlet allocation
+fourier analysis
+ltp-em
+restricted boltzmann machine
+tagassist
+bootstrap aggregating
+logmap
+breadth-first search
+mcmc
+pairwise algorithm
+attribution modeling
+ridge regularization
+cbow
+fastica
+traditional materialized view
+range minimum queries
+downhill simplex
+lib+lif
+fuzzy clustering
+q-learning
+plsa
+preference propagation
+bayesian pmf
+jackknife resampling
+simple random algorithm
+dynamic programming
+autoencoder

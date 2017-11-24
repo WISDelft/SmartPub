@@ -1,0 +1,25 @@
+pearson correlation
+a* search
+regular expression
+signal processing
+random forest
+adaptive filter
+tdcm
+best-first search
+query optimization
+dynamic programming
+graph-based propagation
+latent dirichlet allocation
+general interest model
+qald
+optics algorithm
+stochastic gradient descent
+linkage analysis
+cyclades
+hidden markov models
+convolutional dnn
+simulated annealing
+bmecat
+q-learning
+radial basis function network
+block sort

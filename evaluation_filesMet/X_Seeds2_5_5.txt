@@ -1,0 +1,5 @@
+plsa
+skipgram
+random indexing
+dbscan
+probabilistic retrieval model

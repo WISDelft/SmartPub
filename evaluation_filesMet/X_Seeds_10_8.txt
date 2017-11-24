@@ -1,0 +1,10 @@
+regular expression
+model fitting
+deep learning
+dmp method
+linear search
+evolution strategy
+query optimization
+variational em
+simple random algorithm
+a* search

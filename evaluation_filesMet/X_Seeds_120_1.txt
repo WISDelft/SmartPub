@@ -1,0 +1,120 @@
+multir
+kleinberg's method
+lib*lif
+ndcg-annealing
+general interest model
+jackknife resampling
+manifold alignment
+cotype
+pearson correlation
+yield optimization
+adarank
+fastica
+hopfield network
+bayesian bandits
+rprop
+softmax
+mapreduce leas
+shoq
+pairwise personalized ranking
+lift modeling
+bmecat
+fractional programming
+latent dirichlet allocation
+klsh
+convolutional dnn
+downhill simplex
+kernel density estimation
+hidden markov models
+tagassist
+shannon entropy
+clarke-tax
+range minimum queries
+mcmc
+skipgram
+bayesian pmf
+likelihood function
+rssi
+sequential importance sampling
+tdcm
+minimax	probability machine
+semantic relevance
+semantictyper
+rapid7
+qald
+imputation
+global collaborative ranking
+pairwise algorithm
+bsbm
+dbscan
+linear regression
+globcausal
+lsh method
+k-nearest neighbor
+plsa
+fuzzy clustering
+leabra
+cbow
+probabilistic retrieval model
+generec
+statistical relational learning
+bayesian nonparametric
+autoencoder
+breadth-first search
+lanczos resampling
+binary prioritization
+optics algorithm
+dpm model
+game theory
+logmap
+miakt
+q-learning
+deep learning
+fourier analysis
+alci
+smatch
+backpropagation
+spectral density
+small buckets heuristics
+traditional materialized view
+mstp
+gpbased
+feedforward neural network
+folding-in
+dmp method
+ltcm
+predictive modeling
+basic load control method
+tsa algorithm
+least mean squares
+powell's method
+stochastic gradient descent
+robust discretization
+tfdp
+boltzmann machine
+attribution modeling
+ltp-em
+bernstein polynomial
+spectral clustering
+variational em
+dynamic programming
+support vector machine
+clir
+imrank
+spiking neural network
+hierarchical clustering
+asynchronous distributed optimization
+dijkstra
+bootstrap aggregating
+model fitting
+kolmogorov-smirnov ks
+lstm
+recurrent neural network
+experimental design
+variance adaptive quantization
+htsm model
+usdl
+random forest
+transfer function matrix
+simple random algorithm
+saupodoc

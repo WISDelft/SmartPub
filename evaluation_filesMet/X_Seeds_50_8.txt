@@ -1,0 +1,50 @@
+game theory
+exponential search
+yield optimization
+hidden markov models
+skipgram
+linear search
+gpbased
+general interest model
+mcmc
+linkage analysis
+adaptive filter
+traditional materialized view
+breadth-first search
+tsa algorithm
+lib
+folding-in
+tree sort
+genetic algorithm
+similarity search
+clir
+semantictyper
+stochastic gradient descent
+dijkstra
+genetic programming
+restricted boltzmann machine
+scoring engine
+evolution strategy
+bmecat
+latent dirichlet allocation
+lsh method
+random forest
+lib+lif
+lib*lif
+best-first search
+k-nearest neighbor
+qald
+semantic relevance
+softmax
+pairwise algorithm
+bcdrw
+latent semantic analysis
+predictive modeling
+hierarchical clustering
+support vector machine
+likelihood function
+recursive function
+stack search
+pairwise personalized ranking
+query optimization
+word embedding
