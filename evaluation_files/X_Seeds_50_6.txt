@@ -1,0 +1,50 @@
+semeval
+cyworld
+reddit
+moviepilot
+dailymed
+kitti dataset
+craigslist
+technorati
+dmoz.org
+oaister
+stanford large network dataset
+wpbench
+xanga
+gene ontology
+newegg
+semcor
+allmusic
+umls
+quora
+ldoce
+blogpulse
+billion triple challenge
+specweb
+gerbil
+spambase
+sindice
+movierating
+booking.com
+cifar
+citeseerx
+jester
+euses
+ocred
+ionosphere
+econstor
+imagenet
+nasdaq
+dbsnp
+kddcup
+labelme
+douban
+foldoc
+facc
+letor
+linkedgeodata
+pinterest
+wikitravel
+ask.com
+lexvo
+jnlpba

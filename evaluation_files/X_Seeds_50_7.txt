@@ -1,0 +1,50 @@
+imagenet
+billion triple challenge
+dailymed
+friendfeed
+refseq
+wikia
+walmart
+new york times
+melvyl
+wt2g
+wikitravel
+stanford large network dataset
+algoviz
+semeval
+lexvo
+semcor
+webkb
+sindice
+brightkite
+cyworld
+intact
+ace04
+jnlpba
+kitti dataset
+foldoc
+reddit
+spambase
+fedweb
+ldoce
+buzzfeed
+gene ontology
+kddcup
+craigslist
+jester
+newegg
+allmusic
+dmoz.org
+ratebeer
+euses
+linkedgeodata
+stack overflow
+github
+robust04
+gerbil
+scovo
+pubchem
+douban
+wikiwars
+tpc-w
+booking.com

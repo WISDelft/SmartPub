@@ -1,0 +1,25 @@
+tripadvisor
+friendfeed
+euses
+gene ontology
+specweb
+tpc-w
+linkedgeodata
+spambase
+worldcat
+ldoce
+craigslist
+foldoc
+oaister
+pinterest
+new york times
+duc2001
+kitti dataset
+sindice
+lexvo
+as3ap
+wikitravel
+jnlpba
+dmoz.org
+allmusic
+ocred

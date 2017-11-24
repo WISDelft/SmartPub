@@ -1,0 +1,50 @@
+newsvine
+github
+scovo
+ws-353
+citebase
+kddcup
+fbis
+labelme
+pinterest
+gerbil
+cyworld
+walmart
+letor
+wt2g
+ask.com
+stack overflow
+algoviz
+duc2001
+movierating
+orkut
+tac kbp
+wookieepedia
+brightkite
+nasdaq
+douban
+sindice
+billion triple challenge
+cacm
+jester
+new york times
+oaister
+jnlpba
+wikitravel
+quora
+wikia
+ocred
+friendfeed
+foldoc
+newegg
+buzzfeed
+fedweb
+melvyl
+linkedgeodata
+intact
+gdelt
+spambase
+reddit
+tdt
+tpc-w
+wikiwars

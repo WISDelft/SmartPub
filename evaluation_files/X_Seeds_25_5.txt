@@ -1,0 +1,25 @@
+kddcup
+webkb
+foldoc
+worldcat
+cacm
+stack overflow
+allmusic
+algoviz
+wikiwars
+ionosphere
+robust04
+refseq
+dbsnp
+mesur
+pinterest
+xanga
+imageclef
+intact
+fbis
+wpbench
+jester
+reddit
+duc2001
+douban
+fedweb

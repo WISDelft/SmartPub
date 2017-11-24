@@ -1,0 +1,25 @@
+duc2001
+citebase
+mediaeval
+robust04
+wt2g
+locuslink
+fbis
+newegg
+nasdaq
+newsvine
+facc
+billion triple challenge
+refseq
+specweb
+jnlpba
+imageclef
+blog06
+semeval
+allmusic
+datahub
+intact
+orkut
+gene ontology
+worldcat
+dmoz.org

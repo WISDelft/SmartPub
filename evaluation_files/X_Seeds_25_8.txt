@@ -1,0 +1,25 @@
+pslnl
+dmoz.org
+douban
+as3ap
+fbis
+semcor
+nasdaq
+dbsnp
+kitti dataset
+labelme
+tdt
+locuslink
+fedweb
+kddcup
+cifar
+ace04
+shop.com
+wikitravel
+robust04
+letor
+scovo
+stanford large network dataset
+econstor
+technorati
+duc2001

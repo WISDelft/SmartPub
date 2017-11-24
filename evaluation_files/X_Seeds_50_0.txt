@@ -1,0 +1,50 @@
+stanford large network dataset
+orkut
+brightkite
+blogpulse
+specweb
+spambase
+ace04
+tdt
+cyworld
+pslnl
+tpc-w
+cifar
+robust04
+jester
+gerbil
+booking.com
+wechat
+algoviz
+gene ontology
+semeval
+euses
+friendfeed
+billion triple challenge
+webkb
+locuslink
+imageclef
+mesur
+dbsnp
+buzzfeed
+ask.com
+duc2001
+quora
+github
+semcor
+pinterest
+labelme
+newsvine
+technorati
+citebase
+craigslist
+melvyl
+dailymed
+pubchem
+linkedgeodata
+jnlpba
+mediaeval
+tac kbp
+chemid
+ratebeer
+facc

@@ -1,0 +1,90 @@
+Results
+SemEval-2007
+Senseval-3
+We also tested selectors as features over the Senseval-3 data
+Examining the results in 
+Feature Impact Analysis
+Results discussed thus far imply selectors are contributing information beyond that of the standard set of features.Starting in 2009 the NIST Text Analysis Conference TAC began conducting evaluations of technologies for knowledge base population KBP.We also evaluated our clusters arising from the distributional statistics    , in the Semeval-2010 tasks without any tuning and showed that they perform competetively with other approaches.Quantitative Analysis
+ In this paper    , we discus our systems' performances on the Semeval-2010 word sense induction/disambiguation dataset    , which contains 100 target words: 50 nouns and 50 verbs.Using large language model with and word co-occurrences    , we achieve a performance comparable to the systems in SemEval 2013    , task 13 
+Relation Extraction
+This task has not yet started    , because it relies on a contextualized corpus.After that    , we design the experiments on the SemEval 2013 and 2014 data sets.A strong improvement can be seen on the SemEval 2013 Task 12 dataset Sem13    , which is also the largest dataset.We take as our benchmark the SemEval-2012 task on Measuring Degrees of Relational Similarity 
+Model 
+Comparison systems.The proposed model outperforms the top system in SemEval-2013.Finally    , we also plan to study our approach on different languages and datasets for instance    , the SemEval-2010 dataset.  , features 7–12 in 
+Evaluation
+We evaluate our model on all six languages in the TempEval-2 Task A dataset 
+TempEval-2 Datasets
+ TempEval-2    , from SemEval 2010    , focused on retrieving and reasoning about temporal information from newswire.Keyphrase extraction is defined in the conventional way    , and was evaluated relative to the SemEval-2010 dataset.The comparative results are shown in 
+Comparison with SemEval-2 Systems
+ We compared our best results with the participating systems of the task.The SemEval 2012 CLTE datasets used in our experiments are available for four language pairs: Es–En    , De–En    , Fr–En    , and It–En.First    , the F 1 score obtained on the Task 7 of Semeval 2007 and then the execution time.SemEval 2007 Web People Search Results
+ The best system in SemEval 2007 obtained an Fscore of 0.78    , the average F-score of all 16 participant systems is 0.60.Three benchmark systems as the following are those which achieved better results in the original SemEval-2013 task.One is the absolute value of antonyms experimental result denoting antonymous degree that is shown in 
+SemEval experiment
+ The datasets of Evaluating Chinese Word Similarity task In SemEval 2012 is used as the experimental data    , of which the values are normalized as 
+Conclusions and Future work
+ This paper proposes a new approach for computing word similarity between Chinese words using HowNet.In addition    , we created a dataset to study OSPC based on the TAC KBP Entity Linking 2009 task dataset    , which is publicly available 8 .  , TER 
+To validate our intuition    , we present series of experiments using the publicly available SemEval- 2016 Task 3 datasets    , with focus on subtask A.Relation classification
+Experimental settings
+ To examine the usefulness of the dataset and distributed representations for a different application    , we address the task of relation classification on the SemEval 2010 Task 8 dataset 
+Results and discussions
+Table 3 presents the macro-averaged F1 scores on the SemEval 2010 Task 8 dataset.The collocations were extracted from the TAC KBP collection 
+One entity per discourse
+In order to estimate OSPD we divided the number of times a mention string referred to different entities in the document with the number of times a mention string occurred multiple times in the document.EXPERIMENTS AND EVALUATION
+Data and setup
+We test our model on two subtasks from Semeval-2015 Task 10: phrase-level subtask A and message-level subtask B 1 .We study a dataset collected in September 2009 which includes the whole Brightkite user base at that time    , with information about 54  ,190 users 
+Dataset N K N GC k C D EF F D l 
+Brightkite vides a public API to search and download these messages.Automatic knowledge base population by extracting entity information from large-scale unstructured text data has been shown to be a very challenging task in the recent TAC KBP program 1 .Supplementary evaluations are described in the subsequent sections that include the comparison with SemEval-2 participating systems    , and the analysis of model dynamics with the experimental data.We used the official SemEval task evaluation script to compute the Cohen's kappa index for the agreement on the ordering for each pair of candidates .ACKNOWLEDGEMENTS
+ Introduction
+ The goal of the Text Analysis Conference Knowledge Base Population TAC-KBP Slot Filling SF task 
+1 Supervised classification.Another example is the LinkedGeoData project 4 which provides Linked Data about any circular and rectangular area on Earth 
+AllDataW  = datad | d ∈ D .For English    , both implementations outperform the SemEval-2013 participants and the MFS.The evaluation results indicate that our model outperforms or reaches competitive performance comparable to other systems for the SemEval-2013 word sense induction task.Analysis on Model Dynamics
+This section examines the model dynamics with the SemEval-2 data    , which has been illustrated 890 with pseudo data in Section 3.2.In our experiments with the SemEval-2010 relation classification task    , when training with a sentence x whose class label y = Other    , the first term in the right side of Equation 1 is set to zero.iii: Weighted Normalized Discounted Cumulative Gain WNDCG: NDCG 
+Results
+We compared our models with four baselines and three benchmark systems from the SemEval-2013 task.Knowledge Base Population
+As a result of our participation in the 2015 TAC KBP Slot Filler Validation Task    , we have accumulated an interesting dataset of 69 automatically extracted knowledge bases from all participating systems.We also report accuracy of the most frequent sense MFS baseline    , which always chooses the sense which occurs most frequently in SemCor 
+Results
+On the SemEval-2007 data set    , the basic configuration of simplified Lesk SL+0—i.e.We choose this language pair because its ground-truth Entity Linking annotations are available through the TAC-KBP program .We estimated the threshold for the clustering algorithm using the ECDL subset of the training data provided by SemEval.The guidelines provided to the annotators were based on the recent SemEval task on Cross-Level Semantic Similarity 
+Automatic Creation of Cross-lingual Similarity Datasets
+In this section we present our automatic method for building cross-lingual datasets.We conduct experiments using the SemEval-2010 Task 8 dataset.REFERENCES
+ Introduction
+In SemEval-2010 competition    , there is a sub task for temporal entity identification    , which includes a Chinese corpus.Task Description
+There are multiple subtasks in SemEval 2013 and 2014.We used the input text as is which was stemmed    , for consistency with the published SemEval results.When tested over SemEval-2007 Task 17 and Senseval-3 English Lexical 
+Sample    , we found that word sense disambiguation classifiers utilizing selectors performed significantly better than those without.The evaluation    , conducted on the Task-12 of SemEval-2013    , shows promising results: our method is able to overcome both the most frequent sense baseline and    , for English    , also the other task participants.And this is    , in essence    , the WePS Web People Search task we conducted at SemEval-2007 
+The First Evaluation
+The first evaluation was conducted in early 2007 and the results were reported at the SemEval-2007 workshop.We evaluate our model on the SemEval 2007 Coarse-grained English All-words Task  test set.We bootstrapped this system by transferring the learned model from TAC KBP 2010 thereby circumventing the need for training examples.In building PDEP    , we found it necessary to reprocess the SemEval 2007 data of the full 28  ,052 sentences that were available through TPP    , rather than just those that were used in the SemEval task itself.In 
+Comparison with the state-of-the-art 
+ We now compare the NLSE model with state-ofthe-art systems    , including the best submissions to previous SemEval benchmarks.We evaluate our method on the SemEval-2010 relation classification task    , and achieve a state-ofthe-art F 1 -score of 86.3%.We targeted the SemEval-2010 Japanese WSD task    , and showed the effectiveness of our proposed method.Of these    , we focus on the SemEval 2014 Restaurants data ABSA.BRIGHTKITE.To illustrate    , consider the following sentence    , from the SemEval-2010 relation classification task dataset 
+LSTM-based Hypernymy Detection
+We present HypeNET    , an LSTM-based method for hypernymy detection.Next    , we generate the XML format for our annotated corpus    , which is similar to the data format in SemEval-10 Task 10.Model Selection The trail data of Semeval-2010 WSI task is used as development set for parameter tuning    , which consists of training and test portions of 4 verbs.In this section    , we discuss this improvement by examining the values of features extracted for instances in the SemEval-2007 experimental corpus.Experiment
+Experiment Setup
+ Data Our primary WSI evaluation is based on the standard dataset in Semeval-2010 Word sense induction & Disambiguation task .Our experiments have been carried out    , over the same SemEval datasets    , with two methods that do not use labeled data for the target language combination .The effectiveness of selectors is evaluated within supervised word sense disambiguation classifiers over the SemEval-2007 Task 17 
+The workers loaded the port onto the ship this morning.Also    , we perform significantly better than other Semeval-2010 systems on the paired F-score metric.We even achieve superior performance for very short documents 6–8 words in the SemEval task as long as we can link to at least one entity.Experimental Setup
+Dataset and Evaluation Metric
+ We use the SemEval-2010 Task 8 dataset to perform our experiments.BrightKite is a now defunct location-based social networking website www.brightkite.com where users could publicly check-in to various locations.Introduction
+Temporal relation extraction has been the topic of different SemEval tasks 
+Related work
+ The present work is closely related to previous approaches involved in TempEval campaigns 
+TimeLine: Cross-Document Event Ordering
+In the SemEval task 4 TimeLine: Cross-Document Event Ordering 
+Baseline TimeLine extraction
+In this section we present a system that builds TimeLines which contain events with explicit time-anchors.We compare our approach to the University of Washington submission to TAC-KBP 2013 
+ F 1  over this submission    , evaluated using a comparable approach.SemEval Keyphrase Extraction Data
+In addition to our four collections of index terms    , we used an existing dataset for keyphrase extraction evaluation — the SemEval-2010 keyphrase extraction data.Our performance comparison over the binary classification task from the SEMEVAL-2007 task shows that our 6 systems performed below the best performing system in the competition    , to varying degrees .Datasets
+ We conduct experiments to evaluate the effectiveness of our model on SemEval-2007 dataset.Experiment and Evaluation
+Dataset
+Our WSI evaluation is based on the dataset provided by the SemEval-2013 shared 13th task.The Mean Average Precision MAP results for HGT and NIPS are shown in 
+SemEval Results
+We ran DP-seg on the SemEval corpus of 244 fulltext articles.For the free parameters in our Sequential Dependence SD sub-models we estimate the parameters using training data from the TAC KBP 2010 entity linking data    , resulting in settings 
+λ T D = 0.29    , λ O D = .21    , and λ U D = 0
+ .50.The SemEval data is a collection of 244 scientific articles released as part of a shared task for keyphrase extraction  .In order to prepare our dataset for OSPC    , we chose the dataset of the TAC KBP 2009 Entity Linking competition    , as this dataset have been extensively used in Entity Linking evaluation.A full list of features and a complete description of the entity linking system is provided in our TAC KBP notebook paper.Parameters are learned using the back-propagation method 
+Experiments
+We compare DepNN against multiple baselines on SemEval-2010 dataset 
+Contributions of different components
+We first show the contributions from different components of DepNN.  , comparing different LSTM structures     , architecture components such as hidden layers and input information    , and classification task settings    , we use the SemEval-2010 Task 8.We score our systems by using the SemEval-2010 Task 8 official scorer    , which computes the macro-averaged F1-scores for the nine actual relations excluding Other and takes the directionality into consideration.More information about this dataset can be found in 
+The 
+The SemEval-2010 Task 8 dataset is already partitioned into 8  ,000 training instances and 2  ,717 test instances.We also used an existing SEMEVAL-2013 set to create a similar test set for English both for adjective noun combination and noun noun combination .OpenStreetMap datasets are available in RDF format from the LinkedGeoData project 9 .This task appeared at the Semeval 2007 and 2010 workshops .  , Brightkite 
+The second example illustrates how distributing a dataset allows one to achieve a particular task    , while minimizing the disclosure of sensitive information.Here    , we adopt the definition and the datasets from SemEval–2016 Task 3  on " Community Question Answering "     , focusing on subtask A Question-Comment Similarity only.We conduct our experiments on the commonly used SemEval-2010 Task 8 dataset 
+Experimental Results
+8 in Section 3.3.We select the check-in occurred during January 2010 to September 2010 from the original Brightkite 
+Comparison Methods.Main experiments
+In Table 1    , the results of Siamese CBOW on 20 SemEval datasets are displayed    , together with the results of the baseline systems.We use both methods in our TAC-KBP evaluation.Experiment results on the benchmark dataset of SemEval 2013 show that    , TS- Lex outperforms previously introduced sentiment lexicons and further improves the top-perform system in SemEval 2013 with feature combination.We set threshold at 0.5 for SemEval-2007 test set and 0.35 for Rappler test set    , empirically 6 .An example of artificial class is the class Other in the SemEval 2010 relation classification task.The training data are tagged with POS tags and lemmatized with TreeTagger 
+Evaluation measures
+Evaluation in the SemEval-2013 WSI task can be divided into two categories: 1.As our benchmark    , we selected the recent SemEval- 2012 task on Semantic Textual Similarity STS    , which was concerned with measuring the semantic similarity of sentence pairs.

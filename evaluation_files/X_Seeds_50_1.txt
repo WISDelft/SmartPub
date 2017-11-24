@@ -1,0 +1,50 @@
+pinterest
+fedweb
+sindice
+wt2g
+refseq
+tdt
+jester
+as3ap
+buzzfeed
+algoviz
+douban
+spambase
+wikiwars
+dailymed
+letor
+foldoc
+tpc-w
+fbis
+stack overflow
+github
+new york times
+semeval
+kddcup
+econstor
+dmoz.org
+dbsnp
+imageclef
+melvyl
+stanford large network dataset
+kitti dataset
+friendfeed
+euses
+pslnl
+ratebeer
+labelme
+billion triple challenge
+allmusic
+locuslink
+orkut
+blogpulse
+newsvine
+bdbcomp
+cifar
+ldoce
+webkb
+technorati
+intact
+ace04
+ask.com
+ocred

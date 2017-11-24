@@ -1,0 +1,50 @@
+imageclef
+ldoce
+gerbil
+walmart
+dbsnp
+new york times
+bdbcomp
+scovo
+replab
+wt2g
+openstreetmap
+wpbench
+movierating
+mediaeval
+shop.com
+wookieepedia
+xanga
+as3ap
+robust04
+stack overflow
+wechat
+kitti dataset
+newsvine
+pubchem
+fedweb
+nasdaq
+orkut
+specweb
+tripadvisor
+facc
+cacm
+lexvo
+allmusic
+letor
+cifar
+umls
+stanford large network dataset
+ws-353
+webkb
+mesur
+imagenet
+fbis
+tac kbp
+worldcat
+linkedgeodata
+econstor
+buzzfeed
+blogpulse
+ratebeer
+jester
