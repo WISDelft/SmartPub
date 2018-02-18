@@ -8,13 +8,15 @@ For example in the evaluation_files folder X_Seeds_5_0.txt are the seed terms in
 import multiprocessing
 
 from preprocessing import ner_training,preprocessing_embeddings
-from postprocessing import trainingdata_generation
+from postprocessing import trainingdata_generation,ner_post_iteration,filtering
 
 from default_config import ROOTHPATH
 from gensim.models import Doc2Vec
+from elasticsearch import Elasticsearch
 print(multiprocessing.cpu_count())
 modeldoc2vec = Doc2Vec.load(ROOTHPATH + '/models/doc2vec.model')
-
+es = Elasticsearch(
+   [{'host': 'localhost', 'port': 9200}])
 
 
 
@@ -54,6 +56,14 @@ ner_training.training_austenprop(100, 'term_expansion', str(0))
 
 
 
+#An example for 5 iterations:
+for i in range(0,5):
+   ner_post_iteration.iteration_nerER(100,'term_expansion',i, i+1,0,es)
+   filtering.PMI(100, 'term_expansion', i,0)
+   trainingdata_generation.extract(100,'term_expansion',i,0)
+   trainingdata_generation.post_generate_training(100,'term_expansion',i,0)
+   ner_training.create_austenprop(100, 'term_expansion', 0)
+   ner_training.training_austenprop(100, 'term_expansion', 0)
 
 
 
